@@ -1,12 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
-
 public class SamplePacket implements ReadOnlySamplePacket {
-    private int gaspedalPosition = 0;
-    private int breakpedalPosition = 0;
-    private int wheelPosition = 0;
-    private String gear = "";
+    private int key = 0;
 
     /**
      * Create a Sample Packet
@@ -14,38 +9,12 @@ public class SamplePacket implements ReadOnlySamplePacket {
     public SamplePacket() {
     }
 
-    public int getBreakpedalPosition() {
-        return breakpedalPosition;
+    public int getKey() {
+        return key;
     }
 
-    public void setBreakpedalPosition(int breakpedalPosition) {
-        this.breakpedalPosition = breakpedalPosition;
+    public void setKey(int key) {
+        this.key = key;
     }
-
-    public int getWheelPosition() {
-        return wheelPosition;
-    }
-
-    public void setWheelPosition(int wheelPosition) {
-        this.wheelPosition = wheelPosition;
-    }
-
-    public String getGear() {
-        return gear;
-    }
-
-    public void setGear(String gear) {
-        this.gear = gear;
-    }
-
-    @Override
-    public int getGaspedalPosition() {
-        return gaspedalPosition;
-    }
-    
-    public void setGaspedalPosition(int gaspedalPosition) {
-        this.gaspedalPosition = gaspedalPosition;
-    }
-
 
 }

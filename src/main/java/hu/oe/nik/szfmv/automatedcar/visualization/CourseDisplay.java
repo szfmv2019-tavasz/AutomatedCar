@@ -14,12 +14,10 @@ import java.awt.image.BufferedImage;
  */
 public class CourseDisplay extends JPanel {
 
-    private AffineTransform t = new AffineTransform();
-    private Gui parent;
-
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
+    private Gui parent;
 
 
     /**
@@ -35,15 +33,6 @@ public class CourseDisplay extends JPanel {
         parent = pt;
     }
 
-
-    /**
-     * Draws the world to the course display
-     *
-     * @param world {@link World} object that describes the virtual world
-     */
-    public void drawWorld(World world) {
-        paintComponent(getGraphics(), world);
-    }
 
     /**
      * Inherited method that can paint on the JPanel.
@@ -75,22 +64,16 @@ public class CourseDisplay extends JPanel {
     }
 
 
-    /**
-     * Intended to use for refreshing the course display after redrawing the world
-     */
-    public void refreshFrame() {
-        invalidate();
-        validate();
-        repaint();
+    public void drawWorld(World world) {
+        paintComponent(getGraphics(), world);
     }
 
     private void drawObjects(Graphics2D g2d, World world) {
 
         for (WorldObject object : world.getWorldObjects()) {
-            AffineTransform a = new AffineTransform();
-            g2d.drawImage(object.getImage(), a, this);
-//            g2d.drawImage(object.getImage(), object.getTransformation(), this);
+            AffineTransform t = new AffineTransform();
+            t.translate(object.getX(), object.getY());
+            g2d.drawImage(object.getImage(), t, this);
         }
     }
-
 }
