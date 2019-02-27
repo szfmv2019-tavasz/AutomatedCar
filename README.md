@@ -1,5 +1,5 @@
 ﻿[![Build Status](https://travis-ci.org/szfmv2019-tavasz/AutomatedCar.svg?branch=master)](https://travis-ci.org/szfmv2019-tavasz/AutomatedCar)
-[![CodeFactor](https://www.codefactor.io/repository/github/szfmv2018-osz/automatedcar-a/badge)](https://www.codefactor.io/repository/github/szfmv2018)
+[![CodeFactor](https://www.codefactor.io/repository/github/szfmv2019-tavasz/automatedcar/badge)](https://www.codefactor.io/repository/github/szfmv2019-tavasz/automatedcar)
 [![codecov](https://codecov.io/gh/szfmv2019-tavasz/AutomatedCar/branch/master/graph/badge.svg)](https://codecov.io/gh/szfmv2019-tavasz/AutomatedCar)
 [![forum](https://img.shields.io/badge/forum-Everyone-94B2E0.svg)](https://github.com/orgs/szfmv2019-tavasz/teams/everyone)
 [![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://szfmv2019-tavasz.github.io/handout/)
