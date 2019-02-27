@@ -1,0 +1,28 @@
+# define language and JDK version, JAVA 11 is used
+language: java
+jdk:
+  - openjdk11
+
+# Define OS image for TravisCI to use: Ubuntu 16.04 LTS (Xenial Xerus)
+dist: xenial
+
+# for speeding up the CI cache the dependencies
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+# The selected image is headless (without display server), but for GUI related tests it is required, so the X virtual
+# framebuffer (xvfb) is initiated before the repo is cloned and tests are run.
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+
+script:
+  - mvn clean test jacoco:report
+
+after_success:
+  # codecov reporting
+  - bash <(curl -s https://codecov.io/bash)
