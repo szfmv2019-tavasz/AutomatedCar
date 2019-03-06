@@ -17,12 +17,12 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
 
     @Override
     public int getSpeed() {
-        return 0;
+        return this.speed;
     }
 
     @Override
     public int getRPM() {
-        return 0;
+        return this.rpm;
     }
 
     public void setRpm(int rpm) {
