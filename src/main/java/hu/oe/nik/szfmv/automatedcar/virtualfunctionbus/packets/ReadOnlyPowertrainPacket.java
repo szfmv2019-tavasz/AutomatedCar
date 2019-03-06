@@ -1,12 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 
-public interface IPowertrainPacket {
+public interface ReadOnlyPowertrainPacket {
 
     int getSpeed();
 
-    void setSpeed(int speed);
-
     int getRPM();
 
-    void setRPM(int rpm);
 }
