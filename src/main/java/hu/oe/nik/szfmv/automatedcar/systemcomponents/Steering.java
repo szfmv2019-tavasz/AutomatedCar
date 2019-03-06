@@ -19,7 +19,7 @@ public class Steering extends SystemComponent {
         getValuesFromInputPacket();
         getValuesFromPowertrainPacket();
         // steeringVector = calculateSteeringVector(steering, speed);
-        virtualFunctionBus.steeringPacket = new SteeringPacket(steeringVector);
+        createAndSendPacket();
     }
 
     private void getValuesFromInputPacket() {
@@ -30,5 +30,11 @@ public class Steering extends SystemComponent {
     private void getValuesFromPowertrainPacket() {
         // PowertrainPacket packet = virtualFunctionBus.powertrainPacket;
         // speed = packet.getSpeed();
+    }
+
+    private void createAndSendPacket() {
+        SteeringPacket packet = new SteeringPacket();
+        packet.setSteeringVector(steeringVector);
+        virtualFunctionBus.steeringPacket = packet;
     }
 }

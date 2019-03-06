@@ -5,8 +5,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 public class SteeringPacket implements ReadOnlySteeringPacket {
     private Vector2D steeringVector;
 
-    public SteeringPacket(Vector2D steeringVector) {
-        this.steeringVector = steeringVector;
+    public SteeringPacket() {
     }
 
     @Override
