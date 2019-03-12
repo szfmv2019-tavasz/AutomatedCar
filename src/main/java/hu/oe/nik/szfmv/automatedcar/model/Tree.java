@@ -12,5 +12,4 @@ public class Tree extends Collidable {
         super(0,0,null);
     }
 
-    // TODO 
 }
