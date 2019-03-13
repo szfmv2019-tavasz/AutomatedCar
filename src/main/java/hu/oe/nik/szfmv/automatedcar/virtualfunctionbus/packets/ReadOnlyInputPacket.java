@@ -6,12 +6,37 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 public interface ReadOnlyInputPacket {
 
     /**
+     * Gear shift values:
+     * P - Park
+     * R - Reverse
+     * N - Neutral
+     * D - Drive
+     */
+    public enum GEAR_SHIFT_VALUES {P, R, N, D}
+
+    /**
      * Get the Gas pedal Position
      *
      * @return The Gas pedal Position value, in the range of 0 - 100
      */
     int getGasPedal();
 
-    // TODO: A többi kimeneti adat...
+    int getBreakPedal();
+
+    int getSteeringWheel();
+
+    GEAR_SHIFT_VALUES getGearShift();
+
+    boolean isSignalLeftTurn();
+
+    public boolean isSignalRightTurn();
+
+    public boolean isLaneKeepingOn();
+
+    public boolean isParkingPilotOn();
+
+    public int getAccSpeed();
+
+    public double getAccDistance();
 
 }

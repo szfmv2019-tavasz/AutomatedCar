@@ -6,15 +6,6 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 public class InputPacket implements ReadOnlyInputPacket {
 
     /**
-     * Gear shift values:
-     * P - Park
-     * R - Reverse
-     * N - Neutral
-     * D - Drive
-     */
-    public enum GEAR_SHIFT_VALUES {P, R, N, D}
-
-    /**
      * 0 ... 100
      */
     private int gasPedal = 0;
