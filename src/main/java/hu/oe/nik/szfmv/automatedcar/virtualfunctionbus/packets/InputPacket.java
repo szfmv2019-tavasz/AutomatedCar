@@ -5,11 +5,52 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
  */
 public class InputPacket implements ReadOnlyInputPacket {
 
+    /**
+     * Gear shift values:
+     * P - Park
+     * R - Reverse
+     * N - Neutral
+     * D - Drive
+     */
+    public enum GEAR_SHIFT_VALUES {P, R, N, D}
+
+    /**
+     * 0 ... 100
+     */
     private int gasPedal = 0;
 
-    // TODO: A többi kimeneti adat...
+    /**
+     * 0 ... 100
+     */
+    private int breakPedal = 0;
 
+    /**
+     * -100 ... +100
+     */
+    private int steeringWheel = 0;
 
+    private GEAR_SHIFT_VALUES gearShift = GEAR_SHIFT_VALUES.P;
+
+    private boolean signalLeftTurn = false;
+
+    private boolean signalRightTurn = false;
+
+    private boolean laneKeepingOn = false;
+
+    private boolean parkingPilotOn = false;
+
+    /**
+     * Automatic Cruise Control target speed
+     * 0: ACC switched off
+     * 30 ... 160: ACC switched on
+     */
+    private int accSpeed = 0;
+
+    /**
+     * Automatic Cruise Control target distance
+     * Possible values are: 0.8, 1.0, 1.2, 1.4 (sec)
+     */
+    private double accDistance = 0.8;
 
     public int getGasPedal() {
         return gasPedal;
@@ -17,5 +58,77 @@ public class InputPacket implements ReadOnlyInputPacket {
 
     public void setGasPedal(int gasPedal) {
         this.gasPedal = gasPedal;
+    }
+
+    public int getBreakPedal() {
+        return breakPedal;
+    }
+
+    public void setBreakPedal(int breakPedal) {
+        this.breakPedal = breakPedal;
+    }
+
+    public int getSteeringWheel() {
+        return steeringWheel;
+    }
+
+    public void setSteeringWheel(int steeringWheel) {
+        this.steeringWheel = steeringWheel;
+    }
+
+    public GEAR_SHIFT_VALUES getGearShift() {
+        return gearShift;
+    }
+
+    public void setGearShift(GEAR_SHIFT_VALUES gearShift) {
+        this.gearShift = gearShift;
+    }
+
+    public boolean isSignalLeftTurn() {
+        return signalLeftTurn;
+    }
+
+    public void setSignalLeftTurn(boolean signalLeftTurn) {
+        this.signalLeftTurn = signalLeftTurn;
+    }
+
+    public boolean isSignalRightTurn() {
+        return signalRightTurn;
+    }
+
+    public void setSignalRightTurn(boolean signalRightTurn) {
+        this.signalRightTurn = signalRightTurn;
+    }
+
+    public boolean isLaneKeepingOn() {
+        return laneKeepingOn;
+    }
+
+    public void setLaneKeepingOn(boolean laneKeepingOn) {
+        this.laneKeepingOn = laneKeepingOn;
+    }
+
+    public boolean isParkingPilotOn() {
+        return parkingPilotOn;
+    }
+
+    public void setParkingPilotOn(boolean parkingPilotOn) {
+        this.parkingPilotOn = parkingPilotOn;
+    }
+
+    public int getAccSpeed() {
+        return accSpeed;
+    }
+
+    public void setAccSpeed(int accSpeed) {
+        this.accSpeed = accSpeed;
+    }
+
+    public double getAccDistance() {
+        return accDistance;
+    }
+
+    public void setAccDistance(double accDistance) {
+        this.accDistance = accDistance;
     }
 }
