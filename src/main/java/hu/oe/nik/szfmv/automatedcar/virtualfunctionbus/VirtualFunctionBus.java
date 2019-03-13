@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySteeringPacket;
 
@@ -18,6 +19,8 @@ public class VirtualFunctionBus {
 
     public ReadOnlySamplePacket samplePacket;
     public ReadOnlySteeringPacket steeringPacket;
+
+    public ReadOnlyPowertrainPacket powertrainPacket;
 
     public List<WorldObject> worldObjects = new ArrayList<>();
 
