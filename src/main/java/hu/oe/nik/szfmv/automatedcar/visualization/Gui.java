@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SamplePacket;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +51,16 @@ public class Gui extends JFrame {
         add(dashboard);
 
         setVisible(true);
+
+
+        // Megj.: A billentyű eseményeket a saját komponens osztályunkban kezeljük le, az InputManager-ben
+        this.addKeyListener(new InputManager(virtualFunctionBus));
+
+
+        // A konstruktor további része nem kell, törölhető.
+        // Csak arra való hogy ki lehessen próbálni hogy valami megjelenjen:
+
+        // TODO: DELETE ----------------------------------------------------------->
 
         keysPressed = new ArrayList<>();
 
@@ -107,6 +118,9 @@ public class Gui extends JFrame {
         };
 
         this.addKeyListener(listen);
+
+        // <------------------------------------------------------------ DELETE
+
 
     }
 
