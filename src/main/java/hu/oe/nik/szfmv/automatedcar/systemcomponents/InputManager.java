@@ -14,14 +14,22 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     private final InputPacket inputPacket;
 
+    private final PedalRangeHandler gasPedalRangeHandler;
+
+    private final PedalRangeHandler breakPedalRangeHandler;
+
     public InputManager(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
         inputPacket = new InputPacket();
         virtualFunctionBus.inputPacket = inputPacket;
+        gasPedalRangeHandler = new PedalRangeHandler(0, 100);
+        breakPedalRangeHandler = new PedalRangeHandler(0, 100);
     }
 
     @Override
     public void loop() {
+        gasPedalRangeHandler.loop();
+        breakPedalRangeHandler.loop();
     }
 
     @Override
@@ -50,10 +58,10 @@ public class InputManager extends SystemComponent implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_W) {
-
+            gasPedalRangeHandler.setIncrease(true);
         }
         if (keyCode == KeyEvent.VK_S) {
-
+            breakPedalRangeHandler.setIncrease(true);
         }
         if (keyCode == KeyEvent.VK_A) {
 
@@ -71,10 +79,10 @@ public class InputManager extends SystemComponent implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_W) {
-
+            gasPedalRangeHandler.setIncrease(false);
         }
         if (keyCode == KeyEvent.VK_S) {
-
+            breakPedalRangeHandler.setIncrease(false);
         }
         if (keyCode == KeyEvent.VK_A) {
 
