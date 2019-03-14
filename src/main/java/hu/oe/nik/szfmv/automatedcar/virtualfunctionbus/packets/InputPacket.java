@@ -20,7 +20,7 @@ public class InputPacket implements ReadOnlyInputPacket {
      */
     private int steeringWheel = 0;
 
-    private GEAR_SHIFT_VALUES gearShift = GEAR_SHIFT_VALUES.P;
+    private GEARSHIFTVALUES gearShift = GEARSHIFTVALUES.P;
 
     private boolean signalLeftTurn = false;
 
@@ -67,11 +67,11 @@ public class InputPacket implements ReadOnlyInputPacket {
         this.steeringWheel = steeringWheel;
     }
 
-    public GEAR_SHIFT_VALUES getGearShift() {
+    public GEARSHIFTVALUES getGearShift() {
         return gearShift;
     }
 
-    public void setGearShift(GEAR_SHIFT_VALUES gearShift) {
+    public void setGearShift(GEARSHIFTVALUES gearShift) {
         this.gearShift = gearShift;
     }
 

@@ -42,23 +42,6 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-
-        if (keyCode == KeyEvent.VK_UP) {
-
-        }
-        if (keyCode == KeyEvent.VK_DOWN) {
-
-        }
-        if (keyCode == KeyEvent.VK_T) {
-
-        }
-        if (keyCode == KeyEvent.VK_L) {
-
-        }
-
-        // TODO ...
-
     }
 
     @Override
@@ -78,7 +61,6 @@ public class InputManager extends SystemComponent implements KeyListener {
             steeringRangeHandler.turnRight();
         }
 
-        // TODO ...
 
     }
 
@@ -99,7 +81,7 @@ public class InputManager extends SystemComponent implements KeyListener {
             steeringRangeHandler.release();
         }
 
-        // TODO ...
+
 
     }
 }
