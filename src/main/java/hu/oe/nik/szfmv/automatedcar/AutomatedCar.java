@@ -56,7 +56,7 @@ public class AutomatedCar extends WorldObject {
                 .add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
                         .scalarMultiply(speed * deltaTime));
         frontWheelPosition = frontWheelPosition
-                .add(new Vector2D(Math.cos(carHeading + steeringAngle), Math.sin(carHeading + steeringAngle))
+                .add(new Vector2D(Math.cos(carHeading + Math.toRadians(steeringAngle)), Math.sin(carHeading + Math.toRadians(steeringAngle)))
                         .scalarMultiply(speed * deltaTime));
 
         carLocation = frontWheelPosition.add(backWheelPosition).scalarMultiply(0.5);
