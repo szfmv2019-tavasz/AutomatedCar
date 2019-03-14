@@ -12,7 +12,9 @@ public interface ReadOnlyInputPacket {
      * N - Neutral
      * D - Drive
      */
-    public enum GEAR_SHIFT_VALUES {P, R, N, D}
+    public enum GEARSHIFTVALUES {
+        P, R, N, D
+    }
 
     /**
      * Get the Gas pedal Position
@@ -25,7 +27,7 @@ public interface ReadOnlyInputPacket {
 
     int getSteeringWheel();
 
-    GEAR_SHIFT_VALUES getGearShift();
+    GEARSHIFTVALUES getGearShift();
 
     boolean isSignalLeftTurn();
 

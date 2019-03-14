@@ -53,9 +53,6 @@ public class Gui extends JFrame {
         setVisible(true);
 
 
-        // Megj.: A billentyű eseményeket a saját komponens osztályunkban kezeljük le, az InputManager-ben
-        this.addKeyListener(new InputManager(virtualFunctionBus));
-
 
         // A konstruktor további része nem kell, törölhető.
         // Csak arra való hogy ki lehessen próbálni hogy valami megjelenjen:
@@ -117,7 +114,7 @@ public class Gui extends JFrame {
             }
         };
 
-        this.addKeyListener(listen);
+//        this.addKeyListener(listen);
 
         // <------------------------------------------------------------ DELETE
 

@@ -64,4 +64,8 @@ public class SteeringRangeHandler {
                 }
         }
     }
+
+    public int getValue() {
+        return value;
+    }
 }
