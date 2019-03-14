@@ -36,8 +36,8 @@ public class InputManager extends SystemComponent implements KeyListener {
         steeringRangeHandler.loop();
 
         inputPacket.setGasPedal(gasPedalRangeHandler.getValue());
-        //TODO: Set the current InputPacket values for break pedal and steering wheel
-
+        inputPacket.setBreakPedal(breakPedalRangeHandler.getValue());
+        inputPacket.setSteeringWheel(steeringRangeHandler.getValue());
     }
 
     @Override
