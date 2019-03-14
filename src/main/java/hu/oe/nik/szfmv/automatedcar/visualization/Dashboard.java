@@ -14,6 +14,9 @@ public class Dashboard extends JPanel {
 
     Gui parent;
 
+    private JLabel gearLabel;
+    private Bracket accBracket;
+    private JLabel accLabel;
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
 
@@ -43,10 +46,28 @@ public class Dashboard extends JPanel {
 
         parent = pt;
 
+        accLabel = addLabel(40,200,"ACC",10);
         leftTurnSignal = addTurnSignal(new Point(30, 150), false);
         rightTurnSignal = addTurnSignal(new Point(180, 150), true);
+        gearLabel = addLabel((width / 2) - 30, 155, "Gear: N", 60);
+        accBracket = new Bracket(20,200,60,25);
+        accBracket.setColor(Color.orange);
+        add(accBracket);
 
         timer.start();
+    }
+
+    private JLabel addLabel(int x, int y, String content, int size) {
+        JLabel label = new JLabel(content);
+        label.setBounds(x, y, size, 20);
+
+        add(label);
+        return label;
+    }
+
+    private void setGear(String gear) {
+
+        gearLabel.setText("Gear: " + gear);
     }
 
     private TurnSignal addTurnSignal(Point position, boolean isRightSignal) {
@@ -56,9 +77,6 @@ public class Dashboard extends JPanel {
     }
 
     public class TurnSignal extends JPanel {
-        private final int WIDTH=30;
-        private final int HEIGHT=30;
-
         Color color;
         Point position;
         boolean isRightSignal;
@@ -88,7 +106,44 @@ public class Dashboard extends JPanel {
             this.position=position;
             this.isRightSignal =isRightArrow;
             this.color=Color.black;
-            this.setBounds(position.x, position.y, WIDTH, HEIGHT);
+            this.setBounds(position.x, position.y, 30, 30);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public class Bracket extends JPanel {
+        Color color;
+        int width, height;
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(new Color(0x888888));
+            g.fillRect(0, 0, width, height);
+            g.setColor(color);
+            g.drawRect(0, 0, width, height);
+        }
+
+        public Bracket (int x, int y, int width, int height) {
+            this.width = width;
+            this.height = height;
+            this.color = Color.black;
+            this.setBounds(x, y, width + 1, height + 1);
         }
     }
 }
