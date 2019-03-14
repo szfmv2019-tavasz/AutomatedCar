@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
-import org.apache.commons.math3.analysis.integration.gauss.SymmetricGaussIntegrator;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 
 public class Powertrain extends SystemComponent {
 
@@ -14,13 +14,8 @@ public class Powertrain extends SystemComponent {
 
     private final PowertrainPacket powertrainPacket;
 
-    private enum GearBox {
-        R, P, N, D
-    }
-
     private int rpm;
     private double speed = 0.0;
-    private GearBox drive = GearBox.D;
 
     public Powertrain(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
@@ -39,7 +34,7 @@ public class Powertrain extends SystemComponent {
     }
 
     private void handleCarMovement() {
-        switch (drive) {
+        switch (virtualFunctionBus.inputPacket.getGearShift()) {
             case R:
                 if ( virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
                     speed -= virtualFunctionBus.inputPacket.getBreakPedal()/10.0 * slowConst * deltaTime;

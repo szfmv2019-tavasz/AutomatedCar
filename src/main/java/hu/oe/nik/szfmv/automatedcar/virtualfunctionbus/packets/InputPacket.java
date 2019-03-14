@@ -20,7 +20,7 @@ public class InputPacket implements ReadOnlyInputPacket {
      */
     private int steeringWheel = 0;
 
-    private GEARSHIFTVALUES gearShift = GEARSHIFTVALUES.P;
+    private GEARSHIFTVALUES gearShift = GEARSHIFTVALUES.D;
 
     private boolean signalLeftTurn = false;
 
