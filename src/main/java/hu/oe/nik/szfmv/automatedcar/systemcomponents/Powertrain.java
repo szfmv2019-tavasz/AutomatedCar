@@ -2,11 +2,12 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
+import org.apache.commons.math3.analysis.integration.gauss.SymmetricGaussIntegrator;
 
 public class Powertrain extends SystemComponent {
 
-    private static final int maxSpeed = 100;
-    private static final int minSpeed = -30;
+    private static final int maxSpeed = 10;
+    private static final int minSpeed = -10;
     private static final double deltaTime = 0.04;
     private static final int accelConst = 10;
     private static final int slowConst = 20;
@@ -18,10 +19,8 @@ public class Powertrain extends SystemComponent {
     }
 
     private int rpm;
-    private int speed;
-    private double throttlePower;
-    private double brakePower;
-    private GearBox drive;
+    private double speed = 0.0;
+    private GearBox drive = GearBox.D;
 
     public Powertrain(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
@@ -30,16 +29,10 @@ public class Powertrain extends SystemComponent {
         virtualFunctionBus.powertrainPacket = powertrainPacket;
 
         this.rpm = 0;
-        this.throttlePower = 0;
-        this.brakePower = 0;
-        this.speed = 0;
-        this.drive = GearBox.D;
     }
 
     @Override
     public void loop() {
-        System.out.println(speed);
-
         handleCarMovement();
 
         updatePowertrain();
@@ -48,56 +41,54 @@ public class Powertrain extends SystemComponent {
     private void handleCarMovement() {
         switch (drive) {
             case R:
-                if (throttlePower > 0 && speed < maxSpeed) {
-                    speed += throttlePower * accelConst * deltaTime;
+                if ( virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal()/10.0 * slowConst * deltaTime;
                 }
 
-                if (throttlePower == 0 && speed > 0) {
-                    speed += accelConst * deltaTime;
-                }
-
-                if (brakePower > 0 && speed < minSpeed) {
-                    speed -= brakePower * slowConst * deltaTime;
-                }
+                releasedPedals();
                 break;
             case P:
-                if (speed > 0 && brakePower == 0) {
-                    speed -= brakePower * deltaTime;
-                }
-
-                if (speed > 0 && brakePower > 0) {
-                    speed -= brakePower * slowConst * deltaTime;
-                }
+                releasedPedals();
                 break;
             case N:
-                if (speed > 0 && brakePower == 0) {
-                    speed -= brakePower * deltaTime;
-                }
-
-                if (speed > 0 && brakePower > 0) {
-                    speed -= brakePower * slowConst * deltaTime;
-                }
+                releasedPedals();
                 break;
             case D:
-                if (throttlePower > 0 && speed < maxSpeed) {
-                    speed += throttlePower * accelConst * deltaTime;
+
+                if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
+                    speed += virtualFunctionBus.inputPacket.getGasPedal()/10.0 * accelConst * deltaTime;
                 }
 
-                if (throttlePower == 0 && speed > 0) {
-                    speed -= accelConst * deltaTime;
+                // Ez tolatás, de még nincs váltónk
+                if ( virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal()/10.0 * slowConst * deltaTime;
                 }
 
-                if (brakePower > 0 && speed > 0) {
-                    speed -= brakePower * slowConst * deltaTime;
-                }
+                releasedPedals();
                 break;
             default: break;
         }
 
-        powertrainPacket.setSpeed(speed);
+        powertrainPacket.setSpeed((int)speed);
     }
 
     private void updatePowertrain() {
         virtualFunctionBus.powertrainPacket = powertrainPacket;
+    }
+
+    private void releasedPedals() {
+        if (virtualFunctionBus.inputPacket.getGasPedal() == 0 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
+            speed -= 25 * deltaTime;
+            if (speed < 0) {
+                speed = 0;
+            }
+        }
+
+        if (virtualFunctionBus.inputPacket.getGasPedal() == 0 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
+            speed += 25 * deltaTime;
+            if (speed > 0) {
+                speed = 0;
+            }
+        }
     }
 }
