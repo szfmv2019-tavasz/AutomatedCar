@@ -2,9 +2,11 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 /**
  * System component class handling keyboard events.
@@ -19,6 +21,8 @@ public class InputManager extends SystemComponent implements KeyListener {
     private final PedalRangeHandler breakPedalRangeHandler;
 
     private final SteeringRangeHandler steeringRangeHandler;
+
+    private ArrayList<Integer> pressedKeysList = new ArrayList<>();
 
     public InputManager(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
@@ -46,42 +50,162 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
+        Integer keyCode = e.getKeyCode();
 
-        if (keyCode == KeyEvent.VK_W) {
+        if(!pressedKeysList.contains(keyCode))
+        {
+            this.pressedKeysList.add(keyCode);
+        }
+        for (Integer key : this.pressedKeysList) {
+            this.keyDown(key);
+        }
+    }
+
+    private void keyDown(Integer key)
+    {
+        if (key == KeyEvent.VK_W) {
             gasPedalRangeHandler.setIncrease(true);
         }
-        if (keyCode == KeyEvent.VK_S) {
+        if (key == KeyEvent.VK_S) {
             breakPedalRangeHandler.setIncrease(true);
+            inputPacket.setAccSpeed(0);
         }
-        if (keyCode == KeyEvent.VK_A) {
+        if (key == KeyEvent.VK_A) {
             steeringRangeHandler.turnLeft();
         }
-        if (keyCode == KeyEvent.VK_D) {
+        if (key == KeyEvent.VK_D) {
             steeringRangeHandler.turnRight();
         }
+        if (key == KeyEvent.VK_UP) {
+            if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P))
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
+            }
+            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) //Sebesség adatot bekérni, hogy ne induljon el hirtelen rükvercből előre az autó
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
+            }
+            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N))
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.D);
+            }
+        }
 
+        if (key == KeyEvent.VK_DOWN) {
+            if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D))
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
+            }
+            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N))  //Sebesség adatot bekérni, hogy ne lehessen rükibe tenni
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
+            }
+            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R))
+            {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.P);
+            }
+        }
 
+        if(key==KeyEvent.VK_T)
+        {
+            if(inputPacket.getAccDistance() == 1.4) {
+                inputPacket.setAccDistance(0.8);
+            }
+            else {
+                inputPacket.setAccDistance(inputPacket.getAccDistance() + 0.2);
+            }
+        }
+
+        if(key == KeyEvent.VK_PLUS) //Sebesség lekérése
+        {
+            if(inputPacket.getAccSpeed() == 0)
+            {
+                //Sebesség megadása ACCSpeednek
+                inputPacket.setAccSpeed(120); //Teszt céljából
+            }
+            else if(inputPacket.getAccSpeed() !=0)
+            {
+                if(inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150)
+                {
+                    inputPacket.setAccSpeed(inputPacket.getAccSpeed()+10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
+                }
+            }
+        }
+        if(key == KeyEvent.VK_MINUS) //Sebesség lekérése
+        {
+            if(inputPacket.getAccSpeed() == 0)
+            {
+                //Sebesség megadása ACCSpeednek
+                inputPacket.setAccSpeed(120);
+            }
+            else if(inputPacket.getAccSpeed()!=0)
+            {
+                if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160)
+                {
+                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
+                }
+            }
+        }
+        if(key == KeyEvent.VK_L)
+        {
+            if(!inputPacket.isLaneKeepingOn()) {
+                inputPacket.setLaneKeepingOn(true);
+            }
+            else {
+                inputPacket.setLaneKeepingOn(false);
+            }
+        }
+        if(key == KeyEvent.VK_P)
+        {
+            if(!inputPacket.isParkingPilotOn()) {
+                inputPacket.setParkingPilotOn(true);
+            }
+            else {
+                inputPacket.setParkingPilotOn(false);
+            }
+        }
+        if(key == KeyEvent.VK_Q)
+        {
+            if(!inputPacket.isSignalRightTurn()) {
+                if (!inputPacket.isSignalLeftTurn()) {
+                    inputPacket.setSignalLeftTurn(true);
+                } else {
+                    inputPacket.setSignalLeftTurn(false);
+                }
+            }
+        }
+        if(key == KeyEvent.VK_E)
+        {
+            if(!inputPacket.isSignalLeftTurn()) {
+                if (!inputPacket.isSignalRightTurn()) {
+                    inputPacket.setSignalRightTurn(true);
+                } else {
+                    inputPacket.setSignalRightTurn(false);
+                }
+            }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
+        Integer keyCode = e.getKeyCode();
+        this.pressedKeysList.remove(keyCode);  //pressedKeyList.remove(pressedKeyList.indexOf(keyCode));
+        this.keyUp(keyCode);
+    }
 
-        if (keyCode == KeyEvent.VK_W) {
+    private void keyUp(Integer key)
+    {
+        if (key == KeyEvent.VK_W) {
             gasPedalRangeHandler.setIncrease(false);
         }
-        if (keyCode == KeyEvent.VK_S) {
+        if (key == KeyEvent.VK_S) {
             breakPedalRangeHandler.setIncrease(false);
         }
-        if (keyCode == KeyEvent.VK_A) {
+        if (key == KeyEvent.VK_A) {
             steeringRangeHandler.release();
         }
-        if (keyCode == KeyEvent.VK_D) {
+        if (key == KeyEvent.VK_D) {
             steeringRangeHandler.release();
         }
-
-
-
     }
 }
