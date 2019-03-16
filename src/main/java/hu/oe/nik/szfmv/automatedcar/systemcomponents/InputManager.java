@@ -26,7 +26,7 @@ public class InputManager extends SystemComponent implements KeyListener {
     private static final int ACC_SPEED_MAX = 160;
     private static final int ACC_SPEED_STEP = 10;
 
-    //TODO Remove ACC_SPEED_INIT constant when init speed is from VFB
+    //Remove ACC_SPEED_INIT constant when init speed is from VFB
     private static final int ACC_SPEED_INIT = 120;
 
     private final InputPacket inputPacket;
@@ -159,7 +159,7 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     private void handleKeyPlus() {
         if (inputPacket.getAccSpeed() == 0) {
-            //TODO Set the currend speed from VFB:
+            //Set the currend speed from VFB:
             inputPacket.setAccSpeed(ACC_SPEED_INIT);
         } else if (inputPacket.getAccSpeed() != 0) {
             inputPacket.setAccSpeed(inputPacket.getAccSpeed() + ACC_SPEED_STEP);
@@ -171,7 +171,7 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     private void handleKeyMinus() {
         if (inputPacket.getAccSpeed() == 0) {
-            //TODO Set the currend speed from VFB:
+            //Set the currend speed from VFB:
             inputPacket.setAccSpeed(ACC_SPEED_INIT);
         } else if (inputPacket.getAccSpeed() != 0) {
             inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
