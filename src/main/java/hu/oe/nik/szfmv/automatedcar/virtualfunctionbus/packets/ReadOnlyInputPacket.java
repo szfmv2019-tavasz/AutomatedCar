@@ -12,7 +12,7 @@ public interface ReadOnlyInputPacket {
      * N - Neutral
      * D - Drive
      */
-    public enum GEARSHIFTVALUES {
+    public enum GearShiftValues {
         P, R, N, D
     }
 
@@ -27,7 +27,7 @@ public interface ReadOnlyInputPacket {
 
     int getSteeringWheel();
 
-    GEARSHIFTVALUES getGearShift();
+    GearShiftValues getGearShift();
 
     boolean isSignalLeftTurn();
 

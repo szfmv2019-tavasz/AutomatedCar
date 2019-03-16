@@ -14,6 +14,17 @@ import java.util.ArrayList;
  */
 public class InputManager extends SystemComponent implements KeyListener {
 
+    private static final double ACC_DISTANCE_MIN = 0.8;
+    private static final double ACC_DISTANCE_MAX = 1.4;
+    private static final double ACC_DISTANCE_STEP = 0.2;
+
+    private static final int ACC_SPEED_MIN = 30;
+    private static final int ACC_SPEED_MAX = 160;
+    private static final int ACC_SPEED_STEP = 10;
+
+    //TODO Remove ACC_SPEED_INIT constant when init speed is from VFB
+    private static final int ACC_SPEED_INIT = 120;
+
     private final InputPacket inputPacket;
 
     private final PedalRangeHandler gasPedalRangeHandler;
@@ -53,124 +64,148 @@ public class InputManager extends SystemComponent implements KeyListener {
         Integer keyCode = e.getKeyCode();
 
         if (!pressedKeysList.contains(keyCode)) {
-            this.pressedKeysList.add(keyCode);
+            pressedKeysList.add(keyCode);
         }
-        for (Integer key : this.pressedKeysList) {
-            this.keyDown(key);
-        }
-    }
-
-    private void keyDown(Integer key) {
-
-        if (key == KeyEvent.VK_W) {
-            gasPedalRangeHandler.setIncrease(true);
-        }
-        if (key == KeyEvent.VK_S) {
-            breakPedalRangeHandler.setIncrease(true);
-            inputPacket.setAccSpeed(0);
-        }
-        if (key == KeyEvent.VK_A) {
-            steeringRangeHandler.turnLeft();
-        }
-        if (key == KeyEvent.VK_D) {
-            steeringRangeHandler.turnRight();
-        }
-        if (key == KeyEvent.VK_UP) {
-            if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.D);
-            }
-        }
-        if (key == KeyEvent.VK_DOWN) {
-            if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
-                inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.P);
-            }
-        }
-        if (key == KeyEvent.VK_T) {
-            if (inputPacket.getAccDistance() == 1.4) {
-                inputPacket.setAccDistance(0.8);
-            } else {
-                inputPacket.setAccDistance(inputPacket.getAccDistance() + 0.2);
-            }
-        }
-        if (key == KeyEvent.VK_PLUS) {
-            if (inputPacket.getAccSpeed() == 0) {
-                inputPacket.setAccSpeed(120); //Teszt céljából
-            } else if (inputPacket.getAccSpeed() != 0) {
-                if (inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150) {
-                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() + 10); // AccSpeedet - aktuális sebességg legyen
-                }
-            }
-        }
-        if (key == KeyEvent.VK_MINUS) {
-            if (inputPacket.getAccSpeed() == 0) {
-                inputPacket.setAccSpeed(120);
-            } else if (inputPacket.getAccSpeed() != 0) {
-                if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160) {
-                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10);
-                }
-            }
-        }
-        if (key == KeyEvent.VK_L) {
-            if (!inputPacket.isLaneKeepingOn()) {
-                inputPacket.setLaneKeepingOn(true);
-            } else {
-                inputPacket.setLaneKeepingOn(false);
-            }
-        }
-        if (key == KeyEvent.VK_P) {
-            if (!inputPacket.isParkingPilotOn()) {
-                inputPacket.setParkingPilotOn(true);
-            } else {
-                inputPacket.setParkingPilotOn(false);
-            }
-        }
-        if (key == KeyEvent.VK_Q) {
-            if (!inputPacket.isSignalRightTurn()) {
-                if (!inputPacket.isSignalLeftTurn()) {
-                    inputPacket.setSignalLeftTurn(true);
-                } else {
-                    inputPacket.setSignalLeftTurn(false);
-                }
-            }
-        }
-        if (key == KeyEvent.VK_E) {
-            if (!inputPacket.isSignalLeftTurn()) {
-                if (!inputPacket.isSignalRightTurn()) {
-                    inputPacket.setSignalRightTurn(true);
-                } else {
-                    inputPacket.setSignalRightTurn(false);
-                }
-            }
+        for (Integer key : pressedKeysList) {
+            handleKeyPressed(key);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         Integer keyCode = e.getKeyCode();
-        this.pressedKeysList.remove(keyCode);
-        this.keyUp(keyCode);
+        pressedKeysList.remove(keyCode);
+        handleKeyWSADReleased(keyCode);
     }
 
-    private void keyUp(Integer key) {
-        if (key == KeyEvent.VK_W) {
-            gasPedalRangeHandler.setIncrease(false);
+    private void handleKeyPressed(Integer key) {
+        switch (key) {
+            case KeyEvent.VK_UP: handleKeyUp();
+            case KeyEvent.VK_DOWN: handleKeyDown();
+            case KeyEvent.VK_T: handleKeyT();
+            case KeyEvent.VK_PLUS: handleKeyPlus();
+            case KeyEvent.VK_MINUS: handleKeyMinus();
+            case KeyEvent.VK_L: handleKeyL();
+            case KeyEvent.VK_P: handleKeyP();
+            case KeyEvent.VK_Q: handleKeyQ();
+            case KeyEvent.VK_E: handleKeyE();
+            default:
+                handleKeyWSADPressed(key);
         }
-        if (key == KeyEvent.VK_S) {
-            breakPedalRangeHandler.setIncrease(false);
+    }
+
+    private void handleKeyWSADPressed(Integer key) {
+        switch (key) {
+            case KeyEvent.VK_W:
+                gasPedalRangeHandler.setIncrease(true);
+            case KeyEvent.VK_S:
+                breakPedalRangeHandler.setIncrease(true);
+                inputPacket.setAccSpeed(0);
+            case KeyEvent.VK_A:
+                steeringRangeHandler.turnLeft();
+            case KeyEvent.VK_D:
+                steeringRangeHandler.turnRight();
         }
-        if (key == KeyEvent.VK_A) {
-            steeringRangeHandler.release();
+    }
+
+    private void handleKeyWSADReleased(Integer key) {
+        switch (key) {
+            case KeyEvent.VK_W:
+                gasPedalRangeHandler.setIncrease(false);
+            case KeyEvent.VK_S:
+                breakPedalRangeHandler.setIncrease(false);
+            case KeyEvent.VK_A:
+                steeringRangeHandler.release();
+            case KeyEvent.VK_D:
+                steeringRangeHandler.release();
         }
-        if (key == KeyEvent.VK_D) {
-            steeringRangeHandler.release();
+    }
+
+    private void handleKeyUp() {
+        if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.P) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
+        } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.R) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+        } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.N) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.D);
+        }
+    }
+
+    private void handleKeyDown() {
+        if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+        } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.N) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
+        } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.R) {
+            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.P);
+        }
+    }
+
+    private void handleKeyT() {
+        if (inputPacket.getAccDistance() == ACC_DISTANCE_MAX) {
+            inputPacket.setAccDistance(ACC_DISTANCE_MIN);
+        } else {
+            inputPacket.setAccDistance(inputPacket.getAccDistance() + ACC_DISTANCE_STEP);
+        }
+    }
+
+    private void handleKeyPlus() {
+        if (inputPacket.getAccSpeed() == 0) {
+            //TODO Set the currend speed from VFB:
+            inputPacket.setAccSpeed(ACC_SPEED_INIT);
+        } else if (inputPacket.getAccSpeed() != 0) {
+            inputPacket.setAccSpeed(inputPacket.getAccSpeed() + ACC_SPEED_STEP);
+            if (inputPacket.getAccSpeed() > ACC_SPEED_MAX) {
+                inputPacket.setAccSpeed(ACC_SPEED_MAX);
+            }
+        }
+    }
+
+    private void handleKeyMinus() {
+        if (inputPacket.getAccSpeed() == 0) {
+            //TODO Set the currend speed from VFB:
+            inputPacket.setAccSpeed(120);
+        } else if (inputPacket.getAccSpeed() != 0) {
+            inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
+            if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
+                inputPacket.setAccSpeed(ACC_SPEED_MIN);
+            }
+        }
+    }
+
+    private void handleKeyL() {
+        if (!inputPacket.isLaneKeepingOn()) {
+            inputPacket.setLaneKeepingOn(true);
+        } else {
+            inputPacket.setLaneKeepingOn(false);
+        }
+    }
+
+    private void handleKeyP() {
+        if (!inputPacket.isParkingPilotOn()) {
+            inputPacket.setParkingPilotOn(true);
+        } else {
+            inputPacket.setParkingPilotOn(false);
+        }
+    }
+
+    private void handleKeyQ() {
+        if (!inputPacket.isSignalRightTurn()) {
+            if (!inputPacket.isSignalLeftTurn()) {
+                inputPacket.setSignalLeftTurn(true);
+            } else {
+                inputPacket.setSignalLeftTurn(false);
+            }
+        }
+    }
+
+    private void handleKeyE() {
+        if (!inputPacket.isSignalLeftTurn()) {
+            if (!inputPacket.isSignalRightTurn()) {
+                inputPacket.setSignalRightTurn(true);
+            } else {
+                inputPacket.setSignalRightTurn(false);
+            }
         }
     }
 }
