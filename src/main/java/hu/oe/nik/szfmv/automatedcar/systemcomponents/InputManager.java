@@ -78,7 +78,7 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (key == KeyEvent.VK_UP) {
             if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) { //Sebesség adatot bekérni
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
             } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.D);
@@ -87,7 +87,7 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (key == KeyEvent.VK_DOWN) {
             if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
-            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {  //Sebesség adatot bekérni
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
             } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.P);
@@ -105,14 +105,14 @@ public class InputManager extends SystemComponent implements KeyListener {
                 inputPacket.setAccSpeed(120); //Teszt céljából
             } else if (inputPacket.getAccSpeed() != 0) {
                 if (inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150) {
-                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() + 10); // AccSpeedet -> aktuális sebességg legyen
+                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() + 10); // AccSpeedet - aktuális sebességg legyen
                 }
             }
         }
         if (key == KeyEvent.VK_MINUS) {
             if (inputPacket.getAccSpeed() == 0) {
                 inputPacket.setAccSpeed(120);
-            } else if (inputPacket.getAccSpeed()!= 0) {
+            } else if (inputPacket.getAccSpeed() != 0) {
                 if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160) {
                     inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10);
                 }
@@ -159,8 +159,7 @@ public class InputManager extends SystemComponent implements KeyListener {
         this.keyUp(keyCode);
     }
 
-    private void keyUp(Integer key)
-    {
+    private void keyUp(Integer key) {
         if (key == KeyEvent.VK_W) {
             gasPedalRangeHandler.setIncrease(false);
         }
