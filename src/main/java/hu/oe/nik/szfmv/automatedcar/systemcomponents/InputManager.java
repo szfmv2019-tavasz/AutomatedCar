@@ -3,6 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
  * The keyboard events are transformed to output values in the InputPacket class.
  */
 public class InputManager extends SystemComponent implements KeyListener {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final double ACC_DISTANCE_MIN = 0.8;
     private static final double ACC_DISTANCE_MAX = 1.4;
@@ -105,6 +109,8 @@ public class InputManager extends SystemComponent implements KeyListener {
                 steeringRangeHandler.turnLeft();
             case KeyEvent.VK_D:
                 steeringRangeHandler.turnRight();
+            default:
+                LOGGER.debug("Unused key pressed: " + key);
         }
     }
 
@@ -118,6 +124,8 @@ public class InputManager extends SystemComponent implements KeyListener {
                 steeringRangeHandler.release();
             case KeyEvent.VK_D:
                 steeringRangeHandler.release();
+            default:
+                LOGGER.debug("Unused key released: " + key);
         }
     }
 
@@ -164,7 +172,7 @@ public class InputManager extends SystemComponent implements KeyListener {
     private void handleKeyMinus() {
         if (inputPacket.getAccSpeed() == 0) {
             //TODO Set the currend speed from VFB:
-            inputPacket.setAccSpeed(120);
+            inputPacket.setAccSpeed(ACC_SPEED_INIT);
         } else if (inputPacket.getAccSpeed() != 0) {
             inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
             if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
