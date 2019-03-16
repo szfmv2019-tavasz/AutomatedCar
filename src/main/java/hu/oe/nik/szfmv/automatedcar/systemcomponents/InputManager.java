@@ -78,38 +78,32 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (key == KeyEvent.VK_UP) {
             if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
-            }
-            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) { //Sebesség adatot bekérni, hogy ne induljon el hirtelen rükvercből előre az autó
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) { //Sebesség adatot bekérni, hogy ne induljon el hirtelen rükvercből előre az autó
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
-            }
-            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.D);
             }
         }
         if (key == KeyEvent.VK_DOWN) {
             if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
-            }
-            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {  //Sebesség adatot bekérni, hogy ne lehessen rükibe tenni
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {  //Sebesség adatot bekérni, hogy ne lehessen rükibe tenni
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
-            }
-            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
+            } else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.P);
             }
         }
         if (key == KeyEvent.VK_T) {
             if (inputPacket.getAccDistance() == 1.4) {
                 inputPacket.setAccDistance(0.8);
-            }
-            else {
+            } else {
                 inputPacket.setAccDistance(inputPacket.getAccDistance() + 0.2);
             }
         }
         if (key == KeyEvent.VK_PLUS) {
             if (inputPacket.getAccSpeed() == 0) {
                 inputPacket.setAccSpeed(120); //Teszt céljából
-            }
-            else if (inputPacket.getAccSpeed() != 0) {
+            } else if (inputPacket.getAccSpeed() != 0) {
                 if (inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150) {
                     inputPacket.setAccSpeed(inputPacket.getAccSpeed() + 10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
                 }
@@ -118,8 +112,7 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (key == KeyEvent.VK_MINUS) {
             if(inputPacket.getAccSpeed() == 0) {
                 inputPacket.setAccSpeed(120);
-            }
-            else if (inputPacket.getAccSpeed()!= 0) {
+            } else if (inputPacket.getAccSpeed()!= 0) {
                 if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160) {
                     inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10);
                 }
@@ -128,16 +121,14 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (key == KeyEvent.VK_L) {
             if (!inputPacket.isLaneKeepingOn()) {
                 inputPacket.setLaneKeepingOn(true);
-            }
-            else {
+            } else {
                 inputPacket.setLaneKeepingOn(false);
             }
         }
         if (key == KeyEvent.VK_P) {
             if (!inputPacket.isParkingPilotOn()) {
                 inputPacket.setParkingPilotOn(true);
-            }
-            else {
+            } else {
                 inputPacket.setParkingPilotOn(false);
             }
         }
@@ -145,8 +136,7 @@ public class InputManager extends SystemComponent implements KeyListener {
             if (!inputPacket.isSignalRightTurn()) {
                 if (!inputPacket.isSignalLeftTurn()) {
                     inputPacket.setSignalLeftTurn(true);
-                }
-                else {
+                } else {
                     inputPacket.setSignalLeftTurn(false);
                 }
             }
@@ -155,8 +145,7 @@ public class InputManager extends SystemComponent implements KeyListener {
             if (!inputPacket.isSignalLeftTurn()) {
                 if (!inputPacket.isSignalRightTurn()) {
                     inputPacket.setSignalRightTurn(true);
-                }
-                else {
+                } else {
                     inputPacket.setSignalRightTurn(false);
                 }
             }
