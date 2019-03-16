@@ -52,8 +52,7 @@ public class InputManager extends SystemComponent implements KeyListener {
     public void keyPressed(KeyEvent e) {
         Integer keyCode = e.getKeyCode();
 
-        if(!pressedKeysList.contains(keyCode))
-        {
+        if (!pressedKeysList.contains(keyCode)) {
             this.pressedKeysList.add(keyCode);
         }
         for (Integer key : this.pressedKeysList) {
@@ -61,8 +60,8 @@ public class InputManager extends SystemComponent implements KeyListener {
         }
     }
 
-    private void keyDown(Integer key)
-    {
+    private void keyDown(Integer key) {
+
         if (key == KeyEvent.VK_W) {
             gasPedalRangeHandler.setIncrease(true);
         }
@@ -77,109 +76,87 @@ public class InputManager extends SystemComponent implements KeyListener {
             steeringRangeHandler.turnRight();
         }
         if (key == KeyEvent.VK_UP) {
-            if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P))
-            {
+            if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.P)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
             }
-            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) //Sebesség adatot bekérni, hogy ne induljon el hirtelen rükvercből előre az autó
-            {
+            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) { //Sebesség adatot bekérni, hogy ne induljon el hirtelen rükvercből előre az autó
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
             }
-            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N))
-            {
+            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.D);
             }
         }
-
         if (key == KeyEvent.VK_DOWN) {
-            if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D))
-            {
+            if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.D)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.N);
             }
-            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N))  //Sebesség adatot bekérni, hogy ne lehessen rükibe tenni
-            {
+            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.N)) {  //Sebesség adatot bekérni, hogy ne lehessen rükibe tenni
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.R);
             }
-            else if(inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R))
-            {
+            else if (inputPacket.getGearShift().equals(ReadOnlyInputPacket.GEARSHIFTVALUES.R)) {
                 inputPacket.setGearShift(ReadOnlyInputPacket.GEARSHIFTVALUES.P);
             }
         }
-
-        if(key==KeyEvent.VK_T)
-        {
-            if(inputPacket.getAccDistance() == 1.4) {
+        if (key == KeyEvent.VK_T) {
+            if (inputPacket.getAccDistance() == 1.4) {
                 inputPacket.setAccDistance(0.8);
             }
             else {
                 inputPacket.setAccDistance(inputPacket.getAccDistance() + 0.2);
             }
         }
-
-        if(key == KeyEvent.VK_PLUS) //Sebesség lekérése
-        {
-            if(inputPacket.getAccSpeed() == 0)
-            {
-                //Sebesség megadása ACCSpeednek
+        if (key == KeyEvent.VK_PLUS) {
+            if (inputPacket.getAccSpeed() == 0) {
                 inputPacket.setAccSpeed(120); //Teszt céljából
             }
-            else if(inputPacket.getAccSpeed() !=0)
-            {
-                if(inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150)
-                {
-                    inputPacket.setAccSpeed(inputPacket.getAccSpeed()+10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
+            else if (inputPacket.getAccSpeed() != 0) {
+                if (inputPacket.getAccSpeed() >= 30 && inputPacket.getAccSpeed() <= 150) {
+                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() + 10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
                 }
             }
         }
-        if(key == KeyEvent.VK_MINUS) //Sebesség lekérése
-        {
-            if(inputPacket.getAccSpeed() == 0)
-            {
-                //Sebesség megadása ACCSpeednek
+        if (key == KeyEvent.VK_MINUS) {
+            if(inputPacket.getAccSpeed() == 0) {
                 inputPacket.setAccSpeed(120);
             }
-            else if(inputPacket.getAccSpeed()!=0)
-            {
-                if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160)
-                {
-                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10); // Itt a AccSpeedet az aktuális sebességgel kell helyettesíteni
+            else if (inputPacket.getAccSpeed()!= 0) {
+                if (inputPacket.getAccSpeed() >= 40 && inputPacket.getAccSpeed() <= 160) {
+                    inputPacket.setAccSpeed(inputPacket.getAccSpeed() - 10);
                 }
             }
         }
-        if(key == KeyEvent.VK_L)
-        {
-            if(!inputPacket.isLaneKeepingOn()) {
+        if (key == KeyEvent.VK_L) {
+            if (!inputPacket.isLaneKeepingOn()) {
                 inputPacket.setLaneKeepingOn(true);
             }
             else {
                 inputPacket.setLaneKeepingOn(false);
             }
         }
-        if(key == KeyEvent.VK_P)
-        {
-            if(!inputPacket.isParkingPilotOn()) {
+        if (key == KeyEvent.VK_P) {
+            if (!inputPacket.isParkingPilotOn()) {
                 inputPacket.setParkingPilotOn(true);
             }
             else {
                 inputPacket.setParkingPilotOn(false);
             }
         }
-        if(key == KeyEvent.VK_Q)
-        {
-            if(!inputPacket.isSignalRightTurn()) {
+        if (key == KeyEvent.VK_Q) {
+            if (!inputPacket.isSignalRightTurn()) {
                 if (!inputPacket.isSignalLeftTurn()) {
                     inputPacket.setSignalLeftTurn(true);
-                } else {
+                }
+                else {
                     inputPacket.setSignalLeftTurn(false);
                 }
             }
         }
-        if(key == KeyEvent.VK_E)
-        {
-            if(!inputPacket.isSignalLeftTurn()) {
+        if (key == KeyEvent.VK_E) {
+            if (!inputPacket.isSignalLeftTurn()) {
                 if (!inputPacket.isSignalRightTurn()) {
                     inputPacket.setSignalRightTurn(true);
-                } else {
+                }
+                else {
                     inputPacket.setSignalRightTurn(false);
                 }
             }
