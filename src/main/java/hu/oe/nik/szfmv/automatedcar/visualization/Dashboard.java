@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.TextSignal;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.TurnSignal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,11 @@ public class Dashboard extends JPanel {
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
 
+    private TextSignal accSpeedSignal;
+    private TextSignal accDistanceSignal;
+    private TextSignal accOnOffSignal;
+    private TextSignal ppSignal;
+
     private Thread timer = new Thread() {
         int difference;    // ez nem tudom mire valo, egyelore maradjon
 
@@ -36,8 +42,10 @@ public class Dashboard extends JPanel {
                         handleInputPacket(vfb.inputPacket);
 
                         //...
-
                     }
+
+                    setTestValues();    // csak teszteleshez
+
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     LOGGER.error("Error in Dashboard timer thread!", ex);
@@ -45,18 +53,20 @@ public class Dashboard extends JPanel {
             }
         }
 
-        private void handleInputPacket(ReadOnlyInputPacket inputPacket) {
-            if (inputPacket.isSignalLeftTurn()) {
-                leftTurnSignal.setSwitchedOn(true);
-            }
-            if (inputPacket.isSignalRightTurn()) {
-                leftTurnSignal.setSwitchedOn(false);
-            }
-
-            //...
+        // Csak tesztelesi celokra:
+        private void setTestValues() {
+            leftTurnSignal.setSwitchedOn(true);
+            accSpeedSignal.setText("130");
 
         }
 
+        private void handleInputPacket(ReadOnlyInputPacket inputPacket) {
+            leftTurnSignal.setSwitchedOn(inputPacket.isSignalLeftTurn());
+            rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
+            accSpeedSignal.setText(String.valueOf(inputPacket.getAccSpeed()));
+
+            //...
+        }
     };
 
     /**
@@ -74,6 +84,7 @@ public class Dashboard extends JPanel {
 
     private void addComponents() {
         addTurnSignals();
+        addTextSignals();
 
         //...
 
@@ -84,6 +95,17 @@ public class Dashboard extends JPanel {
         rightTurnSignal = new TurnSignal(180, 150, false);
         add(leftTurnSignal);
         add(rightTurnSignal);
+    }
+
+    private void addTextSignals() {
+        accSpeedSignal = new TextSignal(20, 200, 50, 25, "130", 14);
+
+        // ...
+
+        add(accSpeedSignal);
+
+        // ...
+
     }
 
 }

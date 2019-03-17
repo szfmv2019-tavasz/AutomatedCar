@@ -1,5 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.visualization.dashboard;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,10 +18,12 @@ import java.awt.*;
  */
 public class TurnSignal extends JPanel {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private static final int WIDTH = 30;
     private static final int HEIGHT = 30;
     private static final Color COLOR_BACKGROUND = new Color(0x888888);
-    private static final Color COLOR_OFF = Color.black;
+    private static final Color COLOR_OFF = Color.white;
     private static final Color COLOR_ON = Color.orange;
 
     private int[] xCoords;
@@ -38,7 +43,7 @@ public class TurnSignal extends JPanel {
 
     public void setSwitchedOn(boolean switchedOn) {
         currentColor = switchedOn ? COLOR_ON : COLOR_OFF;
-        System.out.println("setSwitchedOn: " + switchedOn);
+        LOGGER.debug("TurnSignal.setSwitchedOn: " + switchedOn);
         repaint();
     }
 
