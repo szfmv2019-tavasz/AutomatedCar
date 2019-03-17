@@ -43,7 +43,10 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                window.getCourseDisplay().drawWorld(world);
+
+                // ez vmiert elcseszi a dashboard megjeleniteset (csak az ablak talcara rakasa es elovetele utan jelenik meg rendesen! ???)
+//                window.getCourseDisplay().drawWorld(world);
+
 //                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
