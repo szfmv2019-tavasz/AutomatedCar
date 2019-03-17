@@ -30,6 +30,11 @@ public class Dashboard extends JPanel {
     private TextSignal accDistanceSignal;
     private TextSignal accOnOffSignal;
     private TextSignal ppSignal;
+    private TextSignal lkaSignal;
+    private TextSignal lkaWarningSignal;
+    private TextSignal trafficSignSignal;
+    private TextSignal aebWarningSignal;
+    private TextSignal rrWarningSignal;
 
     private Thread timer = new Thread() {
         int difference;    // ez nem tudom mire valo, egyelore maradjon
@@ -55,8 +60,8 @@ public class Dashboard extends JPanel {
 
         // Csak tesztelesi celokra:
         private void setTestValues() {
-            leftTurnSignal.setSwitchedOn(true);
-            accSpeedSignal.setText("130");
+            //leftTurnSignal.setSwitchedOn(true);
+            //accSpeedSignal.setText("130");
 
         }
 
@@ -64,6 +69,11 @@ public class Dashboard extends JPanel {
             leftTurnSignal.setSwitchedOn(inputPacket.isSignalLeftTurn());
             rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
             accSpeedSignal.setText(String.valueOf(inputPacket.getAccSpeed()));
+            accDistanceSignal.setText(String.valueOf(inputPacket.getAccDistance()));
+            accOnOffSignal.setSwitchedOn(false);
+            ppSignal.setSwitchedOn(false);
+            lkaSignal.setSwitchedOn(false);
+            lkaSignal.setSwitchedOn(false);
 
             //...
         }
@@ -98,14 +108,29 @@ public class Dashboard extends JPanel {
     }
 
     private void addTextSignals() {
-        accSpeedSignal = new TextSignal(20, 200, 50, 25, "130", 14);
+        accSpeedSignal = new TextSignal(20, 200, 50, 25, "0", 14);
+        accDistanceSignal = new TextSignal(70,200,50,25,"0.8",14);
+        accOnOffSignal = new TextSignal(20,235,50,25,"ACC",14);
+        ppSignal = new TextSignal(70,235,50,25,"PP",14);
+        lkaSignal = new TextSignal(20,270,50,25,"LKA",14);
+        lkaWarningSignal = new TextSignal(20,295,100,25,"LKA WARN",14);
+        trafficSignSignal = new TextSignal(130,200,100,100,"STOP",14);
+        aebWarningSignal = new TextSignal(130,295,100,25,"AEB WARN",14);
+        rrWarningSignal = new TextSignal(130,320,100,25,"RR WARN",14);
 
         // ...
 
         add(accSpeedSignal);
+        add(accDistanceSignal);
+        add(accOnOffSignal);
+        add(ppSignal);
+        add(lkaSignal);
+        add(lkaWarningSignal);
+        add(trafficSignSignal);
+        add(aebWarningSignal);
+        add(rrWarningSignal);
 
         // ...
 
     }
-
 }
