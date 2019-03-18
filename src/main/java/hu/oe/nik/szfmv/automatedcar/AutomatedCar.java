@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -67,10 +68,10 @@ public class AutomatedCar extends WorldObject {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
 
-        rotation = (float) Math.toDegrees(carHeading);
+        this.rotation = carHeading;
     }
 
     private float calculateWheelBase() {
-        return 120;
+        return this.height - 12;
     }
 }

@@ -8,10 +8,10 @@ public class Powertrain extends SystemComponent {
 
     private static final float deltaTime = 0.04f;
 
-    private static final float maxSpeed = 10f;
-    private static final float minSpeed = -10f;
+    private static final float maxSpeed = 200f;
+    private static final float minSpeed = -100f;
 
-    private static final float accelConst = 10f;
+    private static final float accelConst = 20f;
     private static final float slowConst = 20f;
 
     private int rpm = 0;

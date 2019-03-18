@@ -6,8 +6,6 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
     private float speed;
 
     public PowertrainPacket() {
-        this.rpm = 0;
-        this.speed = 0f;
     }
 
     public PowertrainPacket(int rpm, float speed) {
