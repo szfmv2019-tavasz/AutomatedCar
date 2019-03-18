@@ -6,31 +6,33 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPack
 
 public class Powertrain extends SystemComponent {
 
-    private static final int maxSpeed = 10;
-    private static final int minSpeed = -10;
-    private static final double deltaTime = 0.04;
-    private static final int accelConst = 10;
-    private static final int slowConst = 20;
+    private static final float deltaTime = 0.04f;
 
-    private final PowertrainPacket powertrainPacket;
+    private static final float maxSpeed = 10f;
+    private static final float minSpeed = -10f;
 
-    private int rpm;
-    private double speed = 0.0;
+    private static final float accelConst = 10f;
+    private static final float slowConst = 20f;
+
+    private int rpm = 0;
+    private float speed = 0f;   // in m/s
 
     public Powertrain(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
-
-        this.powertrainPacket = new PowertrainPacket();
-        virtualFunctionBus.powertrainPacket = powertrainPacket;
-
-        this.rpm = 0;
     }
 
     @Override
     public void loop() {
         handleCarMovement();
 
-        updatePowertrain();
+        createAndSendPacket();
+    }
+
+    private void createAndSendPacket() {
+        PowertrainPacket packet = new PowertrainPacket();
+        packet.setSpeed(speed);
+        packet.setRpm(rpm);
+        virtualFunctionBus.powertrainPacket = packet;
     }
 
     private void handleCarMovement() {
@@ -63,12 +65,6 @@ public class Powertrain extends SystemComponent {
                 break;
             default: break;
         }
-
-        powertrainPacket.setSpeed((int)speed);
-    }
-
-    private void updatePowertrain() {
-        virtualFunctionBus.powertrainPacket = powertrainPacket;
     }
 
     private void releasedPedals() {

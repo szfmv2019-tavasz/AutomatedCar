@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 
 public interface ReadOnlyPowertrainPacket {
 
-    int getSpeed();
+    float getSpeed();
 
     int getRPM();
 
