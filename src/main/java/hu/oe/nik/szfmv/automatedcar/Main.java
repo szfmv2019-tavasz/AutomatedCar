@@ -2,8 +2,15 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
+import java.io.IOException;
+import java.util.Map;
 
 public class Main {
 
@@ -14,13 +21,13 @@ public class Main {
     private AutomatedCar car;
     private World world;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
         new Main().run();
 
     }
 
-    public void run() {
+    public void run() throws IOException, SAXException, ParserConfigurationException {
         init();
         loop();
 
