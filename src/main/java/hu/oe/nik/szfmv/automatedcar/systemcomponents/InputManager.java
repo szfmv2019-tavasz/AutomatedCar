@@ -85,14 +85,23 @@ public class InputManager extends SystemComponent implements KeyListener {
     private void handleKeyPressed(Integer key) {
         switch (key) {
             case KeyEvent.VK_UP: handleKeyUp();
+                break;
             case KeyEvent.VK_DOWN: handleKeyDown();
+                break;
             case KeyEvent.VK_T: handleKeyT();
+                break;
             case KeyEvent.VK_PLUS: handleKeyPlus();
+                break;
             case KeyEvent.VK_MINUS: handleKeyMinus();
+                break;
             case KeyEvent.VK_L: handleKeyL();
+                break;
             case KeyEvent.VK_P: handleKeyP();
+                break;
             case KeyEvent.VK_Q: handleKeyQ();
+                break;
             case KeyEvent.VK_E: handleKeyE();
+                break;
             default:
                 handleKeyWSADPressed(key);
         }
@@ -102,13 +111,17 @@ public class InputManager extends SystemComponent implements KeyListener {
         switch (key) {
             case KeyEvent.VK_W:
                 gasPedalRangeHandler.setIncrease(true);
+                break;
             case KeyEvent.VK_S:
                 breakPedalRangeHandler.setIncrease(true);
                 inputPacket.setAccSpeed(0);
+                break;
             case KeyEvent.VK_A:
                 steeringRangeHandler.turnLeft();
+                break;
             case KeyEvent.VK_D:
                 steeringRangeHandler.turnRight();
+                break;
             default:
                 LOGGER.debug("Unused key pressed: " + key);
         }
@@ -118,12 +131,16 @@ public class InputManager extends SystemComponent implements KeyListener {
         switch (key) {
             case KeyEvent.VK_W:
                 gasPedalRangeHandler.setIncrease(false);
+                break;
             case KeyEvent.VK_S:
                 breakPedalRangeHandler.setIncrease(false);
+                break;
             case KeyEvent.VK_A:
                 steeringRangeHandler.release();
+                break;
             case KeyEvent.VK_D:
                 steeringRangeHandler.release();
+                break;
             default:
                 LOGGER.debug("Unused key released: " + key);
         }

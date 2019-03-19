@@ -1,5 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Represents a steering wheel value in the range between -range and +range.
  * The value is increased or decreased when the loop method is called,
@@ -10,6 +13,8 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
  *  When released, the value moves one step closer to zero.
  */
 public class SteeringRangeHandler {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     enum TURNING_STATES {
         TURN_LEFT,
@@ -50,11 +55,13 @@ public class SteeringRangeHandler {
                 if (value < -range) {
                     value = -range;
                 }
+                break;
             case TURN_RIGHT:
                 value += STEP_TURN;
                 if (value > range) {
                     value = range;
                 }
+                break;
             case RELEASE:
                 if (value < 0) {
                     value += STEP_BACK_TO_CENTER;
@@ -62,6 +69,9 @@ public class SteeringRangeHandler {
                 else if (value > 0) {
                     value -= STEP_BACK_TO_CENTER;
                 }
+                break;
+            default:
+                LOGGER.error("Invalid state in SteeringRangeHandler: " + state);
         }
     }
 
