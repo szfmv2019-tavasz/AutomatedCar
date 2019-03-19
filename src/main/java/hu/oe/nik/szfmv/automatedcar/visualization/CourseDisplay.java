@@ -18,6 +18,7 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     private Gui parent;
+    private final int angle = 90;
 
 
     /**
@@ -69,7 +70,7 @@ public class CourseDisplay extends JPanel {
     }
 
     private void drawObjects(Graphics2D g2d, World world) {
-        int angle=90;
+
         for (WorldObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
             t.translate(object.getX() - object.getWidth() / 2, object.getY() - object.getHeight() / 2);
