@@ -3,10 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
-import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.DashboardText;
-import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.ProgressBars;
-import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.TextSignal;
-import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.TurnSignal;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,15 +17,14 @@ public class Dashboard extends JPanel {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final int width = 250;
-    private final int height = 700;
-    private final int backgroundColor = 0x888888;
+    private static final int width = 250;
+    private static final int height = 700;
+    private static final int backgroundColor = 0x888888;
 
     private Gui parent;
 
     private TurnSignal leftTurnSignal;
     private TurnSignal rightTurnSignal;
-
     private TextSignal accSpeedSignal;
     private TextSignal accDistanceSignal;
     private TextSignal accOnOffSignal;
@@ -45,8 +41,8 @@ public class Dashboard extends JPanel {
     private DashboardText yCoordinate;
     private ProgressBars gasProgressBar;
     private ProgressBars breakProgressBar;
-
-
+    private Gauge rpmGauge;
+    private Gauge kmhGauge;
 
 
     private Thread timer = new Thread() {
@@ -64,7 +60,7 @@ public class Dashboard extends JPanel {
 
                     setTestValues();    // csak teszteleshez
 
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     LOGGER.error("Error in Dashboard timer thread!", ex);
                 }
@@ -75,6 +71,9 @@ public class Dashboard extends JPanel {
         private void setTestValues() {
             //leftTurnSignal.setSwitchedOn(true);
             //accSpeedSignal.setText("130");
+
+            //rpmGauge.setValue(3000);
+            //kmhGauge.setValue(130);
 
         }
 
@@ -114,6 +113,7 @@ public class Dashboard extends JPanel {
         addDashboardPlainTexts();
         addDashboardActiveTexts();
         addProgressBars();
+        addGauges();
     }
 
     private void addTurnSignals() {
@@ -133,7 +133,6 @@ public class Dashboard extends JPanel {
         trafficSignSignal = new TextSignal(130,200,100,100,"STOP",14);
         aebWarningSignal = new TextSignal(130,295,100,25,"AEB WARN",14);
         rrWarningSignal = new TextSignal(130,320,100,25,"RR WARN",14);
-
         add(accSpeedSignal);
         add(accDistanceSignal);
         add(accOnOffSignal);
@@ -145,7 +144,7 @@ public class Dashboard extends JPanel {
         add(rrWarningSignal);
     }
 
-    private void addDashboardPlainTexts(){
+    private void addDashboardPlainTexts() {
         DashboardText accOpts = new DashboardText(20,180,70,15,"ACC Opts");
         DashboardText gearText = new DashboardText(90,155,35,15, "Gear: ");
         DashboardText gasText = new DashboardText(20,350,80,15, "Gas Pedal:");
@@ -166,8 +165,7 @@ public class Dashboard extends JPanel {
         add(yText);
     }
 
-    private void addDashboardActiveTexts()
-    {
+    private void addDashboardActiveTexts() {
         currentGear = new DashboardText(125,155,10,15, " ");
         speedLimit = new DashboardText(100, 440,50,15,"0");
         steeringWheel = new DashboardText(120,490,20,15," ");
@@ -180,11 +178,17 @@ public class Dashboard extends JPanel {
         add(yCoordinate);
     }
 
-    private void addProgressBars(){
+    private void addProgressBars() {
         gasProgressBar = new ProgressBars(20,365,200,20);
         breakProgressBar = new ProgressBars(20,400,200,20);
-
         add(gasProgressBar);
         add(breakProgressBar);
+    }
+
+    private void addGauges() {
+        rpmGauge = new Gauge(0, 15, 117, 118, "rpm", 0, 8000, 1000);
+        kmhGauge = new Gauge(115, 15, 117, 118, "km / h", 0, 200, 20);
+        add(rpmGauge);
+        add(kmhGauge);
     }
 }
