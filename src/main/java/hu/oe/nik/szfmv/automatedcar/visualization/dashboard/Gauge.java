@@ -2,7 +2,15 @@ package hu.oe.nik.szfmv.automatedcar.visualization.dashboard;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.dial.*;
+import org.jfree.chart.plot.dial.DialPlot;
+import org.jfree.chart.plot.dial.DialPointer;
+import org.jfree.chart.plot.dial.DialCap;
+import org.jfree.chart.plot.dial.DialBackground;
+import org.jfree.chart.plot.dial.DialTextAnnotation;
+import org.jfree.chart.plot.dial.DialValueIndicator;
+import org.jfree.chart.plot.dial.DialScale;
+import org.jfree.chart.plot.dial.StandardDialFrame;
+import org.jfree.chart.plot.dial.StandardDialScale;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.ui.GradientPaintTransformType;
 import org.jfree.ui.RectangleInsets;
