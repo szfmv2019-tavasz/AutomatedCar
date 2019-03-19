@@ -72,7 +72,8 @@ public class CourseDisplay extends JPanel {
 
         for (WorldObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
-            t.translate(object.getX(), object.getY());
+            t.translate(object.getX() - object.getWidth() / 2, object.getY() - object.getHeight() / 2);
+            t.rotate(object.getRotation() + Math.toRadians(90), object.getWidth() / 2, object.getHeight() / 2);
             g2d.drawImage(object.getImage(), t, this);
         }
     }
