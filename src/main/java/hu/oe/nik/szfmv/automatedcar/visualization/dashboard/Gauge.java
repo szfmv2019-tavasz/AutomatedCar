@@ -39,7 +39,6 @@ public class Gauge extends JPanel {
         ChartPanel chartPanel = new ChartPanel(createJFreeChart(text, minValue, maxValue, step));
         chartPanel.setBackground(BACKGROUD_COLOR);
         chartPanel.setPreferredSize(new Dimension(width - 5, height - 5));
-//        chartPanel.setBounds(x, y, w, h);
         add(chartPanel);
     }
 

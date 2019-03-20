@@ -47,9 +47,7 @@ public class Dashboard extends JPanel {
     private Gauge rpmGauge;
     private Gauge kmhGauge;
 
-
     private Thread timer = new Thread() {
-        //int difference;    // ez nem tudom mire valo, egyelore maradjon
 
         public void run() {
             while (true) {
@@ -58,7 +56,8 @@ public class Dashboard extends JPanel {
                     if (vfb != null) {
                         handleInputPacket(vfb.inputPacket);
 
-                        //...
+                        // Get from VFB (when available):
+                        handleOtherPacketDummy();
                     }
 
                     Thread.sleep(40);
@@ -69,8 +68,6 @@ public class Dashboard extends JPanel {
         }
 
         private void handleInputPacket(ReadOnlyInputPacket inputPacket) {
-            //rpmGauge.setValue(3000);      Read from the bus
-            //kmhGauge.setValue(130);       Read from the bus
             currentGear.setText(String.valueOf(inputPacket.getGearShift()));
             leftTurnSignal.setSwitchedOn(inputPacket.isSignalLeftTurn());
             rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
@@ -79,13 +76,18 @@ public class Dashboard extends JPanel {
             accOnOffSignal.setSwitchedOn(inputPacket.getAccSpeed() != 0);
             ppSignal.setSwitchedOn(inputPacket.isParkingPilotOn());
             lkaSignal.setSwitchedOn(inputPacket.isLaneKeepingOn());
-            //lkaWarningSignal.setSwitchedOn();     Read from the bus
             gasProgressBar.setValue(inputPacket.getGasPedal());
             breakProgressBar.setValue(inputPacket.getBreakPedal());
-            //speedLimit.setText();     Read from the bus
             steeringWheel.setText(String.valueOf(inputPacket.getSteeringWheel()));
-            //xCoordinate.setText();    Read car X coordinate
-            //yCoordinate.setText();    Read car y coordinate
+        }
+
+        private void handleOtherPacketDummy() {
+            rpmGauge.setValue(3000);
+            kmhGauge.setValue(130);
+            lkaWarningSignal.setSwitchedOn(false);
+            speedLimit.setText("100");
+            xCoordinate.setText("300");
+            yCoordinate.setText("150");
         }
     };
 

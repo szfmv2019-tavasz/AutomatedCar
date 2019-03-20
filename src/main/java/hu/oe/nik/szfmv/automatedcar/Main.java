@@ -45,7 +45,7 @@ public class Main {
                 car.drive();
 
                 window.getCourseDisplay().drawWorld(world);
-                //window.getCourseDisplay().refreshFrame();
+//                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage());
