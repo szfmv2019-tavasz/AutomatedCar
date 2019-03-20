@@ -23,8 +23,8 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     private Gui parent;
-    private int WordH = 3000;
-    private int WordW = 5120;
+    private int worldH = 3000;
+    private int worldW = 5120;
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.4f;
@@ -37,7 +37,7 @@ public class CourseDisplay extends JPanel {
      *
      * @param pt parent Gui
      */
-    CourseDisplay(Gui pt){
+    CourseDisplay(Gui pt) {
         // Not using any layout manager, but fixed coordinates
 
         setLayout(null);
@@ -46,7 +46,8 @@ public class CourseDisplay extends JPanel {
         setBackground(new Color(backgroundColor));
         try {
             refPoints = Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.hashCode();
 
         }
         parent = pt;
@@ -59,7 +60,7 @@ public class CourseDisplay extends JPanel {
      * @param g     {@link Graphics} object that can draw to the canvas
      * @param world {@link World} object that describes the virtual world
      */
-    private void paintComponent(Graphics g, World world){
+    private void paintComponent(Graphics g, World world) {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
 
@@ -86,21 +87,21 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
-    private BufferedImage renderDoubleBufferedScreen(World world){
+    private BufferedImage renderDoubleBufferedScreen(World world) {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = ( Graphics2D ) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
 
-        drawObjects(g2d,world);
+        drawObjects(g2d, world);
         return doubleBufferedScreen;
     }
 
 
     public void drawWorld(World world) {
 
-        paintComponent(getGraphics(),world);
+        paintComponent(getGraphics(), world);
 
     }
 
@@ -129,26 +130,26 @@ public class CourseDisplay extends JPanel {
 
     public void drawEnvironment() {
 
-        environment = new BufferedImage((int) (WordW * scale),
-            (int) (WordH * scale), BufferedImage.TYPE_INT_ARGB);
+        environment = new BufferedImage((int) (worldW * scale),
+            (int) (worldH * scale), BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D EnvironmentGrap = environment.createGraphics();
+        Graphics2D environmentGrap = environment.createGraphics();
 
 
 
-        if(useMock) {
+        if (useMock) {
             Mock m = new Mock();
 
             for (WorldObject object : m.getRoadObjects()) {
 
-                drawWorldObject(object,EnvironmentGrap, 0,0);
+                drawWorldObject(object,environmentGrap, 0, 0);
             }
 
             }
         }
 
 
-    private void drawObjects(Graphics2D g2d, World world){
+    private void drawObjects(Graphics2D g2d, World world) {
 
 
         car = world.getWorldObjects().get(0);
