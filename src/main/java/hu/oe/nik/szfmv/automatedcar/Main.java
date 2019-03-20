@@ -3,15 +3,11 @@ package hu.oe.nik.szfmv.automatedcar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
-import hu.oe.nik.szfmv.automatedcar.visualization.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
 import java.io.IOException;
-import java.util.Map;
 
 public class Main {
 
@@ -52,7 +48,7 @@ public class Main {
                 car.drive();
 
                 window.getCourseDisplay().drawWorld(world);
-                //window.getCourseDisplay().refreshFrame();
+//                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage());
