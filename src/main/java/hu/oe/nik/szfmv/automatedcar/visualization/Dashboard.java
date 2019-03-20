@@ -49,7 +49,7 @@ public class Dashboard extends JPanel {
 
 
     private Thread timer = new Thread() {
-        int difference;    // ez nem tudom mire valo, egyelore maradjon
+        //int difference;    // ez nem tudom mire valo, egyelore maradjon
 
         public void run() {
             while (true) {
@@ -61,39 +61,31 @@ public class Dashboard extends JPanel {
                         //...
                     }
 
-                    setTestValues();    // csak teszteleshez
-
-                    Thread.sleep(100);
+                    Thread.sleep(40);
                 } catch (InterruptedException ex) {
                     LOGGER.error("Error in Dashboard timer thread!", ex);
                 }
             }
         }
 
-        // Csak tesztelesi celokra:
-        private void setTestValues() {
-            //leftTurnSignal.setSwitchedOn(true);
-            //accSpeedSignal.setText("130");
-
-            //rpmGauge.setValue(3000);
-            //kmhGauge.setValue(130);
-
-        }
-
         private void handleInputPacket(ReadOnlyInputPacket inputPacket) {
+            //rpmGauge.setValue(3000);      Read from the bus
+            //kmhGauge.setValue(130);       Read from the bus
+            currentGear.setText(String.valueOf(inputPacket.getGearShift()));
             leftTurnSignal.setSwitchedOn(inputPacket.isSignalLeftTurn());
             rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
             accSpeedSignal.setText(String.valueOf(inputPacket.getAccSpeed()));
             accDistanceSignal.setText(String.valueOf(inputPacket.getAccDistance()));
-            accOnOffSignal.setSwitchedOn(false);
-            ppSignal.setSwitchedOn(false);
-            lkaSignal.setSwitchedOn(false);
-            lkaWarningSignal.setSwitchedOn(false);
-            currentGear.setText(String.valueOf(inputPacket.getGearShift()));
-            //speedLimit.setText(); Read from the bus
+            accOnOffSignal.setSwitchedOn(inputPacket.getAccSpeed() != 0);
+            ppSignal.setSwitchedOn(inputPacket.isParkingPilotOn());
+            lkaSignal.setSwitchedOn(inputPacket.isLaneKeepingOn());
+            //lkaWarningSignal.setSwitchedOn();     Read from the bus
+            gasProgressBar.setValue(inputPacket.getGasPedal());
+            breakProgressBar.setValue(inputPacket.getBreakPedal());
+            //speedLimit.setText();     Read from the bus
             steeringWheel.setText(String.valueOf(inputPacket.getSteeringWheel()));
-            //xCoordinate.setText(); Read car X coordinate
-            //yCoordinate.setText(); Read car y coordinate
+            //xCoordinate.setText();    Read car X coordinate
+            //yCoordinate.setText();    Read car y coordinate
         }
     };
 
@@ -152,7 +144,7 @@ public class Dashboard extends JPanel {
         DashboardText gearText = new DashboardText(90, 155, 35, 15, "Gear: ");
         DashboardText gasText = new DashboardText(20, 350, 80, 15, "Gas Pedal:");
         DashboardText breakText = new DashboardText(20, 385, 80, 15, "Break Pedal:");
-        DashboardText speedLimitText = new DashboardText(20, 440, 70, 15, "Speed Limit:");
+        DashboardText speedLimitText = new DashboardText(20, 440, 80, 15, "Speed Limit:");
         DashboardText debugText = new DashboardText(20, 475, 45, 15, "Debug: ");
         DashboardText steeringWheelText = new DashboardText(20, 490, 95, 15, "Steering Wheel: ");
         DashboardText xText = new DashboardText(20, 515, 20, 15, "X: ");
@@ -170,8 +162,8 @@ public class Dashboard extends JPanel {
 
     private void addDashboardActiveTexts() {
         currentGear = new DashboardText(125, 155, 10, 15, " ");
-        speedLimit = new DashboardText(100, 440, 50, 15, "0");
-        steeringWheel = new DashboardText(120, 490, 20, 15, " ");
+        speedLimit = new DashboardText(110, 440, 30, 15, "0");
+        steeringWheel = new DashboardText(120, 490, 30, 15, " ");
         xCoordinate = new DashboardText(50, 515, 20, 15, "0");
         yCoordinate = new DashboardText(130, 515, 20, 15, "0");
         add(currentGear);

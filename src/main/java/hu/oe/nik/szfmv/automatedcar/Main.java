@@ -44,10 +44,7 @@ public class Main {
             try {
                 car.drive();
 
-                // ez vmiert elcseszi a dashboard megjeleniteset
-                // (csak az ablak talcara rakasa es elovetele utan jelenik meg rendesen! ???)
                 window.getCourseDisplay().drawWorld(world);
-
                 //window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
