@@ -4,11 +4,9 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -32,7 +30,7 @@ public class CourseDisplay extends JPanel {
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.4f;
-    private  final Map<String,Point> refPoints=Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
+    private   Map<String,Point> refPoints;
     private  final boolean UseMock=true;
     private WorldObject car;
     private BufferedImage Environment = null;
@@ -41,13 +39,18 @@ public class CourseDisplay extends JPanel {
      *
      * @param pt parent Gui
      */
-    CourseDisplay(Gui pt) throws IOException, SAXException, ParserConfigurationException {
+    CourseDisplay(Gui pt){
         // Not using any layout manager, but fixed coordinates
 
         setLayout(null);
         setDoubleBuffered(true);
         setBounds(0, 0, width, height);
         setBackground(new Color(backgroundColor));
+        try {
+            refPoints=Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
+        }catch (Exception e){
+
+        }
         parent = pt;
     }
 
@@ -167,13 +170,5 @@ public class CourseDisplay extends JPanel {
             drawWorldObject(object, g2d, offset.getX(), offset.getY());
 
         }
-
-
-
-
-
-
-
-
     }
 }
