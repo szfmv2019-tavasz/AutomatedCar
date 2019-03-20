@@ -18,6 +18,7 @@ public class CourseDisplay extends JPanel {
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
     private Gui parent;
+    private final int angle = 90;
 
 
     /**
@@ -72,7 +73,8 @@ public class CourseDisplay extends JPanel {
 
         for (WorldObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
-            t.translate(object.getX(), object.getY());
+            t.translate(object.getX() - object.getWidth() / 2, object.getY() - object.getHeight() / 2);
+            t.rotate(object.getRotation() + Math.toRadians(angle), object.getWidth() / 2, object.getHeight() / 2);
             g2d.drawImage(object.getImage(), t, this);
         }
     }
