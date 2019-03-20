@@ -3,11 +3,14 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -41,7 +44,7 @@ public class CourseDisplay extends JPanel {
      * @param g     {@link Graphics} object that can draw to the canvas
      * @param world {@link World} object that describes the virtual world
      */
-    private void paintComponent(Graphics g, World world) {
+    private void paintComponent(Graphics g, World world){
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -52,7 +55,7 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
-    private BufferedImage renderDoubleBufferedScreen(World world) {
+    private BufferedImage renderDoubleBufferedScreen(World world){
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
@@ -69,7 +72,15 @@ public class CourseDisplay extends JPanel {
         paintComponent(getGraphics(), world);
     }
 
-    private void drawObjects(Graphics2D g2d, World world) {
+    private void drawObjects(Graphics2D g2d, World world){
+        Mock m=new Mock();
+        for(WorldObject object:m.getRoadObjects()){
+            AffineTransform t = new AffineTransform();
+            t.rotate(-object.getRotation(), object.getX(), object.getY());
+
+            g2d.drawImage(object.getImage(),t,this);
+
+        }
 
         for (WorldObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
