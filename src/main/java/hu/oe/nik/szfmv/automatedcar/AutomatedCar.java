@@ -66,11 +66,11 @@ public class AutomatedCar extends WorldObject {
 
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
-
         this.rotation = carHeading;
     }
 
     private float calculateWheelBase() {
-        return this.height - 12;
+        float bumperAxleDistance = 12f;
+        return this.height - bumperAxleDistance;
     }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 public class Steering extends SystemComponent {
     private final float maxSteeringAngle = 60f;
+    private final float steeringRateConst = 0.01f;
 
     private float steeringRate;
     private int steeringWheel;  // -100/+100
@@ -15,7 +16,7 @@ public class Steering extends SystemComponent {
     public Steering(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
 
-        steeringRate = maxSteeringAngle * 0.01f;
+        steeringRate = maxSteeringAngle * steeringRateConst;
     }
 
     @Override

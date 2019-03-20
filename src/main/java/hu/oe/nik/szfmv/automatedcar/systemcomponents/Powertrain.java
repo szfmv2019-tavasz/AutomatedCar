@@ -11,6 +11,7 @@ public class Powertrain extends SystemComponent {
     private final float minSpeed = -100f;
 
     private final float accelConst = 20f;
+    private final float reverseAccelConst = 25f;
     private final float slowConst = 20f;
 
     private int rpm = 0;
@@ -35,10 +36,11 @@ public class Powertrain extends SystemComponent {
     }
 
     private void handleCarMovement() {
+        float pedalRate = 10.0f;
         switch (virtualFunctionBus.inputPacket.getGearShift()) {
             case R:
                 if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / 10.0 * slowConst * deltaTime;
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * reverseAccelConst * deltaTime;
                 }
 
                 releasedPedals();
@@ -52,12 +54,12 @@ public class Powertrain extends SystemComponent {
             case D:
 
                 if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
-                    speed += virtualFunctionBus.inputPacket.getGasPedal() / 10.0 * accelConst * deltaTime;
+                    speed += virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * accelConst * deltaTime;
                 }
 
                 // Ez tolatás, de még nincs váltónk
                 if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / 10.0 * slowConst * deltaTime;
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * slowConst * deltaTime;
                 }
 
                 releasedPedals();
@@ -70,7 +72,7 @@ public class Powertrain extends SystemComponent {
     private void releasedPedals() {
         if (virtualFunctionBus.inputPacket.getGasPedal() == 0
                 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
-            speed -= 25 * deltaTime;
+            speed -= slowConst * deltaTime;
             if (speed < 0) {
                 speed = 0;
             }
@@ -78,7 +80,7 @@ public class Powertrain extends SystemComponent {
 
         if (virtualFunctionBus.inputPacket.getGasPedal() == 0
                 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
-            speed += 25 * deltaTime;
+            speed += slowConst * deltaTime;
             if (speed > 0) {
                 speed = 0;
             }
