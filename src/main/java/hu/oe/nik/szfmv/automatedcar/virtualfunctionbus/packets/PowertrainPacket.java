@@ -3,20 +3,18 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 public class PowertrainPacket implements ReadOnlyPowertrainPacket {
 
     private int rpm;
-    private int speed;
+    private float speed;
 
     public PowertrainPacket() {
-        this.rpm = 0;
-        this.speed = 0;
     }
 
-    public PowertrainPacket(int rpm, int speed) {
+    public PowertrainPacket(int rpm, float speed) {
         this.rpm = rpm;
         this.speed = speed;
     }
 
     @Override
-    public int getSpeed() {
+    public float getSpeed() {
         return this.speed;
     }
 
@@ -29,7 +27,7 @@ public class PowertrainPacket implements ReadOnlyPowertrainPacket {
         this.rpm = rpm;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 }
