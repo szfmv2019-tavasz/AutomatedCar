@@ -16,6 +16,8 @@ public class AutomatedCar extends WorldObject {
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
     private final float deltaTime = 0.04f;
 
+    private final float bumperAxleDistance = 12f;
+
     private float speed;
     private float wheelBase;
     private float steeringAngle;
@@ -37,6 +39,7 @@ public class AutomatedCar extends WorldObject {
         virtualFunctionBus.loop();
 
         calculatePositionAndOrientation();
+        updateCarPositionAndOrientation();
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -63,14 +66,15 @@ public class AutomatedCar extends WorldObject {
         carLocation = frontWheelPosition.add(backWheelPosition).scalarMultiply(0.5);
         carHeading = (float) Math.atan2(frontWheelPosition.getY() - backWheelPosition.getY(),
                 frontWheelPosition.getX() - backWheelPosition.getX());
+    }
 
+    private void updateCarPositionAndOrientation() {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
         this.rotation = carHeading;
     }
 
     private float calculateWheelBase() {
-        float bumperAxleDistance = 12f;
         return this.height - bumperAxleDistance;
     }
 }
