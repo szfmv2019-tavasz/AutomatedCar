@@ -5,13 +5,13 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 
 public class Powertrain extends SystemComponent {
 
-    private static final float deltaTime = 0.04f;
+    private final float deltaTime = 0.04f;
 
-    private static final float maxSpeed = 200f;
-    private static final float minSpeed = -100f;
+    private final float maxSpeed = 200f;
+    private final float minSpeed = -100f;
 
-    private static final float accelConst = 20f;
-    private static final float slowConst = 20f;
+    private final float accelConst = 20f;
+    private final float slowConst = 20f;
 
     private int rpm = 0;
     private float speed = 0f;   // in m/s
