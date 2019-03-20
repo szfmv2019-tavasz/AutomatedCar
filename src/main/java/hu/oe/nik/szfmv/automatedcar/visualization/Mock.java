@@ -1,15 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-
-
-
-import java.awt.*;
-import java.io.IOException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 @SuppressWarnings("checkstyle:magicnumber")
 public class Mock {
     private List<WorldObject> RoadObjects = new ArrayList<>();

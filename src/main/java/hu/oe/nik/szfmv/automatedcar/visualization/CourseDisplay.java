@@ -1,7 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
-import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 
@@ -26,14 +25,13 @@ public class CourseDisplay extends JPanel {
     private Gui parent;
     private int WordH = 3000;
     private int WordW = 5120;
-    private final int angle = 90;
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.4f;
     private   Map<String,Point> refPoints;
-    private  final boolean UseMock=true;
+    private  final boolean useMock =true;
     private WorldObject car;
-    private BufferedImage Environment = null;
+    private BufferedImage environment = null;
     /**
      * Initialize the course display
      *
@@ -90,7 +88,7 @@ public class CourseDisplay extends JPanel {
      */
     private BufferedImage renderDoubleBufferedScreen(World world){
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
+        Graphics2D g2d = ( Graphics2D ) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
@@ -131,14 +129,14 @@ public class CourseDisplay extends JPanel {
 
     public void drawEnvironment() {
 
-        Environment = new BufferedImage((int) (WordW * scale),
+        environment = new BufferedImage((int) (WordW * scale),
             (int) (WordH * scale), BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D EnvironmentGrap = Environment.createGraphics();
+        Graphics2D EnvironmentGrap = environment.createGraphics();
 
 
 
-        if(UseMock) {
+        if(useMock) {
             Mock m = new Mock();
 
             for (WorldObject object : m.getRoadObjects()) {
@@ -159,11 +157,11 @@ public class CourseDisplay extends JPanel {
         Point2D offset = getOffset(scaledWidth, scaledHeight);
 
         //Statikus objektumok kirajzolása csak egyszer
-        if (Environment == null) {
+        if (environment == null) {
             drawEnvironment();
         }
 
-        g2d.drawImage(Environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
+        g2d.drawImage(environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
 
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
