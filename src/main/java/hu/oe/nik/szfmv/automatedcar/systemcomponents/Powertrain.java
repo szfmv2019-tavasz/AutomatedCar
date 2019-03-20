@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 
 public class Powertrain extends SystemComponent {
 
@@ -38,8 +37,8 @@ public class Powertrain extends SystemComponent {
     private void handleCarMovement() {
         switch (virtualFunctionBus.inputPacket.getGearShift()) {
             case R:
-                if ( virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-                    speed -= virtualFunctionBus.inputPacket.getBreakPedal()/10.0 * slowConst * deltaTime;
+                if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / 10.0 * slowConst * deltaTime;
                 }
 
                 releasedPedals();
@@ -53,29 +52,32 @@ public class Powertrain extends SystemComponent {
             case D:
 
                 if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
-                    speed += virtualFunctionBus.inputPacket.getGasPedal()/10.0 * accelConst * deltaTime;
+                    speed += virtualFunctionBus.inputPacket.getGasPedal() / 10.0 * accelConst * deltaTime;
                 }
 
                 // Ez tolatás, de még nincs váltónk
-                if ( virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-                    speed -= virtualFunctionBus.inputPacket.getBreakPedal()/10.0 * slowConst * deltaTime;
+                if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
+                    speed -= virtualFunctionBus.inputPacket.getBreakPedal() / 10.0 * slowConst * deltaTime;
                 }
 
                 releasedPedals();
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
     private void releasedPedals() {
-        if (virtualFunctionBus.inputPacket.getGasPedal() == 0 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
+        if (virtualFunctionBus.inputPacket.getGasPedal() == 0
+                && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
             speed -= 25 * deltaTime;
             if (speed < 0) {
                 speed = 0;
             }
         }
 
-        if (virtualFunctionBus.inputPacket.getGasPedal() == 0 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
+        if (virtualFunctionBus.inputPacket.getGasPedal() == 0
+                && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
             speed += 25 * deltaTime;
             if (speed > 0) {
                 speed = 0;
