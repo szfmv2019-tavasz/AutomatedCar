@@ -47,7 +47,7 @@ public class CourseDisplay extends JPanel {
         setBounds(0, 0, width, height);
         setBackground(new Color(backgroundColor));
         try {
-            refPoints=Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
+            refPoints = Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
         }catch (Exception e){
 
         }
@@ -63,7 +63,7 @@ public class CourseDisplay extends JPanel {
      */
     private void paintComponent(Graphics g, World world){
 
-        g.drawImage(renderDoubleBufferedScreen(world),0,0,this);
+        g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
 
 
     }

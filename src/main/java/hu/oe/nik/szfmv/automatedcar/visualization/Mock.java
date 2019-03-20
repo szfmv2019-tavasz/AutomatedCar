@@ -10,7 +10,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@SuppressWarnings("checkstyle:magicnumber")
 public class Mock {
     private List<WorldObject> RoadObjects = new ArrayList<>();
 
@@ -27,18 +27,18 @@ public class Mock {
     public Mock() {
 //        RoadObjects.add(new WorldObject((int)normalize(300,300,770),(int)normalize(669,0,700),"road_2lane_straight.png"));
 //        RoadObjects.add(new WorldObject((int)normalize(300,300,770),(int)normalize(1019,0,700),"road_2lane_straight.png"));
-        RoadObjects.add(new WorldObject(474,669,"road_2lane_straight.png"));
-        RoadObjects.add(new WorldObject(124,669,"road_2lane_straight.png"));
-        RoadObjects.add(new WorldObject(124,1019,"road_2lane_straight.png"));
-        RoadObjects.add(new WorldObject(124,1369,"road_2lane_straight.png"));
-        RoadObjects.add(new WorldObject(124,1719,"road_2lane_90right.png"));
+        RoadObjects.add(new WorldObject(474, 669, "road_2lane_straight.png"));
+        RoadObjects.add(new WorldObject(124, 669, "road_2lane_straight.png"));
+        RoadObjects.add(new WorldObject(124, 1019, "road_2lane_straight.png"));
+        RoadObjects.add(new WorldObject(124, 1369, "road_2lane_straight.png"));
+        RoadObjects.add(new WorldObject(124, 1719, "road_2lane_90right.png"));
 
 
-        RoadObjects.get(0).setRotation((float)convertMatrixToRadians(1,0,0,1));
-        RoadObjects.get(1).setRotation((float)convertMatrixToRadians(1,0,0,1));
-        RoadObjects.get(2).setRotation((float)convertMatrixToRadians(1,0,0,1));
-        RoadObjects.get(3).setRotation((float)convertMatrixToRadians(1,0,0,1));
-        RoadObjects.get(4).setRotation((float)convertMatrixToRadians(1,0,0,1));
+        RoadObjects.get(0).setRotation((float)convertMatrixToRadians(1, 0, 0, 1));
+        RoadObjects.get(1).setRotation((float)convertMatrixToRadians(1, 0, 0, 1));
+        RoadObjects.get(2).setRotation((float)convertMatrixToRadians(1, 0, 0, 1));
+        RoadObjects.get(3).setRotation((float)convertMatrixToRadians(1, 0, 0, 1));
+        RoadObjects.get(4).setRotation((float)convertMatrixToRadians(1, 0, 0, 1));
 
 
 
