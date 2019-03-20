@@ -13,7 +13,6 @@ public class ProgressBars extends JProgressBar {
     private int height;
 
     public ProgressBars(int x, int y, int width, int height) {
-
         this.x = x;
         this.y = y;
         this.width = width;
@@ -23,6 +22,4 @@ public class ProgressBars extends JProgressBar {
         setMaximum(MAXVALUE);
         setMinimum(MINVALUE);
     }
-
-
 }
