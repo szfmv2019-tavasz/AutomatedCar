@@ -155,7 +155,7 @@ public class CourseDisplay extends JPanel {
         int scaledHeight = (int) (height / scale);
         Point2D offset = getOffset(scaledWidth, scaledHeight);
 
-        //Statikus objektumok kirajzolása
+        //Statikus objektumok kirajzolása csak egyszer
         if (Environment == null) {
             drawEnvironment();
         }
