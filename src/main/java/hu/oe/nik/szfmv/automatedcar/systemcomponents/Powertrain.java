@@ -13,6 +13,7 @@ public class Powertrain extends SystemComponent {
     private final float accelConst = 20f;
     private final float reverseAccelConst = 25f;
     private final float slowConst = 20f;
+    private final float brakePowerConst = 30f;
 
     private final float pedalRate = 10.0f;
 
@@ -58,20 +59,32 @@ public class Powertrain extends SystemComponent {
         }
     }
 
-    private void handleGearShiftR(){
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * reverseAccelConst * deltaTime;
+    private void handleGearShiftR() {
+        // Tolatás
+        if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed > minSpeed) {
+            speed -= virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * reverseAccelConst * deltaTime;
+        }
+
+        // Lassítás
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed < 0) {
+            speed += virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * brakePowerConst * deltaTime;
         }
     }
 
-    private void handleGearShiftD(){
+    private void handleGearShiftD() {
+        //Gyorsítás
         if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
             speed += virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * accelConst * deltaTime;
         }
 
-        // Ez tolatás, de még nincs váltónk
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * slowConst * deltaTime;
+        // Lassítás
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > 0) {
+            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * brakePowerConst * deltaTime;
+        }
+
+        // Még véletlenül se lehessen hátrafelé menni
+        if (speed < 0) {
+            speed = 0;
         }
     }
 
