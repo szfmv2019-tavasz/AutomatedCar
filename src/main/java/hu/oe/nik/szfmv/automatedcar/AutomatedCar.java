@@ -24,6 +24,7 @@ public class AutomatedCar extends WorldObject {
     private float carHeading;  // in radians
     private Vector2D carLocation;
 
+    // Sprint2 init from master
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
