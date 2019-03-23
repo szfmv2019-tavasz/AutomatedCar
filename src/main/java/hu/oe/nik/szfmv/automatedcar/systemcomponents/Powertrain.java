@@ -13,30 +13,49 @@ public class Powertrain extends SystemComponent {
     private final float accelConst = 20f;
     private final float reverseAccelConst = 25f;
     private final float slowConst = 20f;
+    private final float brakePowerConst = 30f;
 
     private final float pedalRate = 10.0f;
 
     private int rpm = 0;
     private float speed = 0f;   // in m/s
 
+    private PowertrainPacket packet;
+
     public Powertrain(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+        packet = new PowertrainPacket();
+        virtualFunctionBus.powertrainPacket = packet;
     }
 
     @Override
     public void loop() {
-        handleCarMovement();
+        boolean emergencyBrake = false;
+
+        if (emergencyBrake) {
+            handleEmergencyBrake();
+        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0) {
+            speed = virtualFunctionBus.inputPacket.getAccSpeed();
+        } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
+            //
+        } else {
+            handleCarMovement();
+        }
 
         createAndSendPacket();
     }
 
+    /**
+     * Send speed and rpm to VFB
+     */
     private void createAndSendPacket() {
-        PowertrainPacket packet = new PowertrainPacket();
         packet.setSpeed(speed);
         packet.setRpm(rpm);
-        virtualFunctionBus.powertrainPacket = packet;
     }
 
+    /**
+     * Set the car speed based on the pedals
+     */
     private void handleCarMovement() {
         switch (virtualFunctionBus.inputPacket.getGearShift()) {
             case R:
@@ -58,23 +77,65 @@ public class Powertrain extends SystemComponent {
         }
     }
 
-    private void handleGearShiftR(){
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * reverseAccelConst * deltaTime;
+    private void handleEmergencyBrake() {
+        if (speed > 0) {
+            speed -= 100 / pedalRate * brakePowerConst * deltaTime;
+
+            if (speed < 0) {
+                speed = 0;
+            }
+        } else {
+            speed += 100 / pedalRate * brakePowerConst * deltaTime;
+
+            if (speed > 0) {
+                speed = 0;
+            }
         }
     }
 
-    private void handleGearShiftD(){
+    /**
+     * Set speed for backwards movement
+     */
+    private void handleGearShiftR() {
+        // Tolatás
+        if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed > minSpeed) {
+            speed -= virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * reverseAccelConst * deltaTime;
+        }
+
+        // Lassítás
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed < 0) {
+            speed += virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * brakePowerConst * deltaTime;
+        }
+
+        // Még véletlenül se lehessen előre menni
+        if (speed > 0) {
+            speed = 0;
+        }
+    }
+
+    /**
+     * Set speed for forward movement
+     */
+    private void handleGearShiftD() {
+        //Gyorsítás
         if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
             speed += virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * accelConst * deltaTime;
         }
 
-        // Ez tolatás, de még nincs váltónk
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
-            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * slowConst * deltaTime;
+        // Lassítás
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > 0) {
+            speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * brakePowerConst * deltaTime;
+        }
+
+        // Még véletlenül se lehessen hátrafelé menni
+        if (speed < 0) {
+            speed = 0;
         }
     }
 
+    /**
+     * Slowly adjust speed until 0 when none of the pedals are active
+     */
     private void releasedPedals() {
         if (virtualFunctionBus.inputPacket.getGasPedal() == 0
                 && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
