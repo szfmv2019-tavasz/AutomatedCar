@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar.model.Objects;
+package hu.oe.nik.szfmv.automatedcar.model.objects;
 
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils;
 import org.apache.logging.log4j.LogManager;

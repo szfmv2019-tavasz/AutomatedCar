@@ -1,6 +1,10 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import hu.oe.nik.szfmv.automatedcar.model.Objects.*;
+import hu.oe.nik.szfmv.automatedcar.model.objects.CrossWalk;
+import hu.oe.nik.szfmv.automatedcar.model.objects.ParkingPlace;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Tree;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Road;
+import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;

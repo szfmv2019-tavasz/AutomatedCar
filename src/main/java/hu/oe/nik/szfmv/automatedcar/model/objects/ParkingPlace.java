@@ -1,6 +1,6 @@
-package hu.oe.nik.szfmv.automatedcar.model.Objects;
+package hu.oe.nik.szfmv.automatedcar.model.objects;
 
-public class CrossWalk extends Crossable {
+public class ParkingPlace extends Crossable {
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -8,14 +8,14 @@ public class CrossWalk extends Crossable {
      * @param y             the initial y coordinate of the object
      * @param imageFileName the filename of the image representing the object in the virtual world
      */
-    public CrossWalk(int x, int y, String imageFileName) {
+    public ParkingPlace(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
     }
 
     /**
      * Creates an object with default parameter values.
      */
-    public CrossWalk() {
+    public ParkingPlace() {
         super(0, 0, null);
     }
 }

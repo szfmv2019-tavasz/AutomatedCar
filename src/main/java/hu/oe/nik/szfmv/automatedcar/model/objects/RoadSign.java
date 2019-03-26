@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar.model.Objects;
+package hu.oe.nik.szfmv.automatedcar.model.objects;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
