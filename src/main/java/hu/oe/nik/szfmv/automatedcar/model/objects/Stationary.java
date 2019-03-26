@@ -20,4 +20,3 @@ public abstract class Stationary extends Collidable {
         super(0, 0, null);
     }
 }
-
