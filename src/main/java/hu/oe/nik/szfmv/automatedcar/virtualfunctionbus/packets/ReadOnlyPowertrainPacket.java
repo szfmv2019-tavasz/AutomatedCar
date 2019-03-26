@@ -6,4 +6,6 @@ public interface ReadOnlyPowertrainPacket {
 
     int getRPM();
 
+    int getActualAutoGear();
+
 }
