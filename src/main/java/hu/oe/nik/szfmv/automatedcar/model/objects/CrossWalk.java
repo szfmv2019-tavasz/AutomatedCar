@@ -19,3 +19,4 @@ public class CrossWalk extends Crossable {
         super(0, 0, null);
     }
 }
+

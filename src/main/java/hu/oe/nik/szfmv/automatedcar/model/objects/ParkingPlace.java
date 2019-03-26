@@ -19,3 +19,4 @@ public class ParkingPlace extends Crossable {
         super(0, 0, null);
     }
 }
+
