@@ -33,13 +33,16 @@ public class RoadSign extends Stationary {
         if (this.getImageFileName().equals("roadsign_priority_stop.png")) {
             return 0;
         } else {
-            try {
-                return Integer.parseInt(this.imageFileName.substring(substringStart, getSubstringEnd));
-            } catch (Exception e) {
-                return -1;
-            }
+            return isSpeedTable ();
         }
 
+    }
+    private int isSpeedTable() {
+        try {
+            return Integer.parseInt (this.imageFileName.substring (substringStart , getSubstringEnd));
+        } catch (Exception e) {
+            return - 1;
+        }
     }
 
     @Override
@@ -47,7 +50,7 @@ public class RoadSign extends Stationary {
         //Circle radius for shape property
         AffineTransform tx = new AffineTransform();
         tx.rotate(-this.getRotation(), this.getX(), this.getY());
-        this.shape = tx.createTransformedShape((Shape) new Ellipse2D.Double(
+        this.shape = tx.createTransformedShape(new Ellipse2D.Double(
             this.getX() + this.getWidth() / 2 - D / 2,
             this.getY() + this.getHeight() / 2 - D / 2,
             D, D));
