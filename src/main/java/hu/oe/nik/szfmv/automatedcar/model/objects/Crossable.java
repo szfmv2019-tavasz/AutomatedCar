@@ -4,6 +4,8 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 
 public abstract class Crossable extends WorldObject {
     /**
+     *
+     *
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
      * @param x             the initial x coordinate of the object

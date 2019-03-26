@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 
 public abstract class Collidable extends WorldObject {
 
+
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
