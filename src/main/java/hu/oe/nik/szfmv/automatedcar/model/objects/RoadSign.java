@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
+@SuppressWarnings("ALL")
 public class RoadSign extends Stationary {
 
 
