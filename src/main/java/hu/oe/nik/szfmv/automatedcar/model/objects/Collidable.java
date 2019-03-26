@@ -22,4 +22,3 @@ public abstract class Collidable extends WorldObject {
         super(0, 0, null);
     }
 }
-

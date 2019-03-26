@@ -9,8 +9,8 @@ public class RoadSign extends Stationary {
 
     private static double D = 10;
 
-    private int substringStart = 15;
-    private int getSubstringEnd =17;
+    private final int substringStart = 15;
+    private final int getSubstringEnd = 17;
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -53,4 +53,3 @@ public class RoadSign extends Stationary {
             D, D));
     }
 }
-

@@ -21,4 +21,3 @@ public abstract class Crossable extends WorldObject {
         super(0, 0, null);
     }
 }
-
