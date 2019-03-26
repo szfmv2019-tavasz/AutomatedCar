@@ -1,9 +1,12 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +21,7 @@ public class WorldObject {
     protected float rotation = 0f;
     protected String imageFileName;
     protected BufferedImage image;
+    protected Shape shape;
 
     public WorldObject(int x, int y, String imageFileName) {
         this.x = x;
@@ -85,6 +89,43 @@ public class WorldObject {
             this.height = image.getHeight();
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
+        }
+    }
+    public Shape getShape() {
+        generateShape();
+        return this.shape;
+    }
+
+    public void generateDimens() {
+        try {
+            BufferedImage image = ImageIO.read(
+                new File(
+                    ClassLoader.getSystemResource(this.getImageFileName())
+                        .getFile()));
+            width = image.getWidth();
+            height = image.getHeight();
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
+    }
+
+    /**
+     *Create rectangle
+     */
+    public void generateShape() {
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(-this.getRotation(), this.getX(), this.getY());
+        if (!AutomatedCar.class.isInstance(this)) {
+            this.shape = tx.createTransformedShape(
+                new Rectangle(
+                    (int) this.getX(), (int) this.getY(),
+                    this.getWidth(), this.getHeight()));
+        } else {
+            this.shape = tx.createTransformedShape(
+                new Rectangle(
+                    (int) this.getX() - this.getWidth() / 2,
+                    (int) this.getY() - this.getHeight() / 2,
+                    this.getWidth(), this.getHeight()));
         }
     }
 
