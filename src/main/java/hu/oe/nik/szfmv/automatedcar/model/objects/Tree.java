@@ -24,7 +24,7 @@ public class Tree extends Stationary {
      * Creates an object with default parameter values.
      */
     public Tree() {
-        super(0, 0, null);
+        super(0, 0, "tree.png");
     }
 
     @Override

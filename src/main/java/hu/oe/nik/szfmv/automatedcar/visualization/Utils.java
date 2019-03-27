@@ -30,7 +30,7 @@ public abstract class Utils {
             int y = Integer.parseInt(refPoint.getAttribute("y"));
             Point p = new Point(x, y);
 
-            referencesP.put(imageName+".png", p);
+            referencesP.put(imageName, p);
         }
 
         return referencesP;

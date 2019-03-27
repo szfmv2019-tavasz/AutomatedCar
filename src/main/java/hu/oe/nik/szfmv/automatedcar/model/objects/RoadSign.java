@@ -28,7 +28,7 @@ public class RoadSign extends Stationary {
      * Creates an object with default parameter values.
      */
     public RoadSign() {
-        super(0, 0, null);
+        super(0, 0, "roadsign_speed_50.png");
     }
 
     public int getSpeedLimit() {

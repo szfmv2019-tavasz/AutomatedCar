@@ -87,6 +87,8 @@ public class WorldObject {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
             this.width = image.getWidth();
             this.height = image.getHeight();
+
+
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
@@ -104,6 +106,7 @@ public class WorldObject {
                         .getFile()));
             width = image.getWidth();
             height = image.getHeight();
+
         } catch (IOException e) {
             LOGGER.error(e);
         }

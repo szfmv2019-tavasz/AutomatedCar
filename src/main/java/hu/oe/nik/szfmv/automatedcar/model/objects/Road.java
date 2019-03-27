@@ -89,7 +89,7 @@ public class Road extends Crossable {
      * Creates an object with default parameter values.
      */
     public Road() {
-        super(0, 0, null);
+        super(0, 0, "parking_90.png");
         hashMapInit();
     }
 
@@ -111,6 +111,7 @@ public class Road extends Crossable {
     public static void loadReferencePoints() {
         try {
             referencePoints = Utils.LoadReferencePointsFromXml(referencePointsURI);
+            System.out.println("gg");
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOGGER.error(e.getMessage());
         }

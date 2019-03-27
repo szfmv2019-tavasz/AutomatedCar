@@ -3,6 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,10 +29,11 @@ public class CourseDisplay extends JPanel {
     private int worldW = 5120;
     private final int carWidth = 102;
     private final int carHeight = 208;
-    private final float scale = 0.4f;
-    private   Map<String,Point> refPoints;
-    private  final boolean useMock =true;
+    private final float scale = 0.89f;
+    private   Map<String, Point> refPoints;
+    private  final boolean useMock = false;
     private WorldObject car;
+    private World world;
     private BufferedImage environment = null;
     /**
      * Initialize the course display
@@ -63,11 +66,12 @@ public class CourseDisplay extends JPanel {
     private void paintComponent(Graphics g, World world) {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
-
+        this.world  = world;
 
     }
 
     private Point2D getOffset(int scaledWidth, int scaledHeight) {
+        car = world.getWorldObjects().get(world.getWorldObjects().size()-1);
         double offsetX = 0;
         double offsetY = 0;
         double diffX = (scaledWidth / 2) - car.getX() - carWidth / 2;
@@ -101,7 +105,9 @@ public class CourseDisplay extends JPanel {
 
     public void drawWorld(World world) {
 
+        this.world  = world;
         paintComponent(getGraphics(), world);
+
 
     }
 
@@ -137,22 +143,32 @@ public class CourseDisplay extends JPanel {
 
 
 
-        if (useMock) {
-            Mock m = new Mock();
+//        if (useMock) {
+////            Mock m = new Mock();
+////
+////            for (WorldObject object : m.getRoadObjects()) {
+////
+////                drawWorldObject(object, environmentGrap, 0, 0);
+////            }
+////
+////            }
+        for (WorldObject object : world.getWorldObjects()) {
+            //if(Stationary.class.isAssignableFrom(object.getClass()) ||
+            if(Crossable.class.isAssignableFrom(object.getClass()) || Stationary.class.isAssignableFrom(object.getClass())){
+                drawWorldObject(object, environmentGrap, 0, 0);
 
-            for (WorldObject object : m.getRoadObjects()) {
 
-                drawWorldObject(object,environmentGrap, 0, 0);
             }
 
-            }
+        }
+
         }
 
 
     private void drawObjects(Graphics2D g2d, World world) {
 
 
-        car = world.getWorldObjects().get(0);
+        car = world.getWorldObjects().get(world.getWorldObjects().size()-1);
         int scaledWidth = (int) (width / scale);
         int scaledHeight = (int) (height / scale);
         Point2D offset = getOffset(scaledWidth, scaledHeight);
@@ -166,7 +182,11 @@ public class CourseDisplay extends JPanel {
 
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
-            drawWorldObject(object, g2d, offset.getX(), offset.getY());
+            if(!Stationary.class.isAssignableFrom(object.getClass()) && !Crossable.class.isAssignableFrom(object.getClass())){
+                drawWorldObject(object, g2d, offset.getX(), offset.getY());
+                System.out.println(object.getX()+": "+object.getY());
+
+            }
 
         }
     }
