@@ -36,6 +36,7 @@ public class CourseDisplay extends JPanel {
     private WorldObject car;
     private World world;
     private BufferedImage environment = null;
+    private boolean PolyEnabled = false;
     /**
      * Initialize the course display
      *
@@ -165,6 +166,21 @@ public class CourseDisplay extends JPanel {
 
         }
 
+    private void drawShapesDebug(Graphics g, double offsetX, double offsetY) {
+        for (WorldObject object : world.getWorldObjects()) {
+            g.setColor(Color.BLUE);
+            AffineTransform at1 = new AffineTransform();
+            at1.scale(scale, scale);
+            at1.translate(offsetX, offsetY);
+
+            Shape s = object.getShape();
+            if (s != null) {
+                ((Graphics2D) g).draw(at1.createTransformedShape(s));
+            }
+        }
+        g.drawImage(environment, (int) (offsetX * scale), (int) (offsetY * scale), this);
+    }
+
 
     private void drawObjects(Graphics2D g2d, World world) {
 
@@ -177,9 +193,12 @@ public class CourseDisplay extends JPanel {
         //Statikus objektumok kirajzolása csak egyszer
         if (environment == null) {
             drawEnvironment();
+
         }
 
         g2d.drawImage(environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
+
+
 
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
@@ -193,5 +212,10 @@ public class CourseDisplay extends JPanel {
             }
 
         }
+        if(PolyEnabled){
+            drawShapesDebug(g2d,offset.getX(),offset.getY());
+
+        }
+
     }
 }
