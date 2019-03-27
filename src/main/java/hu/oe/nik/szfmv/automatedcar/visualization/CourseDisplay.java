@@ -29,7 +29,8 @@ public class CourseDisplay extends JPanel {
     private int worldW = 5120;
     private final int carWidth = 102;
     private final int carHeight = 208;
-    private final float scale = 0.89f;
+    private final float scale = 0.5f;
+    private  final int angle = 90;
     private   Map<String, Point> refPoints;
     private  final boolean useMock = false;
     private WorldObject car;
@@ -183,8 +184,11 @@ public class CourseDisplay extends JPanel {
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
             if(!Stationary.class.isAssignableFrom(object.getClass()) && !Crossable.class.isAssignableFrom(object.getClass())){
-                drawWorldObject(object, g2d, offset.getX(), offset.getY());
-                System.out.println(object.getX()+": "+object.getY());
+                AffineTransform t = new AffineTransform();
+                t.scale(scale,scale);
+                t.translate(object.getX() - refPoints.get("car_2_red.png").x+offset.getX(), object.getY() - refPoints.get("car_2_red.png").y+offset.getY());
+                t.rotate(object.getRotation() + Math.toRadians(angle), refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
+                g2d.drawImage(object.getImage(), t, this);
 
             }
 
