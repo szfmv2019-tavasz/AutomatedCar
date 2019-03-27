@@ -212,6 +212,7 @@ public class CourseDisplay extends JPanel {
             }
 
         }
+        //EZT RAKJUK ÁT A MÁSIK BRANCHRE
         if(PolyEnabled){
             drawShapesDebug(g2d,offset.getX(),offset.getY());
 
