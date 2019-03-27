@@ -34,7 +34,7 @@ public class Main {
 
     }
 
-    private void init() {
+    private void init() throws IOException, SAXException, ParserConfigurationException {
         // create the world
         world = new World(5000, 3000);
         // create an automated car

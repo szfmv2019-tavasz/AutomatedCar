@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 
 public class SamplePacket implements ReadOnlySamplePacket {
-    private int key = 0;
+    private int key = 2;
 
     /**
      * Create a Sample Packet
