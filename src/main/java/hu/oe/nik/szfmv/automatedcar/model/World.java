@@ -32,7 +32,7 @@ public class World {
 
     public List<WorldObject> createWorld(String xmlLocation) {
         try {
-            return XmlConverter.build(xmlLocation);
+            return XmlParser.build(xmlLocation);
         } catch (Exception ex) {
             System.out.printf(ex.getMessage());
             return  new ArrayList<WorldObject>();

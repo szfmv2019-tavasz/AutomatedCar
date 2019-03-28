@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class XmlConverter {
+public abstract class XmlParser {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static List<WorldObject> build(String xmlLocation)

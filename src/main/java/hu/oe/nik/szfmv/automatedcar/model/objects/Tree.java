@@ -22,6 +22,10 @@ public class Tree extends Stationary {
 
     /**
      * Creates an object with default parameter values.
+     * Added default png
+     *
+     *
+     *
      */
     public Tree() {
         super(0, 0, "tree.png");
@@ -29,14 +33,13 @@ public class Tree extends Stationary {
 
     @Override
     public void generateShape() {
-        //Circle radius for shape property
-        //For more information please see Issue #221
-        AffineTransform tx = new AffineTransform();
-        tx.rotate(-this.getRotation(), this.getX(), this.getY());
-        this.shape = tx.createTransformedShape((Shape) new Ellipse2D.Double(
-            this.getX() + this.getWidth() / 2 - D / 2,
-            this.getY() + this.getHeight() / 2 - D / 2,
-            D, D));
+        //get ellipse shape
+        AffineTransform t = new AffineTransform();
+        t.rotate(-this.getRotation(), this.getX(), this.getY());
+        this.shape = t.createTransformedShape((Shape) new Ellipse2D.Double(
+            this.getX() + this.getWidth() / 2 - 25 / 2,
+            this.getY() + this.getHeight() / 2 - 25 / 2,
+            25, 25));
     }
 }
 
