@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+//import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.DashboardText;
@@ -82,11 +83,11 @@ public class Dashboard extends JPanel {
         }
 
         private void handleOtherPacketDummy() {
-            rpmGauge.setValue(3000);
-            kmhGauge.setValue(130);
+            rpmGauge.setValue(parent.getVirtualFunctionBus().powertrainPacket.getRPM());
+            kmhGauge.setValue(parent.getVirtualFunctionBus().powertrainPacket.getSpeed());
             lkaWarningSignal.setSwitchedOn(false);
             speedLimit.setText("100");
-            xCoordinate.setText("300");
+            xCoordinate.setText("100");
             yCoordinate.setText("150");
         }
     };

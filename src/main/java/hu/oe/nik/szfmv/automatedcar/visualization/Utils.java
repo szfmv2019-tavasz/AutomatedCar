@@ -15,11 +15,12 @@ import java.util.Map;
 
 public abstract class Utils {
 
-    public static Map<String, Point> LoadReferencePointsFromXml(String URI) throws ParserConfigurationException, IOException, SAXException {
-        Map<String,Point> referencesP=new HashMap<>();
+    public static Map<String, Point> loadReferencePointsFromXml(String uri)
+        throws ParserConfigurationException, IOException, SAXException {
+        Map<String, Point> referencesP = new HashMap<>();
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(URI);
+        Document document = documentBuilder.parse(uri);
 
         NodeList nodes = document.getElementsByTagName("Image");
         for (int i = 0; i < nodes.getLength(); i++) {

@@ -3,7 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SteeringPacket;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+//import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 public class Steering extends SystemComponent {
     private final float maxSteeringAngle = 60f;
