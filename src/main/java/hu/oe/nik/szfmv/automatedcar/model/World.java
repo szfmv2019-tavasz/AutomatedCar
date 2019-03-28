@@ -11,8 +11,7 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
-        worldObjects=this.createWorld("./src/main/resources/test_world.xml");
-        System.out.println( );
+        worldObjects = this.createWorld("./src/main/resources/test_world.xml");
     }
 
     public int getWidth() {

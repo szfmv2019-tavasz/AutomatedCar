@@ -72,7 +72,7 @@ public class CourseDisplay extends JPanel {
     }
 
     private Point2D getOffset(int scaledWidth, int scaledHeight) {
-        car = world.getWorldObjects().get(world.getWorldObjects().size()-1);
+        car = world.getWorldObjects().get(world.getWorldObjects().size() - 1);
         double offsetX = 0;
         double offsetY = 0;
         double diffX = (scaledWidth / 2) - car.getX() - carWidth / 2;
@@ -118,6 +118,7 @@ public class CourseDisplay extends JPanel {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(object.getImageFileName()).getFile()));
         } catch (IOException e) {
+            System.out.println(" ");
 
         }
 
@@ -142,20 +143,10 @@ public class CourseDisplay extends JPanel {
 
         Graphics2D environmentGrap = environment.createGraphics();
 
-
-
-//        if (useMock) {
-////            Mock m = new Mock();
-////
-////            for (WorldObject object : m.getRoadObjects()) {
-////
-////                drawWorldObject(object, environmentGrap, 0, 0);
-////            }
-////
-////            }
         for (WorldObject object : world.getWorldObjects()) {
             //if(Stationary.class.isAssignableFrom(object.getClass()) ||
-            if(Crossable.class.isAssignableFrom(object.getClass()) || Stationary.class.isAssignableFrom(object.getClass())){
+            if (Crossable.class.isAssignableFrom(object.getClass())
+                || Stationary.class.isAssignableFrom(object.getClass())) {
                 drawWorldObject(object, environmentGrap, 0, 0);
 
 
@@ -163,13 +154,13 @@ public class CourseDisplay extends JPanel {
 
         }
 
-        }
+    }
 
 
     private void drawObjects(Graphics2D g2d, World world) {
 
 
-        car = world.getWorldObjects().get(world.getWorldObjects().size()-1);
+        car = world.getWorldObjects().get(world.getWorldObjects().size() - 1);
         int scaledWidth = (int) (width / scale);
         int scaledHeight = (int) (height / scale);
         Point2D offset = getOffset(scaledWidth, scaledHeight);
@@ -183,11 +174,14 @@ public class CourseDisplay extends JPanel {
 
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
-            if(!Stationary.class.isAssignableFrom(object.getClass()) && !Crossable.class.isAssignableFrom(object.getClass())){
+            if (!Stationary.class.isAssignableFrom(object.getClass())
+                && !Crossable.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
-                t.scale(scale,scale);
-                t.translate(object.getX() - refPoints.get("car_2_red.png").x+offset.getX(), object.getY() - refPoints.get("car_2_red.png").y+offset.getY());
-                t.rotate(object.getRotation() + Math.toRadians(angle), refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
+                t.scale(scale, scale);
+                t.translate(object.getX() - refPoints.get("car_2_red.png").x + offset.getX(),
+                    object.getY() - refPoints.get("car_2_red.png").y + offset.getY());
+                t.rotate(object.getRotation() + Math.toRadians(angle),
+                    refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
                 g2d.drawImage(object.getImage(), t, this);
 
             }
