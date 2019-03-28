@@ -33,11 +33,11 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-       - run: mvn clean test jacoco:report
+      - run: mvn clean test jacoco:report
 
 general:
   branches:
-    # ignore:
+    ignore:
       - gh-pages # list of branches to ignore
       # - /release\/.*/ # or ignore regexes
     only:
