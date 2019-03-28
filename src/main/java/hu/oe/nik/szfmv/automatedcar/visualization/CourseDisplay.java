@@ -36,7 +36,7 @@ public class CourseDisplay extends JPanel {
     private WorldObject car;
     private World world;
     private BufferedImage environment = null;
-    private boolean PolyEnabled = false;
+    private boolean PolyEnabled = true;
     /**
      * Initialize the course display
      *
@@ -202,10 +202,12 @@ public class CourseDisplay extends JPanel {
 
         //Mozgo objektumok
         for (WorldObject object : world.getWorldObjects()) {
-            if(!Stationary.class.isAssignableFrom(object.getClass()) && !Crossable.class.isAssignableFrom(object.getClass())){
+            if (!Stationary.class.isAssignableFrom(object.getClass()) && !Crossable.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
-                t.scale(scale,scale);
-                t.translate(object.getX() - refPoints.get("car_2_red.png").x+offset.getX(), object.getY() - refPoints.get("car_2_red.png").y+offset.getY());
+                t.scale(scale, scale);
+                t.translate(object.getX() - refPoints.get("car_2_red.png").x + offset.getX(), object.getY() - refPoints.get("car_2_red.png").y + offset.getY());
+
+
                 t.rotate(object.getRotation() + Math.toRadians(angle), refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
                 g2d.drawImage(object.getImage(), t, this);
 
@@ -214,7 +216,7 @@ public class CourseDisplay extends JPanel {
         }
         //EZT RAKJUK ÁT A MÁSIK BRANCHRE
         if (PolyEnabled){
-            drawShapesDebug(g2d,offset.getX(),offset.getY());
+            drawShapesDebug(g2d, offset.getX(), offset.getY());
 
         }
 
