@@ -17,7 +17,7 @@ public class ParkingPlace extends Crossable {
      * Creates an object with default parameter values.
      */
     public ParkingPlace() {
-        super(0, 0, null);
+        super(0, 0, "parking_space_parallel.png");
     }
 }
 

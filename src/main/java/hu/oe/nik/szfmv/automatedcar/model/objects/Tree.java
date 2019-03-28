@@ -29,11 +29,10 @@ public class Tree extends Stationary {
 
     @Override
     public void generateShape() {
-        //Circle radius for shape property
-        //For more information please see Issue #221
-        AffineTransform tx = new AffineTransform();
-        tx.rotate(-this.getRotation(), this.getX(), this.getY());
-        this.shape = tx.createTransformedShape((Shape) new Ellipse2D.Double(
+       //get the ellipse D=25
+        AffineTransform t = new AffineTransform();
+        t.rotate(-this.getRotation(), this.getX(), this.getY());
+        this.shape = t.createTransformedShape((Shape) new Ellipse2D.Double(
             this.getX() + this.getWidth() / 2 - D / 2,
             this.getY() + this.getHeight() / 2 - D / 2,
             D, D));
