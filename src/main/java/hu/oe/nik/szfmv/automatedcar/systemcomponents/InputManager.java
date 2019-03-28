@@ -26,9 +26,6 @@ public class InputManager extends SystemComponent implements KeyListener {
     private static final int ACC_SPEED_MAX = 160;
     private static final int ACC_SPEED_STEP = 10;
 
-    //Remove ACC_SPEED_INIT constant when init speed is from VFB
-    private static final int ACC_SPEED_INIT = 120;
-
     private final InputPacket inputPacket;
 
     private final PedalRangeHandler gasPedalRangeHandler;
@@ -92,7 +89,11 @@ public class InputManager extends SystemComponent implements KeyListener {
                 break;
             case KeyEvent.VK_ADD: handleKeyPlus();
                 break;
+            case KeyEvent.VK_PLUS: handleKeyPlus();
+                break;
             case KeyEvent.VK_SUBTRACT: handleKeyMinus();
+                break;
+            case KeyEvent.VK_MINUS: handleKeyMinus();
                 break;
             case KeyEvent.VK_L: handleKeyL();
                 break;
@@ -180,10 +181,7 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
             if (inputPacket.getAccSpeed() == 0 && virtualFunctionBus.powertrainPacket.getSpeed() > ACC_SPEED_MIN) {
                 //Set the currend speed from VFB:
-                //Kéne rá egy eldöntőt írni, ami eldönti hogy melyik szám felé kerekíti a sebességet
-                //Mert megkapja a sebességet, de nem 10-es re kerekítve adja át
-                //inputPacket.setAccSpeed(ACC_SPEED_INIT);
-                inputPacket.setAccSpeed(decideAccSpeed(virtualFunctionBus.powertrainPacket.getSpeed()));
+                inputPacket.setAccSpeed(roundAccSpeed(virtualFunctionBus.powertrainPacket.getSpeed()));
             } else if (inputPacket.getAccSpeed() != 0) {
                 inputPacket.setAccSpeed(inputPacket.getAccSpeed() + ACC_SPEED_STEP);
                 if (inputPacket.getAccSpeed() > ACC_SPEED_MAX) {
@@ -193,47 +191,19 @@ public class InputManager extends SystemComponent implements KeyListener {
         }
     }
 
-    //Mókolás, csak 105-ig csináltam meg teszt miatt, de működik
-    private int decideAccSpeed(float speed) {
-        if (speed < 35) {
-            return 30;
-        } else if (speed < 45) {
-            return 40;
-        } else if (speed < 55) {
-            return 50;
-        } else if (speed < 65) {
-            return 60;
-        } else if (speed < 75) {
-            return 70;
-        } else if (speed < 85) {
-            return 80;
-        } else if (speed < 95) {
-            return 90;
-        } else if (speed < 105) {
-            return 100;
-        } else {
-            return 0;
-        }
+    // Rounds a float number to the nearest int number that can be divided by 10
+    private int roundAccSpeed(float speed) {
+        return Math.round(speed / 10) * 10;
     }
 
     private void handleKeyMinus() {
         if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
-//            if (inputPacket.getAccSpeed() == 0) {
-//                //Set the currend speed from VFB:
-//                inputPacket.setAccSpeed(ACC_SPEED_INIT);
-//            } else if (inputPacket.getAccSpeed() != 0) {
-//                inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
-//                if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
-//                    inputPacket.setAccSpeed(ACC_SPEED_MIN);
-//                }
-//            }
             if (inputPacket.getAccSpeed() != 0) {
                 inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
-                if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {  //Szerintem ez nem tud teljesülni, de itt hagyom
+                if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
                     inputPacket.setAccSpeed(ACC_SPEED_MIN);
                 }
             }
-
         }
     }
 
