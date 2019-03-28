@@ -58,21 +58,22 @@ public class Powertrain extends SystemComponent {
         }
     }
 
-    private void handleGearShiftR(){
+    private void handleGearShiftR() {
         if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
             speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * reverseAccelConst * deltaTime;
         }
     }
 
-    private void handleGearShiftD(){
+    private void handleGearShiftD() {
         if (virtualFunctionBus.inputPacket.getGasPedal() > 0 && speed < maxSpeed) {
             speed += virtualFunctionBus.inputPacket.getGasPedal() / pedalRate * accelConst * deltaTime;
         }
 
         // Ez tolatás, de még nincs váltónk
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > minSpeed) {
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 && speed > 0) {
             speed -= virtualFunctionBus.inputPacket.getBreakPedal() / pedalRate * slowConst * deltaTime;
         }
+
     }
 
     private void releasedPedals() {

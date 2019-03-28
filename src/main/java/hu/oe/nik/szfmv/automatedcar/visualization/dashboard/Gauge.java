@@ -43,7 +43,11 @@ public class Gauge extends JPanel {
     }
 
     public void setValue(double value) {
-        dataset.setValue(value);
+        if (value < 0) {
+            dataset.setValue(Math.abs(value));
+        } else {
+            dataset.setValue(value);
+        }
     }
 
     private JFreeChart createJFreeChart(String text, double minValue, double maxValue, double step) {
