@@ -6,6 +6,9 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+
 public class AutomatedCar extends WorldObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -48,4 +51,18 @@ public class AutomatedCar extends WorldObject {
                 break;
         }
     }
+
+    @Override
+    public void generateShape() {
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(this.getRotation() + Math.toRadians(90), this.x , this.y);
+
+        this.shape = tx.createTransformedShape(
+            new Rectangle(
+                (int) this.getX() - this.getWidth() / 2,
+                (int) this.getY() - this.getHeight() / 2,
+                this.getWidth(), this.getHeight()));
+
+    }
+
 }
