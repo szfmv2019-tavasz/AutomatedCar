@@ -124,6 +124,7 @@ public class InputManager extends SystemComponent implements KeyListener {
                 steeringRangeHandler.turnRight();
                 break;
             default:
+                // TODO "Unused key pressed: 18" jon mindig ...???
                 LOGGER.debug("Unused key pressed: " + key);
         }
     }

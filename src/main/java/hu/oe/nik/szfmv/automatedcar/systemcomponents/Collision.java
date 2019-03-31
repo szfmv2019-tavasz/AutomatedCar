@@ -59,23 +59,26 @@ public class Collision extends SystemComponent {
     }
 
     private void handleGameOver() {
-
+        LOGGER.info("Game Over - Collision");
 
     }
 
     private void handleCollisionWithNPCCar() {
+        LOGGER.info("Collision with NPC car");
 
 
         damage();
     }
 
     private void handleCollissionWithRoadSign() {
+        LOGGER.info("Collision with road sign");
 
 
         damage();
     }
 
     private void damage() {
+        LOGGER.info("Car has been damaged");
 
 
     }
