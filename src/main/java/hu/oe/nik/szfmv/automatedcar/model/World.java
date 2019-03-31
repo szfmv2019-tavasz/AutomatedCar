@@ -11,6 +11,8 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
+        worldObjects=this.createWorld("./src/main/resources/test_world.xml");
+        System.out.println( );
     }
 
     public int getWidth() {
@@ -27,6 +29,16 @@ public class World {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public List<WorldObject> createWorld(String xmlLocation) {
+        try {
+            return XmlConverter.build(xmlLocation);
+        } catch (Exception ex) {
+            System.out.printf(ex.getMessage());
+            return  new ArrayList<WorldObject>();
+
+        }
     }
 
     public List<WorldObject> getWorldObjects() {

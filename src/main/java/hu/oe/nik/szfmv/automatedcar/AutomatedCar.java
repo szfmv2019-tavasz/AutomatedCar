@@ -9,6 +9,9 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+
 public class AutomatedCar extends WorldObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -51,28 +54,44 @@ public class AutomatedCar extends WorldObject {
         steeringAngle = virtualFunctionBus.steeringPacket.getSteeringAngle();
 
         Vector2D frontWheelPosition = carLocation.add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                .scalarMultiply(wheelBase / 2));
+            .scalarMultiply(wheelBase / 2));
         Vector2D backWheelPosition = carLocation.subtract(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                .scalarMultiply(wheelBase / 2));
+            .scalarMultiply(wheelBase / 2));
 
         backWheelPosition = backWheelPosition
-                .add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                        .scalarMultiply(speed * deltaTime));
+            .add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
+                .scalarMultiply(speed * deltaTime));
         frontWheelPosition = frontWheelPosition
-                .add(new Vector2D(Math.cos(carHeading + Math.toRadians(steeringAngle)),
-                        Math.sin(carHeading + Math.toRadians(steeringAngle)))
-                        .scalarMultiply(speed * deltaTime));
+            .add(new Vector2D(Math.cos(carHeading + Math.toRadians(steeringAngle)),
+                Math.sin(carHeading + Math.toRadians(steeringAngle)))
+                .scalarMultiply(speed * deltaTime));
 
         carLocation = frontWheelPosition.add(backWheelPosition).scalarMultiply(0.5);
         carHeading = (float) Math.atan2(frontWheelPosition.getY() - backWheelPosition.getY(),
-                frontWheelPosition.getX() - backWheelPosition.getX());
+            frontWheelPosition.getX() - backWheelPosition.getX());
     }
+
 
     private void updateCarPositionAndOrientation() {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
         this.rotation = carHeading;
     }
+
+    @Override
+    public void generateShape() {
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(this.getRotation() + Math.toRadians(90), this.x , this.y);
+
+        this.shape = tx.createTransformedShape(
+            new Rectangle(
+                (int) this.getX() - this.getWidth() / 2,
+                (int) this.getY() - this.getHeight() / 2,
+                this.getWidth(), this.getHeight()));
+
+    }
+
+
 
     private float calculateWheelBase() {
         return this.height - bumperAxleDistance;
