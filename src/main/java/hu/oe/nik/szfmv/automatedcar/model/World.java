@@ -1,43 +1,42 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private int width = 0;
-    private int height = 0;
+
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    public static final int WIDTH = 5120;
+    public static final int HEIGHT = 3000;
+    private static final String XML_LOCATION = "./src/main/resources/test_world.xml";
+
+    private static World instance;
+
     private List<WorldObject> worldObjects = new ArrayList<>();
 
-    public World(int width, int height) {
-        this.width = width;
-        this.height = height;
-        worldObjects=this.createWorld("./src/main/resources/test_world.xml");
-        System.out.println( );
+    public static World getInstance() {
+        // Thread safety is not needed in this singleton
+        if (instance == null) {
+            instance = new World();
+        }
+        return instance;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+    private World() {
+        worldObjects = createWorld(XML_LOCATION);
     }
 
     public List<WorldObject> createWorld(String xmlLocation) {
         try {
             return XmlConverter.build(xmlLocation);
-        } catch (Exception ex) {
-            System.out.printf(ex.getMessage());
-            return  new ArrayList<WorldObject>();
-
+        } catch (Exception e) {
+            String msg = "Failed to create world: " + e.getMessage();
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
         }
     }
 

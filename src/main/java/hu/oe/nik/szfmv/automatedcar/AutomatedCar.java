@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
@@ -33,6 +34,7 @@ public class AutomatedCar extends WorldObject {
         new Driver(virtualFunctionBus);
         new Powertrain(virtualFunctionBus);
         new Steering(virtualFunctionBus);
+        new Collision(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
@@ -90,8 +92,6 @@ public class AutomatedCar extends WorldObject {
                 this.getWidth(), this.getHeight()));
 
     }
-
-
 
     private float calculateWheelBase() {
         return this.height - bumperAxleDistance;
