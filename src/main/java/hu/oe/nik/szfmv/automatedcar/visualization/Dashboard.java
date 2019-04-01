@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 //import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.DashboardText;
@@ -38,6 +39,7 @@ public class Dashboard extends JPanel {
     private TextSignal trafficSignSignal;
     private TextSignal aebWarningSignal;
     private TextSignal rrWarningSignal;
+    private DashboardText healthSignal;
     private DashboardText currentGear;
     private DashboardText speedLimit;
     private DashboardText steeringWheel;
@@ -54,6 +56,7 @@ public class Dashboard extends JPanel {
             while (true) {
                 try {
                     VirtualFunctionBus vfb = parent.getVirtualFunctionBus();
+
                     if (vfb != null) {
                         handleInputPacket(vfb.inputPacket);
 
@@ -80,6 +83,7 @@ public class Dashboard extends JPanel {
             gasProgressBar.setValue(inputPacket.getGasPedal());
             breakProgressBar.setValue(inputPacket.getBreakPedal());
             steeringWheel.setText(String.valueOf(inputPacket.getSteeringWheel()));
+            healthSignal.setText(String.valueOf(parent.getAutomatedCar().getAutomatedCarHealth()));
         }
 
         private void handleOtherPacketDummy() {
@@ -87,8 +91,8 @@ public class Dashboard extends JPanel {
             kmhGauge.setValue(parent.getVirtualFunctionBus().powertrainPacket.getSpeed());
             lkaWarningSignal.setSwitchedOn(false);
             speedLimit.setText("100");
-            xCoordinate.setText("100");
-            yCoordinate.setText("150");
+            xCoordinate.setText(String.valueOf(parent.getAutomatedCar().getX()));
+            yCoordinate.setText(String.valueOf(parent.getAutomatedCar().getY()));
         }
     };
 
@@ -144,14 +148,15 @@ public class Dashboard extends JPanel {
 
     private void addDashboardPlainTexts() {
         DashboardText accOpts = new DashboardText(20, 180, 70, 15, "ACC Opts");
-        DashboardText gearText = new DashboardText(90, 155, 35, 15, "Gear: ");
+        DashboardText gearText = new DashboardText(80, 155, 35, 15, "Gear: ");
         DashboardText gasText = new DashboardText(20, 350, 80, 15, "Gas Pedal:");
         DashboardText breakText = new DashboardText(20, 385, 80, 15, "Break Pedal:");
         DashboardText speedLimitText = new DashboardText(20, 440, 80, 15, "Speed Limit:");
         DashboardText debugText = new DashboardText(20, 475, 45, 15, "Debug: ");
         DashboardText steeringWheelText = new DashboardText(20, 490, 95, 15, "Steering Wheel: ");
         DashboardText xText = new DashboardText(20, 515, 20, 15, "X: ");
-        DashboardText yText = new DashboardText(100, 515, 20, 15, "Y: ");
+        DashboardText yText = new DashboardText(150, 515, 20, 15, "Y: ");
+        DashboardText helathText = new DashboardText(20,535,70,15,"Health:");
         add(accOpts);
         add(gearText);
         add(gasText);
@@ -161,19 +166,22 @@ public class Dashboard extends JPanel {
         add(steeringWheelText);
         add(xText);
         add(yText);
+        add(helathText);
     }
 
     private void addDashboardActiveTexts() {
-        currentGear = new DashboardText(125, 155, 10, 15, " ");
+        currentGear = new DashboardText(130, 155, 10, 15, " ");
         speedLimit = new DashboardText(110, 440, 30, 15, "0");
         steeringWheel = new DashboardText(120, 490, 30, 15, " ");
-        xCoordinate = new DashboardText(50, 515, 20, 15, "0");
-        yCoordinate = new DashboardText(130, 515, 20, 15, "0");
+        xCoordinate = new DashboardText(50, 515, 100, 15, "0");
+        yCoordinate = new DashboardText(180, 515, 100, 15, "0");
+        healthSignal = new DashboardText(100,535,25,15," ");
         add(currentGear);
         add(speedLimit);
         add(steeringWheel);
         add(xCoordinate);
         add(yCoordinate);
+        add(healthSignal);
     }
 
     private void addProgressBars() {

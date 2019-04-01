@@ -12,16 +12,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.util.ArrayList;
 
 public class Collision extends SystemComponent {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private AutomatedCar car;
+    private ArrayList<WorldObject> collideItems;
 
     public Collision(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
         this.car = car;
+        collideItems = new ArrayList();
     }
 
     @Override
@@ -29,10 +32,10 @@ public class Collision extends SystemComponent {
         for (WorldObject worldObject : World.getInstance().getWorldObjects()) {
             if (worldObject instanceof Collidable && checkCollision(worldObject)) {
                 if (worldObject instanceof Tree) {
-                    handleGameOver();
+                    handleCollisionWithTree();
 // Ezek meg nincsenek a vilagmodelben:
 //                } else if (worldObject instanceof NPCPedestrian) {
-//                    handleGameOver();
+//                    handleCollisionWithNPCPedestrian();
 //                } else if (worldObject instanceof NPCCar) {
 //                    handleCollisionWithNPCCar();
                 } else if (worldObject instanceof RoadSign) {
@@ -42,17 +45,30 @@ public class Collision extends SystemComponent {
         }
     }
 
+
+    // Amikor kihajt az akadályból, megint csökken az élete
     private boolean checkCollision(WorldObject worldObject) {
         boolean collision = false;
 
         Shape carShape = car.getShape();
         Shape worldObjectShape = worldObject.getShape();
 
-        // First time check the bounds intersection for better performance (Area intersection is much more expensive)
-        if (carShape.getBounds().intersects(worldObjectShape.getBounds())) {
-            Area carArea = new Area(carShape);
-            carArea.intersect(new Area(worldObjectShape));
-            collision = !carArea.isEmpty();
+        if (!collideItems.contains(worldObject)) {
+            // First time check the bounds intersection for better performance (Area intersection is much more expensive)
+            if (carShape.getBounds().intersects(worldObjectShape.getBounds())) {
+                Area carArea = new Area(carShape);
+                carArea.intersect(new Area(worldObjectShape));
+                collision = !carArea.isEmpty();
+                this.collideItems.add(worldObject);
+            }
+        }
+        if (collideItems.contains(worldObject)){
+            if (!carShape.getBounds().intersects(worldObjectShape.getBounds())){
+                Area carArea = new Area(carShape);
+                carArea.intersect(new Area(worldObjectShape));
+                collision = !carArea.isEmpty();
+                this.collideItems.remove(worldObject);
+            }
         }
 
         return collision;
@@ -67,20 +83,36 @@ public class Collision extends SystemComponent {
         LOGGER.info("Collision with NPC car");
 
 
-        damage();
+        damage(50);
+    }
+
+    private void handleCollisionWithNPCPedestrian() {
+        LOGGER.info("Collision with NPC pedestrian");
+
+
+        damage(20);
+    }
+
+    private void handleCollisionWithTree() {
+        LOGGER.info("Collision with tree");
+
+
+        damage(70);
     }
 
     private void handleCollissionWithRoadSign() {
         LOGGER.info("Collision with road sign");
 
-
-        damage();
+        //this.car.setCarSpeed(0); //Ez szar
+        damage(30);
     }
 
-    private void damage() {
+    private void damage(int damageValue) {
         LOGGER.info("Car has been damaged");
-
-
+        this.car.setAutomatedCarHealth(this.car.getAutomatedCarHealth() - damageValue);
+        if (this.car.getAutomatedCarHealth() < 0 ){
+            handleGameOver();
+        }
     }
 
 }

@@ -18,6 +18,7 @@ public class Gui extends JFrame {
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
+    private AutomatedCar car;
 
     /**
      * Initialize the GUI class
@@ -36,7 +37,7 @@ public class Gui extends JFrame {
         // https://creativecommons.org/licenses/by/4.0/
         ImageIcon carIcon = new ImageIcon(ClassLoader.getSystemResource("car-icon.png"));
         setIconImage(carIcon.getImage());
-
+        this.car = car;
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
@@ -59,5 +60,9 @@ public class Gui extends JFrame {
 
     public CourseDisplay getCourseDisplay() {
         return courseDisplay;
+    }
+
+    public AutomatedCar getAutomatedCar(){
+        return  this.car;
     }
 }

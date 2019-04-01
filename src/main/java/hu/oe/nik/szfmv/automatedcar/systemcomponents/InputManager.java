@@ -152,7 +152,9 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.P) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.R) {
-            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+            if (virtualFunctionBus.powertrainPacket.getSpeed() == 0) {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+            }
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.N) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.D);
         }

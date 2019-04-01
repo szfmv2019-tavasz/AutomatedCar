@@ -27,6 +27,7 @@ public class AutomatedCar extends WorldObject {
     private float steeringAngle;
     private float carHeading;  // in radians
     private Vector2D carLocation;
+    private int health;
 
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
@@ -38,7 +39,23 @@ public class AutomatedCar extends WorldObject {
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
+        health = 100;
     }
+
+    public int getAutomatedCarHealth(){
+        return this.health;
+    }
+
+    public void setAutomatedCarHealth(int health){
+        this.health = health;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+    }
+
+//    public void setCarSpeed(float speed){
+//        this.speed = speed;
+//    }
 
     public void drive() {
         virtualFunctionBus.loop();
