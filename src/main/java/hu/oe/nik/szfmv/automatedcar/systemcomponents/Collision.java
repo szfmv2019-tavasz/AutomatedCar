@@ -10,6 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Collision extends SystemComponent {
     public Collision(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
         this.car = car;
-        collideItems = new ArrayList();
+        collideItems = new ArrayList<>();
     }
 
     @Override
@@ -32,6 +33,7 @@ public class Collision extends SystemComponent {
         for (WorldObject worldObject : World.getInstance().getWorldObjects()) {
             if (worldObject instanceof Collidable && checkCollision(worldObject)) {
                 if (worldObject instanceof Tree) {
+                    System.out.println("FA");
                     handleCollisionWithTree();
 // Ezek meg nincsenek a vilagmodelben:
 //                } else if (worldObject instanceof NPCPedestrian) {
@@ -46,7 +48,9 @@ public class Collision extends SystemComponent {
     }
 
 
-    // Amikor kihajt az akadályból, megint csökken az élete
+
+
+    // Nem úgy működik ahogy kellene.
     private boolean checkCollision(WorldObject worldObject) {
         boolean collision = false;
 
@@ -61,22 +65,27 @@ public class Collision extends SystemComponent {
                 collision = !carArea.isEmpty();
                 this.collideItems.add(worldObject);
             }
+
         }
         if (collideItems.contains(worldObject)){
             if (!carShape.getBounds().intersects(worldObjectShape.getBounds())){
-                Area carArea = new Area(carShape);
-                carArea.intersect(new Area(worldObjectShape));
-                collision = !carArea.isEmpty();
+                collision = false;
                 this.collideItems.remove(worldObject);
             }
         }
-
         return collision;
     }
 
     private void handleGameOver() {
         LOGGER.info("Game Over - Collision");
+        JFrame exitFrame = new JFrame("Game over");
+        exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        exitFrame.setLocationByPlatform(true);
+        exitFrame.setPreferredSize(new Dimension(400,500));
+        exitFrame.add(new JLabel("Game Over"));
+        exitFrame.setVisible(true);
 
+        //System.exit(0);
     }
 
     private void handleCollisionWithNPCCar() {
@@ -104,13 +113,13 @@ public class Collision extends SystemComponent {
         LOGGER.info("Collision with road sign");
 
         //this.car.setCarSpeed(0); //Ez szar
-        damage(30);
+        damage(100);
     }
 
     private void damage(int damageValue) {
         LOGGER.info("Car has been damaged");
         this.car.setAutomatedCarHealth(this.car.getAutomatedCarHealth() - damageValue);
-        if (this.car.getAutomatedCarHealth() < 0 ){
+        if (this.car.getAutomatedCarHealth() == 0 ){
             handleGameOver();
         }
     }
