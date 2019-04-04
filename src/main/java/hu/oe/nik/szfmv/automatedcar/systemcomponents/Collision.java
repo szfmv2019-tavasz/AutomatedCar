@@ -4,14 +4,18 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Collidable;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Road;
 import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Tree;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
@@ -79,13 +83,22 @@ public class Collision extends SystemComponent {
     private void handleGameOver() {
         LOGGER.info("Game Over - Collision");
         JFrame exitFrame = new JFrame("Game over");
-        exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        exitFrame.setPreferredSize(new Dimension(300,200));
+        JButton exitButton = new JButton("Exit");
+        exitButton.setSize(50,25); //Nem ezt a nagyságot állítja be.
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        exitFrame.add(new JLabel("Game Over", SwingConstants.CENTER));
+        exitFrame.add(exitButton, BorderLayout.SOUTH);
+        exitFrame.pack();
         exitFrame.setLocationByPlatform(true);
-        exitFrame.setPreferredSize(new Dimension(400,500));
-        exitFrame.add(new JLabel("Game Over"));
         exitFrame.setVisible(true);
-
-        //System.exit(0);
+        //exitFrame.setEnabled();
     }
 
     private void handleCollisionWithNPCCar() {
@@ -97,9 +110,7 @@ public class Collision extends SystemComponent {
 
     private void handleCollisionWithNPCPedestrian() {
         LOGGER.info("Collision with NPC pedestrian");
-
-
-        damage(20);
+        handleGameOver();
     }
 
     private void handleCollisionWithTree() {
