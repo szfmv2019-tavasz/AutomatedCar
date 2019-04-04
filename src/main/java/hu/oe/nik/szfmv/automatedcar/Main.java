@@ -43,14 +43,16 @@ public class Main {
         // create the world
         World world = World.getInstance();
         // create an automated car and add to the world
-        car = new AutomatedCar(20, 20, "car_2_white.png");
+        car = new AutomatedCar(200, 200, "car_2_white.png");
         world.addObjectToWorld(car);
 
-        pedestrian = new WorldObject(50, 50, "man.png");
+        pedestrian = new WorldObject(500, 500, "man.png");
         pedPath = new ScriptedPath(pedestrian);
+        pedPath.setMovementSpeed(200);
         pedPath.setWaypoints(createPedWaypoint());
-        pedPath.setLoopType(ScriptedPath.LoopType.LOOP);
+        pedPath.setLoopType(ScriptedPath.LoopType.PINGPONG);
         pedPath.init();
+        world.addObjectToWorld(pedestrian);
 
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
@@ -72,10 +74,10 @@ public class Main {
 
     private List<Vector2D> createPedWaypoint() {
         List<Vector2D> waypoints = new ArrayList<Vector2D>();
-        waypoints.add(new Vector2D(100, 100));
-        waypoints.add(new Vector2D(100, 300));
-        waypoints.add(new Vector2D(300, 300));
-        waypoints.add(new Vector2D(300, 100));
+        waypoints.add(new Vector2D(1000, 1000));
+        waypoints.add(new Vector2D(1000, 2000));
+        waypoints.add(new Vector2D(2000, 2000));
+        waypoints.add(new Vector2D(2000, 1000));
 
         return waypoints;
     }
