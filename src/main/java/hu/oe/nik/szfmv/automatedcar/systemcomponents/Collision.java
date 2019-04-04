@@ -4,7 +4,6 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Collidable;
-import hu.oe.nik.szfmv.automatedcar.model.objects.Road;
 import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Tree;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -34,49 +33,38 @@ public class Collision extends SystemComponent {
 
     @Override
     public void loop() {
-        for (WorldObject worldObject : World.getInstance().getWorldObjects()) {
-            if (worldObject instanceof Collidable && checkCollision(worldObject)) {
-                if (worldObject instanceof Tree) {
-                    System.out.println("FA");
+        for (WorldObject wObject : World.getInstance().getWorldObjects()) {
+            if (wObject instanceof Collidable && checkCollision(wObject) && !collideItems.contains(wObject)) {
+                collideItems.add(wObject);
+                if (wObject instanceof Tree) {
                     handleCollisionWithTree();
 // Ezek meg nincsenek a vilagmodelben:
-//                } else if (worldObject instanceof NPCPedestrian) {
+//                } else if (wObject instanceof NPCPedestrian) {
 //                    handleCollisionWithNPCPedestrian();
-//                } else if (worldObject instanceof NPCCar) {
+//                } else if (wObject instanceof NPCCar) {
 //                    handleCollisionWithNPCCar();
-                } else if (worldObject instanceof RoadSign) {
+                } else if (wObject instanceof RoadSign) {
                     handleCollissionWithRoadSign();
                 }
             }
         }
     }
 
-
-
-
-    // Nem úgy működik ahogy kellene.
     private boolean checkCollision(WorldObject worldObject) {
         boolean collision = false;
 
         Shape carShape = car.getShape();
         Shape worldObjectShape = worldObject.getShape();
-
-        if (!collideItems.contains(worldObject)) {
+        Area carArea = new Area(carShape);
             // First time check the bounds intersection for better performance (Area intersection is much more expensive)
             if (carShape.getBounds().intersects(worldObjectShape.getBounds())) {
-                Area carArea = new Area(carShape);
+
                 carArea.intersect(new Area(worldObjectShape));
                 collision = !carArea.isEmpty();
-                this.collideItems.add(worldObject);
             }
-
-        }
-        if (collideItems.contains(worldObject)){
-            if (!carShape.getBounds().intersects(worldObjectShape.getBounds())){
-                collision = false;
-                this.collideItems.remove(worldObject);
+            else if (collision = carArea.isEmpty()){
+                collideItems.clear();
             }
-        }
         return collision;
     }
 
@@ -124,7 +112,7 @@ public class Collision extends SystemComponent {
         LOGGER.info("Collision with road sign");
 
         //this.car.setCarSpeed(0); //Ez szar
-        damage(100);
+        damage(20);
     }
 
     private void damage(int damageValue) {
