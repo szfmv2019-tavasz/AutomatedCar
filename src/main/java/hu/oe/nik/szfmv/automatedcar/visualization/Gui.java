@@ -1,32 +1,29 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SamplePacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 public class Gui extends JFrame {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
     private final int windowWidth = 1020;
     private final int windowHeight = 700;
-    private ArrayList<Integer> keysPressed;
+
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
-
+    private AutomatedCar car;
 
     /**
      * Initialize the GUI class
      */
-    public Gui() {
+    public Gui(AutomatedCar car) {
         setTitle("AutomatedCar");
         setLocation(0, 0); // default is 0,0 (top left corner)
         addWindowListener(new GuiAdapter());
@@ -40,85 +37,17 @@ public class Gui extends JFrame {
         // https://creativecommons.org/licenses/by/4.0/
         ImageIcon carIcon = new ImageIcon(ClassLoader.getSystemResource("car-icon.png"));
         setIconImage(carIcon.getImage());
-
+        this.car = car;
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay(this);
+        courseDisplay = new CourseDisplay(car);
         add(courseDisplay);
 
         dashboard = new Dashboard(this);
         add(dashboard);
 
         setVisible(true);
-
-
-
-        // A konstruktor további része nem kell, törölhető.
-        // Csak arra való hogy ki lehessen próbálni hogy valami megjelenjen:
-
-        // TODO: DELETE ----------------------------------------------------------->
-
-        keysPressed = new ArrayList<>();
-
-        KeyListener listen = new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-
-                // Release turning and pedal pressing so the back positioning can run.
-                if (keyCode == KeyEvent.VK_RIGHT) {
-                    LOGGER.info(">");
-                    SamplePacket p = new SamplePacket();
-                    p.setKey(1);
-                    virtualFunctionBus.samplePacket = p;
-                }
-                if (keyCode == KeyEvent.VK_LEFT) {
-                    LOGGER.info("<");
-                    SamplePacket p = new SamplePacket();
-                    p.setKey(3);
-                    virtualFunctionBus.samplePacket = p;
-                }
-                if (keyCode == KeyEvent.VK_UP) {
-                    LOGGER.info("^");
-                    SamplePacket p = new SamplePacket();
-                    p.setKey(0);
-                    virtualFunctionBus.samplePacket = p;
-                }
-                if (keyCode == KeyEvent.VK_DOWN) {
-                    LOGGER.info("v");
-                    SamplePacket p = new SamplePacket();
-                    p.setKey(2);
-                    virtualFunctionBus.samplePacket = p;
-                }
-
-                if (keysPressed.contains(keyCode)) {
-                    keysPressed.remove(keysPressed.indexOf(keyCode));
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-                if (!keysPressed.contains(e.getKeyCode())) {
-                    keysPressed.add(e.getKeyCode());
-                }
-
-            }
-        };
-
-//        this.addKeyListener(listen);
-
-        // <------------------------------------------------------------ DELETE
-
-
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -133,8 +62,7 @@ public class Gui extends JFrame {
         return courseDisplay;
     }
 
-    public Dashboard getDashboard() {
-        return dashboard;
+    public AutomatedCar getAutomatedCar(){
+        return  this.car;
     }
-
 }

@@ -46,7 +46,8 @@ public class TextSignal extends JPanel {
 
     public void setSwitchedOn(boolean switchedOn) {
         currentColor = switchedOn ? COLOR_ON : COLOR_OFF;
-        LOGGER.debug("setSwitchedOn: " + switchedOn + " (" + text + ")");
+        // TODO Folyamatosan meghivodik
+        //LOGGER.debug("setSwitchedOn: " + switchedOn + " (" + text + ")");
         repaint();
     }
 

@@ -26,9 +26,6 @@ public class InputManager extends SystemComponent implements KeyListener {
     private static final int ACC_SPEED_MAX = 160;
     private static final int ACC_SPEED_STEP = 10;
 
-    //Remove ACC_SPEED_INIT constant when init speed is from VFB
-    private static final int ACC_SPEED_INIT = 120;
-
     private final InputPacket inputPacket;
 
     private final PedalRangeHandler gasPedalRangeHandler;
@@ -90,7 +87,11 @@ public class InputManager extends SystemComponent implements KeyListener {
                 break;
             case KeyEvent.VK_T: handleKeyT();
                 break;
+            case KeyEvent.VK_ADD: handleKeyPlus();
+                break;
             case KeyEvent.VK_PLUS: handleKeyPlus();
+                break;
+            case KeyEvent.VK_SUBTRACT: handleKeyMinus();
                 break;
             case KeyEvent.VK_MINUS: handleKeyMinus();
                 break;
@@ -123,6 +124,7 @@ public class InputManager extends SystemComponent implements KeyListener {
                 steeringRangeHandler.turnRight();
                 break;
             default:
+                // TODO "Unused key pressed: 18" jon mindig ...???
                 LOGGER.debug("Unused key pressed: " + key);
         }
     }
@@ -150,7 +152,9 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.P) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.R) {
-            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+            if (virtualFunctionBus.powertrainPacket.getSpeed() == 0) {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
+            }
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.N) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.D);
         }
@@ -160,7 +164,9 @@ public class InputManager extends SystemComponent implements KeyListener {
         if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.N);
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.N) {
-            inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
+            if (virtualFunctionBus.powertrainPacket.getSpeed() ==  0) {
+                inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.R);
+            }
         } else if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.R) {
             inputPacket.setGearShift(ReadOnlyInputPacket.GearShiftValues.P);
         }
@@ -175,25 +181,31 @@ public class InputManager extends SystemComponent implements KeyListener {
     }
 
     private void handleKeyPlus() {
-        if (inputPacket.getAccSpeed() == 0) {
-            //Set the currend speed from VFB:
-            inputPacket.setAccSpeed(ACC_SPEED_INIT);
-        } else if (inputPacket.getAccSpeed() != 0) {
-            inputPacket.setAccSpeed(inputPacket.getAccSpeed() + ACC_SPEED_STEP);
-            if (inputPacket.getAccSpeed() > ACC_SPEED_MAX) {
-                inputPacket.setAccSpeed(ACC_SPEED_MAX);
+        if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
+            if (inputPacket.getAccSpeed() == 0 && virtualFunctionBus.powertrainPacket.getSpeed() > ACC_SPEED_MIN) {
+                //Set the currend speed from VFB:
+                inputPacket.setAccSpeed(roundAccSpeed(virtualFunctionBus.powertrainPacket.getSpeed()));
+            } else if (inputPacket.getAccSpeed() != 0) {
+                inputPacket.setAccSpeed(inputPacket.getAccSpeed() + ACC_SPEED_STEP);
+                if (inputPacket.getAccSpeed() > ACC_SPEED_MAX) {
+                    inputPacket.setAccSpeed(ACC_SPEED_MAX);
+                }
             }
         }
     }
 
+    // Rounds a float number to the nearest int number that can be divided by 10
+    private int roundAccSpeed(float speed) {
+        return Math.round(speed / 10) * 10;
+    }
+
     private void handleKeyMinus() {
-        if (inputPacket.getAccSpeed() == 0) {
-            //Set the currend speed from VFB:
-            inputPacket.setAccSpeed(ACC_SPEED_INIT);
-        } else if (inputPacket.getAccSpeed() != 0) {
-            inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
-            if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
-                inputPacket.setAccSpeed(ACC_SPEED_MIN);
+        if (inputPacket.getGearShift() == ReadOnlyInputPacket.GearShiftValues.D) {
+            if (inputPacket.getAccSpeed() != 0) {
+                inputPacket.setAccSpeed(inputPacket.getAccSpeed() - ACC_SPEED_STEP);
+                if (inputPacket.getAccSpeed() < ACC_SPEED_MIN) {
+                    inputPacket.setAccSpeed(ACC_SPEED_MIN);
+                }
             }
         }
     }

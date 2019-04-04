@@ -43,7 +43,8 @@ public class TurnSignal extends JPanel {
 
     public void setSwitchedOn(boolean switchedOn) {
         currentColor = switchedOn ? COLOR_ON : COLOR_OFF;
-        LOGGER.debug("TurnSignal.setSwitchedOn: " + switchedOn);
+        // TODO Folyamatosan meghivodik
+        //LOGGER.debug("TurnSignal.setSwitchedOn: " + switchedOn);
         repaint();
     }
 

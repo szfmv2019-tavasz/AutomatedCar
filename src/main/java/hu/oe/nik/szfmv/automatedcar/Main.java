@@ -41,8 +41,8 @@ public class Main {
 
     private void init() {
         // create the world
-        world = new World(5000, 3000);
-        // create an automated car
+        World world = World.getInstance();
+        // create an automated car and add to the world
         car = new AutomatedCar(20, 20, "car_2_white.png");
         world.addObjectToWorld(car);
 
@@ -52,7 +52,7 @@ public class Main {
         pedPath.setLoopType(ScriptedPath.LoopType.LOOP);
         pedPath.init();
 
-        window = new Gui();
+        window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputManager(car.getVirtualFunctionBus()));
     }
@@ -61,9 +61,8 @@ public class Main {
         while (true) {
             try {
                 car.drive();
+                window.getCourseDisplay().drawWorld();
                 pedPath.loop();
-                window.getCourseDisplay().drawWorld(world);
-//                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage());
