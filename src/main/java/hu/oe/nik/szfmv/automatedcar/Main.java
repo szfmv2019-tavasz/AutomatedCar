@@ -1,16 +1,19 @@
 package hu.oe.nik.szfmv.automatedcar;
 
+import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.objects.Cyclist;
-import hu.oe.nik.szfmv.automatedcar.model.objects.NPCar;
-import hu.oe.nik.szfmv.automatedcar.model.objects.Pedestrian;
+import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -20,6 +23,9 @@ public class Main {
     private Gui window;
     private AutomatedCar car;
     private World world;
+
+    private WorldObject pedestrian;
+    private ScriptedPath pedPath;
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
@@ -40,10 +46,11 @@ public class Main {
         car = new AutomatedCar(20, 20, "car_2_white.png");
         world.addObjectToWorld(car);
 
-        world.addObjectToWorld(new Pedestrian());
-        world.addObjectToWorld(new Pedestrian(600, 300, "woman.png"));
-        world.addObjectToWorld(new Cyclist());
-        world.addObjectToWorld(new NPCar());
+        pedestrian = new WorldObject(50, 50, "man.png");
+        pedPath = new ScriptedPath(pedestrian);
+        pedPath.setWaypoints(createPedWaypoint());
+        pedPath.setLoopType(ScriptedPath.LoopType.LOOP);
+        pedPath.init();
 
         window = new Gui();
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
@@ -54,7 +61,7 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-
+                pedPath.loop();
                 window.getCourseDisplay().drawWorld(world);
 //                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
@@ -62,6 +69,16 @@ public class Main {
                 LOGGER.error(e.getMessage());
             }
         }
+    }
+
+    private List<Vector2D> createPedWaypoint() {
+        List<Vector2D> waypoints = new ArrayList<Vector2D>();
+        waypoints.add(new Vector2D(100, 100));
+        waypoints.add(new Vector2D(100, 300));
+        waypoints.add(new Vector2D(300, 300));
+        waypoints.add(new Vector2D(300, 100));
+
+        return waypoints;
     }
 
 }
