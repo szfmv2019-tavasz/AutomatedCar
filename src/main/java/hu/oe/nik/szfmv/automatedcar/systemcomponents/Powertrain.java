@@ -13,7 +13,8 @@ public class Powertrain extends SystemComponent {
     private static final ArrayList<Double> GEAR_SHIFT_LEVEL_SPEED;
 
     static {
-        GEAR_SHIFT_LEVEL_SPEED = new ArrayList<>(Arrays.asList(1.3888, 5.5555, 9.7222, 13.8888, 22.2222, 30.5555, Double.MAX_VALUE));
+        GEAR_SHIFT_LEVEL_SPEED =
+            new ArrayList<>(Arrays.asList(1.3888, 5.5555, 9.7222, 13.8888, 22.2222, 30.5555, Double.MAX_VALUE));
     }
 
     private final float deltaTime = 0.04f;
