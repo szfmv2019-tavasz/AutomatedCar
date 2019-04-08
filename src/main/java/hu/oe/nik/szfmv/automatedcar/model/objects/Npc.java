@@ -24,7 +24,7 @@ public class Npc extends Collidable {
         this.deadImageFileName = deadImageFileName;
     }
 
-    public void HandleCollision() {
+    public void handleCollision() {
         if (this.state == State.HEALTHY) {
             this.state = State.DAMAGED;
             loadImage();
@@ -44,6 +44,8 @@ public class Npc extends Collidable {
                 break;
             case DEAD:
                 this.imageFileName = deadImageFileName;
+                break;
+            default:
                 break;
         }
 

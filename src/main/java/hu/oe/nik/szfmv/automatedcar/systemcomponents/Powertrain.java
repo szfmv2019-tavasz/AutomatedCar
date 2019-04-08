@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Powertrain extends SystemComponent {
-
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final ArrayList<Double> GEAR_SHIFT_LEVEL_SPEED;
 
-    public static final ArrayList<Double> GEAR_SHIFT_LEVEL_SPEED =
-        new ArrayList<>(Arrays.asList(1.3888, 5.5555, 9.7222, 13.8888, 22.2222, 30.5555, Double.MAX_VALUE));
+    static {
+        GEAR_SHIFT_LEVEL_SPEED = new ArrayList<>(Arrays.asList(1.3888, 5.5555, 9.7222, 13.8888, 22.2222, 30.5555, Double.MAX_VALUE));
+    }
 
     private final float deltaTime = 0.04f;
 
@@ -163,8 +164,7 @@ public class Powertrain extends SystemComponent {
     private void handleGearShiftD() {
         float deltaSpeed = 0;
 
-        if(actualAutoGear == 0)
-        {
+        if (actualAutoGear == 0) {
             actualAutoGear++;
         }
 
@@ -193,7 +193,7 @@ public class Powertrain extends SystemComponent {
      */
     private void releasedPedals() {
         if (virtualFunctionBus.inputPacket.getGasPedal() == 0
-                && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
+            && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed > 0) {
             speed -= slowConst * deltaTime;
             if (speed < 0) {
                 speed = 0;
@@ -202,7 +202,7 @@ public class Powertrain extends SystemComponent {
         }
 
         if (virtualFunctionBus.inputPacket.getGasPedal() == 0
-                && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
+            && virtualFunctionBus.inputPacket.getBreakPedal() == 0 && speed < 0) {
             speed += slowConst * deltaTime;
             if (speed > 0) {
                 speed = 0;

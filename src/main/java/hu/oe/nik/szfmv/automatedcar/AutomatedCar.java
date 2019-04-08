@@ -43,11 +43,11 @@ public class AutomatedCar extends WorldObject {
         health = 100;
     }
 
-    public int getAutomatedCarHealth(){
+    public int getAutomatedCarHealth() {
         return this.health;
     }
 
-    public void setAutomatedCarHealth(int health){
+    public void setAutomatedCarHealth(int health) {
         this.health = health;
         if (this.health < 0) {
             this.health = 0;
@@ -101,12 +101,12 @@ public class AutomatedCar extends WorldObject {
     @Override
     public void generateShape() {
         AffineTransform tx = new AffineTransform();
-        tx.rotate(this.getRotation() + Math.toRadians(90), this.x , this.y);
+        tx.rotate(this.getRotation() + Math.toRadians(90), this.x, this.y);
 
         this.shape = tx.createTransformedShape(
             new Rectangle(
-                (int) this.getX() - this.getWidth() / 2,
-                (int) this.getY() - this.getHeight() / 2,
+                this.getX() - this.getWidth() / 2,
+                this.getY() - this.getHeight() / 2,
                 this.getWidth(), this.getHeight()));
 
     }

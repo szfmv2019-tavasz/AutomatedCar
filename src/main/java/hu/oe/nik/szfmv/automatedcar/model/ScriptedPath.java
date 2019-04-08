@@ -36,11 +36,11 @@ public class ScriptedPath {
         this.worldObject = worldObject;
     }
 
-    public void Start() {
+    public void start() {
         isStopped = false;
     }
 
-    public void Stop() {
+    public void stop() {
         isStopped = true;
     }
 
@@ -54,7 +54,7 @@ public class ScriptedPath {
         if (!isStopped) {
             moveObjectTowardsWaypoint();
             rotateObjectTowardsWaypoint();
-            ApplyPositionAndRotationToObject();
+            applyPositionAndRotationToObject();
             if (isTargetWaypointReached()) {
                 getNewTargetWaypoint();
                 if (isPathFinished()) {
@@ -65,7 +65,7 @@ public class ScriptedPath {
         }
     }
 
-    private void ApplyPositionAndRotationToObject() {
+    private void applyPositionAndRotationToObject() {
         worldObject.setX((int) currentPosition.getX());
         worldObject.setY((int) currentPosition.getY());
         worldObject.setRotation(rotation);
