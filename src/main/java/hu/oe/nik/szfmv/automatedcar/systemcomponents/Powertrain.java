@@ -54,9 +54,6 @@ public class Powertrain extends SystemComponent {
             handleCarMovement();
         }
 
-        LOGGER.error(actualAutoGear);
-        LOGGER.error(speed);
-
         createAndSendPacket();
     }
 
