@@ -1,6 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
-import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 
@@ -19,18 +18,36 @@ public class Powertrain extends SystemComponent {
 
     private AutomatedCar car;
 
-    private int rpm = 0;
-    private float speed = 0f;   // in m/s
+    private int rpm = 700;
+    private float speed = 0f;   // in pixel/s
+    private int actualAutoGear = 0;
+    private boolean isAccelerate;
 
-    public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
+    private PowertrainPacket packet;
+
+    public Powertrain(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
         this.car = car;
+        packet = new PowertrainPacket();
+        virtualFunctionBus.powertrainPacket = packet;
     }
 
     @Override
     public void loop() {
         speed = car.getSpeed();
-        handleCarMovement();
+
+        boolean emergencyBrake = false;
+
+        if (emergencyBrake) {
+            handleEmergencyBrake();
+        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0) {
+            speed = virtualFunctionBus.inputPacket.getAccSpeed();
+        } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
+            //
+        } else {
+            handleCarMovement();
+        }
+
         createAndSendPacket();
     }
 

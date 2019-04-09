@@ -29,6 +29,7 @@ public class AutomatedCar extends WorldObject {
     private Vector2D carLocation;
     private int health;
 
+    // Sprint2 init from master
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
@@ -104,12 +105,12 @@ public class AutomatedCar extends WorldObject {
     @Override
     public void generateShape() {
         AffineTransform tx = new AffineTransform();
-        tx.rotate(this.getRotation() + Math.toRadians(90), this.x , this.y);
+        tx.rotate(this.getRotation() + Math.toRadians(90), this.x, this.y);
 
         this.shape = tx.createTransformedShape(
             new Rectangle(
-                (int) this.getX() - this.getWidth() / 2,
-                (int) this.getY() - this.getHeight() / 2,
+                this.getX() - this.getWidth() / 2,
+                this.getY() - this.getHeight() / 2,
                 this.getWidth(), this.getHeight()));
 
     }
