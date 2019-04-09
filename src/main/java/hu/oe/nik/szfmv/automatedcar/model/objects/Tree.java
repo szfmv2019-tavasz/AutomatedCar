@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D;
 public class Tree extends Stationary {
 
     private static double D = 25;
+    private static double R = D / 2.0;
 
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
@@ -20,13 +21,7 @@ public class Tree extends Stationary {
         super(x, y, imageFileName);
     }
 
-    /**
-     * Creates an object with default parameter values.
-     * Added default png
-     *
-     *
-     *
-     */
+
     public Tree() {
         super(0, 0, "tree.png");
     }
@@ -37,9 +32,9 @@ public class Tree extends Stationary {
         AffineTransform t = new AffineTransform();
         t.rotate(-this.getRotation(), this.getX(), this.getY());
         this.shape = t.createTransformedShape((Shape) new Ellipse2D.Double(
-            this.getX() + this.getWidth() / 2 - 25 / 2,
-            this.getY() + this.getHeight() / 2 - 25 / 2,
-            25, 25));
+            this.getX() + this.getWidth() / 2 - R,
+            this.getY() + this.getHeight() / 2 - R,
+            D, D));
     }
 }
 
