@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class World {
     public World(int width, int height) {
         this.width = width;
         this.height = height;
-        worldObjects = this.createWorld("./src/main/resources/test_world.xml");
+        worldObjects = this.createWorld();
     }
 
     public int getWidth() {
@@ -30,9 +32,10 @@ public class World {
         this.height = height;
     }
 
-    public List<WorldObject> createWorld(String xmlLocation) {
+    public List<WorldObject> createWorld() {
         try {
-            return XmlParser.build(xmlLocation);
+            File xml = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
+            return XmlParser.build(xml);
         } catch (Exception ex) {
             System.out.printf(ex.getMessage());
             return  new ArrayList<WorldObject>();

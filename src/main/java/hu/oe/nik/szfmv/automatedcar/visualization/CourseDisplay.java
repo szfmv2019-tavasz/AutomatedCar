@@ -49,7 +49,7 @@ public class CourseDisplay extends JPanel {
         setBounds(0, 0, width, height);
         setBackground(new Color(backgroundColor));
         try {
-            refPoints = Utils.LoadReferencePointsFromXml("./src/main/resources/reference_points.xml");
+            refPoints = Utils.loadReferencePointsFromXml();
         } catch (Exception e) {
             e.hashCode();
 
@@ -144,7 +144,6 @@ public class CourseDisplay extends JPanel {
         Graphics2D environmentGrap = environment.createGraphics();
 
         for (WorldObject object : world.getWorldObjects()) {
-            //if(Stationary.class.isAssignableFrom(object.getClass()) ||
             if (Crossable.class.isAssignableFrom(object.getClass())
                 || Stationary.class.isAssignableFrom(object.getClass())) {
                 drawWorldObject(object, environmentGrap, 0, 0);
@@ -172,7 +171,7 @@ public class CourseDisplay extends JPanel {
 
         g2d.drawImage(environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
 
-        //Mozgo objektumok
+
         for (WorldObject object : world.getWorldObjects()) {
             if (!Stationary.class.isAssignableFrom(object.getClass())
                 && !Crossable.class.isAssignableFrom(object.getClass())) {
