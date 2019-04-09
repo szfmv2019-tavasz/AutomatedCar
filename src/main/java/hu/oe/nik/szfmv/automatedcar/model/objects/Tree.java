@@ -30,7 +30,7 @@ public class Tree extends Stationary {
     public void generateShape() {
         //get ellipse shape
         AffineTransform t = new AffineTransform();
-        t.rotate(-this.getRotation(), this.getX(), this.getY());
+        t.rotate(this.getRotation(), this.getX(), this.getY());
         this.shape = t.createTransformedShape((Shape) new Ellipse2D.Double(
             this.getX() + this.getWidth() / 2 - R,
             this.getY() + this.getHeight() / 2 - R,
