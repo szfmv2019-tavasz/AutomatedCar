@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar;
 import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.objects.NpcPedestrian;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -24,7 +25,7 @@ public class Main {
     private AutomatedCar car;
     private World world;
 
-    private WorldObject pedestrian;
+    private NpcPedestrian pedestrian;
     private ScriptedPath pedPath;
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
@@ -46,7 +47,8 @@ public class Main {
         car = new AutomatedCar(200, 200, "car_2_white.png");
         world.addObjectToWorld(car);
 
-        pedestrian = new WorldObject(500, 500, "man.png");
+        pedestrian = new NpcPedestrian(500, 500, "man.png",
+            "man.png", "man.png");
         pedPath = new ScriptedPath(pedestrian);
         pedPath.setMovementSpeed(200);
         pedPath.setWaypoints(createPedWaypoint());
