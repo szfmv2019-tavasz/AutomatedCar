@@ -3,9 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.model.objects.Collidable;
-import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
-import hu.oe.nik.szfmv.automatedcar.model.objects.Tree;
+import hu.oe.nik.szfmv.automatedcar.model.objects.*;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CollisionPacket;
 import org.apache.logging.log4j.LogManager;
@@ -86,11 +84,10 @@ public class Collision extends SystemComponent {
     private void handleCollision(WorldObject worldObject) {
         if (worldObject instanceof Tree) {
             handleCollisionWithTree();
-// Ezek meg nincsenek a vilagmodelben:
-//                } else if (worldObject instanceof NPCPedestrian) {
-//                    handleCollisionWithNPCPedestrian();
-//                } else if (worldObject instanceof NPCCar) {
-//                    handleCollisionWithNPCCar();
+        } else if (worldObject instanceof NpcPedestrian) {
+            handleCollisionWithNPCPedestrian();
+        } else if (worldObject instanceof NpcCar) {
+            handleCollisionWithNPCCar();
         } else if (worldObject instanceof RoadSign) {
             handleCollisionWithRoadSign();
         }
@@ -98,8 +95,7 @@ public class Collision extends SystemComponent {
 
     private void handleCollisionWithNPCCar() {
         LOGGER.info("Collision with NPC car");
-
-
+        collisionPacket.setSpeedAfterCollision(0);
         damage(DAMAGE_NPCCAR);
     }
 
