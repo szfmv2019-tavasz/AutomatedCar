@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 
@@ -16,17 +17,20 @@ public class Powertrain extends SystemComponent {
 
     private final float pedalRate = 10.0f;
 
+    private AutomatedCar car;
+
     private int rpm = 0;
     private float speed = 0f;   // in m/s
 
-    public Powertrain(VirtualFunctionBus virtualFunctionBus) {
+    public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
+        this.car = car;
     }
 
     @Override
     public void loop() {
+        speed = car.getSpeed();
         handleCarMovement();
-
         createAndSendPacket();
     }
 

@@ -7,7 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.objects.Collidable;
 import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Tree;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CollisionPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,29 +22,46 @@ public class Collision extends SystemComponent {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final int DAMAGE_ROADSIGN = 20;
+    private static final int DAMAGE_NPCCAR = 50;
+    private static final int DAMAGE_TREE = 70;
+
     private AutomatedCar car;
+
+    private final CollisionPacket collisionPacket;
+
     private ArrayList<WorldObject> collideItems;
 
     public Collision(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
         this.car = car;
+        collisionPacket = new CollisionPacket();
+        virtualFunctionBus.collisionPacket = collisionPacket;
         collideItems = new ArrayList<>();
     }
 
     @Override
     public void loop() {
         for (WorldObject wObject : World.getInstance().getWorldObjects()) {
-            if (wObject instanceof Collidable && checkCollision(wObject) && !collideItems.contains(wObject)) {
-                collideItems.add(wObject);
-                if (wObject instanceof Tree) {
-                    handleCollisionWithTree();
-// Ezek meg nincsenek a vilagmodelben:
-//                } else if (wObject instanceof NPCPedestrian) {
-//                    handleCollisionWithNPCPedestrian();
-//                } else if (wObject instanceof NPCCar) {
-//                    handleCollisionWithNPCCar();
-                } else if (wObject instanceof RoadSign) {
-                    handleCollissionWithRoadSign();
+            if (wObject instanceof Collidable) {
+                // Check all collidable world objects
+                if (checkCollision(wObject)) {
+                    // Collision: handle only once
+                    if (!collideItems.contains(wObject)) {
+                        LOGGER.info("Add to collideItems: {}", wObject.getClass().getName());
+                        collideItems.add(wObject);
+                        collisionPacket.setCollision(true);
+                        handleCollision(wObject);
+                    } else {
+                        collisionPacket.setCollision(false);
+                    }
+                } else {
+                    // No collision: remove from the list if it contains the world object
+                    if (collideItems.contains(wObject)) {
+                        LOGGER.info("Remove from collideItems: {}", wObject.getClass().getName());
+                        collideItems.remove(wObject);
+                        collisionPacket.setCollision(false);
+                    }
                 }
             }
         }
@@ -55,23 +72,67 @@ public class Collision extends SystemComponent {
 
         Shape carShape = car.getShape();
         Shape worldObjectShape = worldObject.getShape();
-        Area carArea = new Area(carShape);
-            // First time check the bounds intersection for better performance (Area intersection is much more expensive)
-            if (carShape.getBounds().intersects(worldObjectShape.getBounds())) {
 
-                carArea.intersect(new Area(worldObjectShape));
-                collision = !carArea.isEmpty();
-            }
-            else if (collision = carArea.isEmpty()){
-                collideItems.clear();
-            }
+        // First time check the bounds intersection for better performance (Area intersection is much more expensive)
+        if (carShape.getBounds().intersects(worldObjectShape.getBounds())) {
+            Area carArea = new Area(carShape);
+            carArea.intersect(new Area(worldObjectShape));
+            collision = !carArea.isEmpty();
+        }
+
         return collision;
+    }
+
+    private void handleCollision(WorldObject worldObject) {
+        if (worldObject instanceof Tree) {
+            handleCollisionWithTree();
+// Ezek meg nincsenek a vilagmodelben:
+//                } else if (worldObject instanceof NPCPedestrian) {
+//                    handleCollisionWithNPCPedestrian();
+//                } else if (worldObject instanceof NPCCar) {
+//                    handleCollisionWithNPCCar();
+        } else if (worldObject instanceof RoadSign) {
+            handleCollisionWithRoadSign();
+        }
+    }
+
+    private void handleCollisionWithNPCCar() {
+        LOGGER.info("Collision with NPC car");
+
+
+        damage(DAMAGE_NPCCAR);
+    }
+
+    private void handleCollisionWithNPCPedestrian() {
+        LOGGER.info("Collision with NPC pedestrian");
+        handleGameOver();
+    }
+
+    private void handleCollisionWithTree() {
+        LOGGER.info("Collision with tree");
+        collisionPacket.setSpeedAfterCollision(0);
+        damage(DAMAGE_TREE);
+    }
+
+    private void handleCollisionWithRoadSign() {
+        LOGGER.info("Collision with road sign");
+        collisionPacket.setSpeedAfterCollision(car.getSpeed() / 2);
+        damage(DAMAGE_ROADSIGN);
+    }
+
+    private void damage(int damageValue) {
+        LOGGER.info("Car has been damaged: {}", damageValue);
+        car.setAutomatedCarHealth(car.getAutomatedCarHealth() - damageValue);
+        if (car.getAutomatedCarHealth() == 0) {
+            handleGameOver();
+        }
     }
 
     private void handleGameOver() {
         LOGGER.info("Game Over - Collision");
+        collisionPacket.setGameOver(true);
+
         JFrame exitFrame = new JFrame("Game over");
-        //exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         exitFrame.setPreferredSize(new Dimension(300,200));
         JButton exitButton = new JButton("Exit");
         exitButton.setSize(50,25); //Nem ezt a nagyságot állítja be.
@@ -86,41 +147,6 @@ public class Collision extends SystemComponent {
         exitFrame.pack();
         exitFrame.setLocationByPlatform(true);
         exitFrame.setVisible(true);
-        //exitFrame.setEnabled();
-    }
-
-    private void handleCollisionWithNPCCar() {
-        LOGGER.info("Collision with NPC car");
-
-
-        damage(50);
-    }
-
-    private void handleCollisionWithNPCPedestrian() {
-        LOGGER.info("Collision with NPC pedestrian");
-        handleGameOver();
-    }
-
-    private void handleCollisionWithTree() {
-        LOGGER.info("Collision with tree");
-
-
-        damage(70);
-    }
-
-    private void handleCollissionWithRoadSign() {
-        LOGGER.info("Collision with road sign");
-
-        //this.car.setCarSpeed(0); //Ez szar
-        damage(20);
-    }
-
-    private void damage(int damageValue) {
-        LOGGER.info("Car has been damaged");
-        this.car.setAutomatedCarHealth(this.car.getAutomatedCarHealth() - damageValue);
-        if (this.car.getAutomatedCarHealth() == 0 ){
-            handleGameOver();
-        }
     }
 
 }
