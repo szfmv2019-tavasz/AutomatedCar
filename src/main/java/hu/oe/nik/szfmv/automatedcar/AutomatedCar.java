@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
@@ -8,6 +9,9 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class AutomatedCar extends WorldObject {
 
@@ -23,17 +27,36 @@ public class AutomatedCar extends WorldObject {
     private float steeringAngle;
     private float carHeading;  // in radians
     private Vector2D carLocation;
+    private int health;
 
+    // Sprint2 init from master
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
         new Powertrain(virtualFunctionBus);
         new Steering(virtualFunctionBus);
+        new Collision(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
+        health = 100;
     }
+
+    public int getAutomatedCarHealth() {
+        return this.health;
+    }
+
+    public void setAutomatedCarHealth(int health) {
+        this.health = health;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+    }
+
+//    public void setCarSpeed(float speed){
+//        this.speed = speed;
+//    }
 
     public void drive() {
         virtualFunctionBus.loop();
@@ -51,27 +74,41 @@ public class AutomatedCar extends WorldObject {
         steeringAngle = virtualFunctionBus.steeringPacket.getSteeringAngle();
 
         Vector2D frontWheelPosition = carLocation.add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                .scalarMultiply(wheelBase / 2));
+            .scalarMultiply(wheelBase / 2));
         Vector2D backWheelPosition = carLocation.subtract(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                .scalarMultiply(wheelBase / 2));
+            .scalarMultiply(wheelBase / 2));
 
         backWheelPosition = backWheelPosition
-                .add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
-                        .scalarMultiply(speed * deltaTime));
+            .add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
+                .scalarMultiply(speed * deltaTime));
         frontWheelPosition = frontWheelPosition
-                .add(new Vector2D(Math.cos(carHeading + Math.toRadians(steeringAngle)),
-                        Math.sin(carHeading + Math.toRadians(steeringAngle)))
-                        .scalarMultiply(speed * deltaTime));
+            .add(new Vector2D(Math.cos(carHeading + Math.toRadians(steeringAngle)),
+                Math.sin(carHeading + Math.toRadians(steeringAngle)))
+                .scalarMultiply(speed * deltaTime));
 
         carLocation = frontWheelPosition.add(backWheelPosition).scalarMultiply(0.5);
         carHeading = (float) Math.atan2(frontWheelPosition.getY() - backWheelPosition.getY(),
-                frontWheelPosition.getX() - backWheelPosition.getX());
+            frontWheelPosition.getX() - backWheelPosition.getX());
     }
+
 
     private void updateCarPositionAndOrientation() {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
         this.rotation = carHeading;
+    }
+
+    @Override
+    public void generateShape() {
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(this.getRotation() + Math.toRadians(90), this.x, this.y);
+
+        this.shape = tx.createTransformedShape(
+            new Rectangle(
+                this.getX() - this.getWidth() / 2,
+                this.getY() - this.getHeight() / 2,
+                this.getWidth(), this.getHeight()));
+
     }
 
     private float calculateWheelBase() {

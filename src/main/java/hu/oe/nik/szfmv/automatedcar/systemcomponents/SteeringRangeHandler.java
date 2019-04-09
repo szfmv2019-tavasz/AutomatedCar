@@ -22,9 +22,9 @@ public class SteeringRangeHandler {
         RELEASE
     }
 
-    private static final int STEP_TURN = 2;
+    private static final int STEP_TURN = 3;
 
-    private static final int STEP_BACK_TO_CENTER = 1;
+    private static final int STEP_BACK_TO_CENTER = 2;
 
     private int range;
 
@@ -65,9 +65,11 @@ public class SteeringRangeHandler {
             case RELEASE:
                 if (value < 0) {
                     value += STEP_BACK_TO_CENTER;
+                    value = (value > 0 ? 0 : value);
                 }
                 else if (value > 0) {
                     value -= STEP_BACK_TO_CENTER;
+                    value = (value < 0 ? 0 : value);
                 }
                 break;
             default:

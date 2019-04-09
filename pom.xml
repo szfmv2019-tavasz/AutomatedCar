@@ -131,6 +131,13 @@
             <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
+      
+        <!-- gauge component with JFreeChart -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.19</version>
+        </dependency>
 
         <!-- Apache Commons Math for Vector2D -->
         <dependency>
