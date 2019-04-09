@@ -4,22 +4,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Utils {
 
-    public static Map<String, Point> LoadReferencePointsFromXml(String URI) throws ParserConfigurationException, IOException, SAXException {
-        Map<String,Point> referencesP=new HashMap<>();
+    public static Map<String, Point> loadReferencePointsFromXml() throws ParserConfigurationException, IOException, SAXException {
+        Map<String, Point> referencesP = new HashMap<>();
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(URI);
+        File refXml = new File(ClassLoader.getSystemResource("reference_points.xml").getFile());
+        Document document = documentBuilder.parse(refXml);
 
         NodeList nodes = document.getElementsByTagName("Image");
         for (int i = 0; i < nodes.getLength(); i++) {

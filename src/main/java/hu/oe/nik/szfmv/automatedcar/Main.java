@@ -30,9 +30,9 @@ public class Main {
 
     }
 
-    private void init() {
+    private void init() throws IOException, SAXException, ParserConfigurationException {
         // create the world
-        world = new World(5000, 3000);
+        world = new World(5120, 3000);
         // create an automated car
         car = new AutomatedCar(20, 20, "car_2_white.png");
         world.addObjectToWorld(car);

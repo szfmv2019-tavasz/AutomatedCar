@@ -5,11 +5,14 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SamplePacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Gui extends JFrame {
@@ -26,7 +29,7 @@ public class Gui extends JFrame {
     /**
      * Initialize the GUI class
      */
-    public Gui() {
+    public Gui() throws ParserConfigurationException, SAXException, IOException {
         setTitle("AutomatedCar");
         setLocation(0, 0); // default is 0,0 (top left corner)
         addWindowListener(new GuiAdapter());
