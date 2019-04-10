@@ -88,7 +88,7 @@ public class CourseDisplay extends JPanel {
         return doubleBufferedScreen;
     }
 
-    public void drawWorld(World world) {
+    public void drawWorld() {
         getGraphics().drawImage(renderDoubleBufferedScreen(), 0, 0, this);
     }
 
