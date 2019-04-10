@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,6 @@ public class World {
 
     public static final int WIDTH = 5120;
     public static final int HEIGHT = 3000;
-    private static final String XML_LOCATION = "./src/main/resources/test_world.xml";
 
     private static World instance;
 
@@ -27,12 +26,13 @@ public class World {
     }
 
     private World() {
-        worldObjects = createWorld(XML_LOCATION);
+        worldObjects = createWorld();
     }
 
-    public List<WorldObject> createWorld(String xmlLocation) {
+    private List<WorldObject> createWorld() {
         try {
-            return XmlConverter.build(xmlLocation);
+            File xml = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
+            return XmlParser.build(xml);
         } catch (Exception e) {
             String msg = "Failed to create world: " + e.getMessage();
             LOGGER.error(msg, e);

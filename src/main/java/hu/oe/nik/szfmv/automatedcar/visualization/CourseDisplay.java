@@ -28,18 +28,16 @@ public class CourseDisplay extends JPanel {
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
-
+    private  final int angle = 90;
     private int worldH = 3000;
     private int worldW = 5120;
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.5f;
-    private final int angle = 90;
     private Map<String, Point> refPoints;
     private final boolean useMock = false;
     private WorldObject car;
     private BufferedImage environment = null;
-    private boolean PolyEnabled = true;
 
     /**
      * Initialize the course display
@@ -54,11 +52,9 @@ public class CourseDisplay extends JPanel {
         setBounds(0, 0, width, height);
         setBackground(new Color(backgroundColor));
         try {
-            refPoints = Utils.loadReferencePointsFromXml("./src/main/resources/reference_points.xml");
+            refPoints = Utils.loadReferencePointsFromXml();
         } catch (Exception e) {
-            String msg = "Failed to create the CourseDisplay: " + e.getMessage();
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
+            LOGGER.error("Failed to create the CourseDisplay!", e);
         }
     }
 
@@ -83,7 +79,7 @@ public class CourseDisplay extends JPanel {
      */
     private BufferedImage renderDoubleBufferedScreen() {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = ( Graphics2D ) doubleBufferedScreen.getGraphics();
+        Graphics2D g2d = (Graphics2D)doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
@@ -92,9 +88,8 @@ public class CourseDisplay extends JPanel {
         return doubleBufferedScreen;
     }
 
-    public void drawWorld() {
-        Graphics g = getGraphics();
-        g.drawImage(renderDoubleBufferedScreen(), 0, 0, this);
+    public void drawWorld(World world) {
+        getGraphics().drawImage(renderDoubleBufferedScreen(), 0, 0, this);
     }
 
     private void drawWorldObject(WorldObject object, Graphics g, double offsetX, double offsetY) {
@@ -103,7 +98,7 @@ public class CourseDisplay extends JPanel {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(object.getImageFileName()).getFile()));
         } catch (IOException e) {
-
+            LOGGER.error("Failed to read image file name: " + object.getImageFileName(), e);
         }
 
         Point referencePoint = refPoints.getOrDefault(object.getImageFileName(), null);
@@ -120,41 +115,17 @@ public class CourseDisplay extends JPanel {
     }
 
     public void drawEnvironment() {
-        environment = new BufferedImage((int) (worldW * scale), (int) (worldH * scale), BufferedImage.TYPE_INT_ARGB);
+        environment = new BufferedImage((int) (worldW * scale),
+            (int) (worldH * scale), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D environmentGrap = environment.createGraphics();
 
-//        if (useMock) {
-////            Mock m = new Mock();
-////
-////            for (WorldObject object : m.getRoadObjects()) {
-////
-////                drawWorldObject(object, environmentGrap, 0, 0);
-////            }
-////
-////            }
         for (WorldObject object : World.getInstance().getWorldObjects()) {
-            //if(Stationary.class.isAssignableFrom(object.getClass()) ||
-            if (Crossable.class.isAssignableFrom(object.getClass()) ||
-                Stationary.class.isAssignableFrom(object.getClass())) {
+            if (Crossable.class.isAssignableFrom(object.getClass())
+                || Stationary.class.isAssignableFrom(object.getClass())) {
                 drawWorldObject(object, environmentGrap, 0, 0);
             }
         }
-    }
-
-    private void drawShapesDebug(Graphics g, double offsetX, double offsetY) {
-        for (WorldObject object : World.getInstance().getWorldObjects()) {
-            g.setColor(Color.BLUE);
-            AffineTransform at1 = new AffineTransform();
-            at1.scale(scale, scale);
-            at1.translate(offsetX, offsetY);
-
-            Shape s = object.getShape();
-            if (s != null) {
-                ((Graphics2D) g).draw(at1.createTransformedShape(s));
-            }
-        }
-        g.drawImage(environment, (int) (offsetX * scale), (int) (offsetY * scale), this);
     }
 
     private void drawObjects(Graphics2D g2d) {
@@ -169,25 +140,17 @@ public class CourseDisplay extends JPanel {
 
         g2d.drawImage(environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
 
-        //Mozgo objektumok
         for (WorldObject object : World.getInstance().getWorldObjects()) {
-            if (!Stationary.class.isAssignableFrom(object.getClass()) &&
-                !Crossable.class.isAssignableFrom(object.getClass())) {
+            if (!Stationary.class.isAssignableFrom(object.getClass())
+                && !Crossable.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
                 t.scale(scale, scale);
-
                 t.translate(object.getX() - refPoints.get("car_2_red.png").x + offset.getX(),
                     object.getY() - refPoints.get("car_2_red.png").y + offset.getY());
-
                 t.rotate(object.getRotation() + Math.toRadians(angle),
                     refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
-
                 g2d.drawImage(object.getImage(), t, this);
             }
-        }
-        //EZT RAKJUK ÁT A MÁSIK BRANCHRE
-        if (PolyEnabled){
-            drawShapesDebug(g2d, offset.getX(), offset.getY());
         }
     }
 }
