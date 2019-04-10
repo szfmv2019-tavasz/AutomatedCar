@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.SimpleDetector;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
 
 import java.io.File;
 import java.util.ArrayList;

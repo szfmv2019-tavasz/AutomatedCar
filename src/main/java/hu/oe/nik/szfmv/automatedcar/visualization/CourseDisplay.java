@@ -5,7 +5,7 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.CameraPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.CameraPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 

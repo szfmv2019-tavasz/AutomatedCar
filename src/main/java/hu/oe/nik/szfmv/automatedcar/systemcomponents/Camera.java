@@ -4,9 +4,9 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 import hu.oe.nik.szfmv.automatedcar.sensors.Triangle;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.CameraPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.CameraPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.SimpleDetector;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
 
 import java.awt.*;
 
