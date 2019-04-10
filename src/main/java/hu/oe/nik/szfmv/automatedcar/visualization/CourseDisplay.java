@@ -79,14 +79,14 @@ public class CourseDisplay extends JPanel {
     }
 
     private Point2D getOffset(int scaledWidth, int scaledHeight) {
-        car = world.getWorldObjects().get(world.getWorldObjects().size() - 1);
+
         double offsetX = 0;
         double offsetY = 0;
-        double diffX = (scaledWidth / 2) - car.getX() - carWidth / 2;
+        double diffX = (scaledWidth / 2) - carPacket.getPosition().x - carWidth / 2;
         if (diffX < 0) {
             offsetX = diffX;
         }
-        double diffY = scaledHeight / 2 - car.getY() - carHeight / 2;
+        double diffY = scaledHeight / 2 - carPacket.getPosition().y - carHeight / 2;
         if (diffY < 0) {
             offsetY = diffY;
         }
@@ -185,7 +185,7 @@ public class CourseDisplay extends JPanel {
     private void drawObjects(Graphics2D g2d, World world) {
 
 
-        car = world.getWorldObjects().get(world.getWorldObjects().size() - 1);
+
         int scaledWidth = (int) (width / scale);
         int scaledHeight = (int) (height / scale);
         Point2D offset = getOffset(scaledWidth, scaledHeight);
