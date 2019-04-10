@@ -5,9 +5,9 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
-import hu.oe.nik.szfmv.automatedcar.sensors.Triangle;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CarPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.CameraPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -40,6 +40,9 @@ public class CourseDisplay extends JPanel {
     private World world;
     private BufferedImage environment = null;
     private ReadOnlyCarPacket carPacket;
+    private ReadOnlyInputPacket inputPacket;
+
+
     /**
      * Initialize the course display
      *
@@ -108,10 +111,11 @@ public class CourseDisplay extends JPanel {
     }
 
 
-    public void drawWorld(World world, ReadOnlyCarPacket carPacket) {
+    public void drawWorld(World world, ReadOnlyCarPacket carPacket, ReadOnlyInputPacket input) {
 
         this.world  = world;
         this.carPacket = carPacket;
+        this.inputPacket = input;
         paintComponent(getGraphics(), world);
 
 
@@ -119,9 +123,11 @@ public class CourseDisplay extends JPanel {
 
     private void drawSensor(Point[] trianglePoints, java.awt.geom.Point2D offset, Color color, Graphics graphics) {
         int[] x = {(int) ((trianglePoints[0].x + offset.getX()) * scale),
-            (int) ((trianglePoints[1].x + offset.getX()) * scale), (int) ((trianglePoints[2].x + offset.getX()) * scale)};
+            (int) ((trianglePoints[1].x + offset.getX()) * scale),
+            (int) ((trianglePoints[2].x + offset.getX()) * scale)};
         int[] y = {(int) ((trianglePoints[0].y + offset.getY()) * scale),
-            (int) ((trianglePoints[1].y + offset.getY()) * scale), (int) ((trianglePoints[2].y + offset.getY()) * scale)};
+            (int) ((trianglePoints[1].y + offset.getY()) * scale),
+            (int) ((trianglePoints[2].y + offset.getY()) * scale)};
         graphics.setColor(color);
         graphics.drawPolygon(x, y, 3);
     }
@@ -169,6 +175,12 @@ public class CourseDisplay extends JPanel {
 
     }
 
+    private void drawSensorsIfEnabled(Graphics2D g, Point2D offset) {
+        if (inputPacket.getSensorDebug()) {
+            drawSensor(CameraPacket.getPacket().getTrianglePoints(), offset, Color.RED, g);
+        }
+    }
+
 
     private void drawObjects(Graphics2D g2d, World world) {
 
@@ -200,11 +212,8 @@ public class CourseDisplay extends JPanel {
             }
 
         }
+        drawSensorsIfEnabled(g2d, offset);
 
-
-        Point[] test = Triangle.createTrianglePoints(carPacket.getPosition(), 12 * 50, 60.0 , (double)carPacket.getRotation());
-
-        drawSensor(test, offset, Color.green, g2d);
 
     }
 }

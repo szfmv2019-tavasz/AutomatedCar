@@ -14,7 +14,7 @@ public class Triangle {
 
         double preCalAngle = fov / 2.0;
         double triangleRange = range / cos(toRadians(preCalAngle));
-        Point sideA = polarPointCalc(triangleRange,  + preCalAngle + toDegrees(rotation));
+        Point sideA = polarPointCalc(triangleRange,  preCalAngle + toDegrees(rotation));
         sideA.x += sensorPos.x;
         sideA.y += sensorPos.y;
         Point sideB = polarPointCalc(triangleRange,  -preCalAngle + toDegrees(rotation));

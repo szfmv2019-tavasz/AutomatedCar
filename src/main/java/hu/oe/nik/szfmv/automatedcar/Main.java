@@ -48,7 +48,7 @@ public class Main {
             try {
                 car.drive();
 
-                window.getCourseDisplay().drawWorld(world, car.getCarValues());
+                window.getCourseDisplay().drawWorld(world, car.getCarValues(), window.getVirtualFunctionBus().inputPacket);
 //                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {

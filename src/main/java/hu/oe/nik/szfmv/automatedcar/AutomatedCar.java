@@ -1,10 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
@@ -38,6 +35,7 @@ public class AutomatedCar extends WorldObject {
         new Powertrain(virtualFunctionBus);
         new Steering(virtualFunctionBus);
         positionTracker = new AutomatedCarPos(virtualFunctionBus);
+        new Camera(virtualFunctionBus);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);

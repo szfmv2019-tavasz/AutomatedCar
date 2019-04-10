@@ -31,6 +31,7 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     private final InputPacket inputPacket;
 
+
     private final PedalRangeHandler gasPedalRangeHandler;
 
     private final PedalRangeHandler breakPedalRangeHandler;
@@ -101,6 +102,8 @@ public class InputManager extends SystemComponent implements KeyListener {
             case KeyEvent.VK_Q: handleKeyQ();
                 break;
             case KeyEvent.VK_E: handleKeyE();
+                break;
+            case KeyEvent.VK_K: handleKeyK();
                 break;
             default:
                 handleKeyWSADPressed(key);
@@ -222,6 +225,9 @@ public class InputManager extends SystemComponent implements KeyListener {
                 inputPacket.setSignalLeftTurn(false);
             }
         }
+    }
+    private void handleKeyK() {
+        inputPacket.toggleSensorDebug();
     }
 
     private void handleKeyE() {

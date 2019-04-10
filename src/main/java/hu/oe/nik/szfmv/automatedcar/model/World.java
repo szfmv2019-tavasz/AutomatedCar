@@ -1,7 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.SimpleDetector;
+
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class World {
         this.width = width;
         this.height = height;
         worldObjects = this.createWorld();
+        SimpleDetector det = SimpleDetector.getDetector();
+        det.setWorldObjects(this.worldObjects);
     }
 
     public int getWidth() {
