@@ -40,5 +40,7 @@ public interface ReadOnlyInputPacket {
     public int getAccSpeed();
 
     public double getAccDistance();
+    public boolean getSensorDebug();
+
 
 }

@@ -6,6 +6,9 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,16 +34,18 @@ public class World {
     }
 
     private World() {
-        worldObjects = createWorld(XML_LOCATION);
+        worldObjects = createWorld();
+        SimpleDetector det = SimpleDetector.getDetector();
+        det.setWorldObjects(this.worldObjects);
     }
 
-    public List<WorldObject> createWorld(String xmlLocation) {
+    public List<WorldObject> createWorld() {
         try {
-            return XmlConverter.build(xmlLocation);
+            File xml = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
+            return XmlParser.build(xml);
         } catch (Exception e) {
-            String msg = "Failed to create world: " + e.getMessage();
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
+            System.out.printf(ex.getMessage());
+            return  new ArrayList<WorldObject>();
         }
     }
 

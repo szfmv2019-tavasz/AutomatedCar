@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,7 +61,7 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                window.getCourseDisplay().drawWorld();
+                window.getCourseDisplay().drawWorld(world, car.getCarValues(), window.getVirtualFunctionBus().inputPacket);
                 loopNpcPaths();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {

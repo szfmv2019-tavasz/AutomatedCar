@@ -28,6 +28,7 @@ public class Steering extends SystemComponent {
 
     private void getValuesFromInputPacket() {
         ReadOnlyInputPacket packet = virtualFunctionBus.inputPacket;
+
         steeringWheel = packet.getSteeringWheel();
     }
 
