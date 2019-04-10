@@ -34,7 +34,7 @@ public class AutomatedCar extends WorldObject {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        new Powertrain(virtualFunctionBus);
+        new Powertrain(virtualFunctionBus, this);
         new Steering(virtualFunctionBus);
         new Collision(virtualFunctionBus, this);
 
@@ -54,15 +54,17 @@ public class AutomatedCar extends WorldObject {
         }
     }
 
-//    public void setCarSpeed(float speed){
-//        this.speed = speed;
-//    }
+    public float getSpeed() {
+        return speed;
+    }
 
     public void drive() {
-        virtualFunctionBus.loop();
+        if (!virtualFunctionBus.collisionPacket.isGameOver()) {
+            virtualFunctionBus.loop();
 
-        calculatePositionAndOrientation();
-        updateCarPositionAndOrientation();
+            calculatePositionAndOrientation();
+            updateCarPositionAndOrientation();
+        }
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -70,7 +72,9 @@ public class AutomatedCar extends WorldObject {
     }
 
     private void calculatePositionAndOrientation() {
-        speed = virtualFunctionBus.powertrainPacket.getSpeed();
+        speed = virtualFunctionBus.collisionPacket.isCollision() ?
+            virtualFunctionBus.collisionPacket.getSpeedAfterCollision() :
+            virtualFunctionBus.powertrainPacket.getSpeed();
         steeringAngle = virtualFunctionBus.steeringPacket.getSteeringAngle();
 
         Vector2D frontWheelPosition = carLocation.add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
