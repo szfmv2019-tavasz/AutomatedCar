@@ -1,10 +1,15 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Camera;
+
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +31,7 @@ public class AutomatedCar extends WorldObject {
     private float steeringAngle;
     private float carHeading;  // in radians
     private Vector2D carLocation;
+    private AutomatedCarPos positionTracker;
 
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
@@ -33,6 +39,8 @@ public class AutomatedCar extends WorldObject {
         new Driver(virtualFunctionBus);
         new Powertrain(virtualFunctionBus);
         new Steering(virtualFunctionBus);
+        positionTracker = new AutomatedCarPos(virtualFunctionBus);
+        new Camera(virtualFunctionBus);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
@@ -43,6 +51,13 @@ public class AutomatedCar extends WorldObject {
 
         calculatePositionAndOrientation();
         updateCarPositionAndOrientation();
+        positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
+            (int)carLocation.getY()), this.carHeading);
+
+
+
+
+
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -77,6 +92,9 @@ public class AutomatedCar extends WorldObject {
         this.rotation = carHeading;
     }
 
+    public ReadOnlyCarPacket getCarValues() {
+        return virtualFunctionBus.carPacket;
+    }
     private float calculateWheelBase() {
         return this.height - bumperAxleDistance;
     }
