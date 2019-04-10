@@ -2,11 +2,10 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.objects.CrossWalk;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcPedestrian;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,8 +43,8 @@ public class World {
             File xml = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
             return XmlParser.build(xml);
         } catch (Exception e) {
-            System.out.printf(ex.getMessage());
-            return  new ArrayList<WorldObject>();
+            System.out.printf(e.getMessage());
+            return new ArrayList<WorldObject>();
         }
     }
 

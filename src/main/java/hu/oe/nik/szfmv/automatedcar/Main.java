@@ -4,7 +4,6 @@ import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +17,8 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CYCLE_PERIOD = 40;
-    private static final int CAR_START_POS_X = 200;
-    private static final int CAR_START_POS_Y = 200;
+    private static final int CAR_START_POS_X = 500;
+    private static final int CAR_START_POS_Y = 500;
     // The window handle
     private Gui window;
     private AutomatedCar car;
