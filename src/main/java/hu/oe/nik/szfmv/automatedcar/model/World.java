@@ -1,5 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.objects.CrossWalk;
+import hu.oe.nik.szfmv.automatedcar.model.objects.NpcPedestrian;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +20,7 @@ public class World {
     private static World instance;
 
     private List<WorldObject> worldObjects = new ArrayList<>();
+    private List<ScriptedPath> npcPaths = new ArrayList<>();
 
     public static World getInstance() {
         // Thread safety is not needed in this singleton
@@ -51,5 +55,34 @@ public class World {
      */
     public void addObjectToWorld(WorldObject o) {
         worldObjects.add(o);
+    }
+
+    public void initializeNpcsAndPaths() {
+        List<WorldObject> worldObjects = List.copyOf(this.worldObjects);
+        for (WorldObject worldObject : worldObjects) {
+            if (worldObject instanceof CrossWalk) {
+                CrossWalk crossWalk = (CrossWalk) worldObject;
+                Vector2D startPoint = crossWalk.getStartPoint();
+                Vector2D endPoint = crossWalk.getEndPoint();
+                NpcPedestrian pedestrian =
+                    new NpcPedestrian(1000, 1000,
+                        "man.png", "man.png", "man.png");
+                ScriptedPath path = new ScriptedPath(pedestrian);
+                List<Vector2D> waypoints = new ArrayList<>();
+                waypoints.add(startPoint);
+                waypoints.add(endPoint);
+                path.setWaypoints(waypoints);
+                path.setMovementSpeed(300);
+                path.setLoopType(ScriptedPath.LoopType.PINGPONG);
+                path.init();
+                this.addObjectToWorld(pedestrian);
+                npcPaths.add(path);
+                pedestrian.setPath(path);
+            }
+        }
+    }
+
+    public List<ScriptedPath> getNpcPaths() {
+        return npcPaths;
     }
 }

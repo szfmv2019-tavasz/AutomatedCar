@@ -19,13 +19,13 @@ public class Powertrain extends SystemComponent {
 
     private final float deltaTime = 0.04f;
 
-    private final float maxSpeed = 200f;
-    private final float minSpeed = -100f;
+    private final float maxSpeed = 600f;
+    private final float minSpeed = -150f;
 
     private final float accelConst = 20f;
     private final float reverseAccelConst = 25f;
     private final float slowConst = 20f;
-    private final float brakePowerConst = 30f;
+    private final float brakePowerConst = 60f;
 
     private final float pedalRate = 10.0f;
 
