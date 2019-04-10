@@ -2,10 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySteeringPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +17,7 @@ public class VirtualFunctionBus {
 
     public ReadOnlySamplePacket samplePacket;
     public ReadOnlySteeringPacket steeringPacket;
+    public ReadOnlyCarPacket carPacket;
 
     public ReadOnlyPowertrainPacket powertrainPacket;
 

@@ -5,6 +5,9 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
+import hu.oe.nik.szfmv.automatedcar.sensors.Triangle;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CarPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,6 +39,7 @@ public class CourseDisplay extends JPanel {
     private WorldObject car;
     private World world;
     private BufferedImage environment = null;
+    private ReadOnlyCarPacket carPacket;
     /**
      * Initialize the course display
      *
@@ -104,12 +108,22 @@ public class CourseDisplay extends JPanel {
     }
 
 
-    public void drawWorld(World world) {
+    public void drawWorld(World world, ReadOnlyCarPacket carPacket) {
 
         this.world  = world;
+        this.carPacket = carPacket;
         paintComponent(getGraphics(), world);
 
 
+    }
+
+    private void drawSensor(Point[] trianglePoints, java.awt.geom.Point2D offset, Color color, Graphics graphics) {
+        int[] x = {(int) ((trianglePoints[0].x + offset.getX()) * scale),
+            (int) ((trianglePoints[1].x + offset.getX()) * scale), (int) ((trianglePoints[2].x + offset.getX()) * scale)};
+        int[] y = {(int) ((trianglePoints[0].y + offset.getY()) * scale),
+            (int) ((trianglePoints[1].y + offset.getY()) * scale), (int) ((trianglePoints[2].y + offset.getY()) * scale)};
+        graphics.setColor(color);
+        graphics.drawPolygon(x, y, 3);
     }
 
     private void drawWorldObject(WorldObject object, Graphics g, double offsetX, double offsetY) {
@@ -186,5 +200,11 @@ public class CourseDisplay extends JPanel {
             }
 
         }
+
+
+        Point[] test = Triangle.createTrianglePoints(carPacket.getPosition(), 12 * 50, 60.0 , (double)carPacket.getRotation());
+
+        drawSensor(test, offset, Color.green, g2d);
+
     }
 }
