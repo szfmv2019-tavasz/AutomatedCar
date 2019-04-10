@@ -3,7 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera.ReadOnlyCameraPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.ReadOnlyCameraPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;

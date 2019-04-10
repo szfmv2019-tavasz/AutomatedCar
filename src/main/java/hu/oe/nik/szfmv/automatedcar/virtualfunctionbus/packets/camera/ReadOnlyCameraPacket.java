@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.Camera;
+package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera;
 
 import hu.oe.nik.szfmv.automatedcar.model.objects.RoadSign;
 
