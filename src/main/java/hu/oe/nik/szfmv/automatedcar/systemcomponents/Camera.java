@@ -14,8 +14,8 @@ import java.util.List;
 
 public class Camera extends SystemComponent {
 
-    private static final double CAMERAANGLEOFVIEW = 60;
-    private static final double CAMERARANGE = 12 * 50; // 50 pixel 1 méter
+    private static final double CAMERAANGLE = 60;
+    private static final double CAMERARANGE = 10 * 50; // 50 pixel 1 méter
     private CameraPacket cameraPacket;
 
     public Camera(VirtualFunctionBus virtualFunctionBus) {
@@ -32,7 +32,7 @@ public class Camera extends SystemComponent {
         double cameraRotation = carPacket.getRotation();
 
         Triangle triangle = new Triangle();
-        Point[] trianglePoints = triangle.createTrianglePoints(cameraPosition, CAMERARANGE, CAMERAANGLEOFVIEW,
+        Point[] trianglePoints = triangle.createTrianglePoints(cameraPosition, CAMERARANGE, CAMERAANGLE,
             (cameraRotation));
         cameraPacket.setTriangle(trianglePoints);
 
