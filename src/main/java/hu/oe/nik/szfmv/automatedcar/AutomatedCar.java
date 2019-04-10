@@ -1,9 +1,14 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
+
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Camera;
+
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.CarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +51,9 @@ public class AutomatedCar extends WorldObject {
 
         calculatePositionAndOrientation();
         updateCarPositionAndOrientation();
-        positionTracker.handleLocationChange(new Point((int)carLocation.getX(), (int)carLocation.getY()), this.carHeading);
+        positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
+            (int)carLocation.getY()), this.carHeading);
+
 
 
 
