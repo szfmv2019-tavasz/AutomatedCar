@@ -17,8 +17,10 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CYCLE_PERIOD = 40;
+
     private static final int CAR_START_POS_X = 550;
     private static final int CAR_START_POS_Y = 250;
+
     // The window handle
     private Gui window;
     private AutomatedCar car;
@@ -61,7 +63,7 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                window.getCourseDisplay().drawWorld();
+                window.getCourseDisplay().drawWorld(world, car.getCarValues(), window.getVirtualFunctionBus().inputPacket);
                 loopNpcPaths();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
@@ -75,6 +77,5 @@ public class Main {
             path.loop();
         }
     }
-
 
 }
