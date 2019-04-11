@@ -17,8 +17,8 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CYCLE_PERIOD = 40;
-    private static final int CAR_START_POS_X = 200;
-    private static final int CAR_START_POS_Y = 200;
+    private static final int CAR_START_POS_X = 550;
+    private static final int CAR_START_POS_Y = 250;
     // The window handle
     private Gui window;
     private AutomatedCar car;
