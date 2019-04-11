@@ -15,7 +15,6 @@ import java.util.Map;
 public class Road extends Crossable {
     private static HashMap<String, Polygon> roadPolyMap = new HashMap<>();
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String referencePointsURI = "./src/main/resources/reference_points.xml";
     private static Map<String, Point> referencePoints = new HashMap<>();
 
     //525x525
@@ -110,7 +109,7 @@ public class Road extends Crossable {
      */
     public static void loadReferencePoints() {
         try {
-            referencePoints = Utils.loadReferencePointsFromXml(referencePointsURI);
+            referencePoints = Utils.loadReferencePointsFromXml();
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOGGER.error(e.getMessage());
         }

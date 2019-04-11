@@ -26,7 +26,7 @@ public class Main {
     private World world;
     private List<ScriptedPath> npcPaths;
 
-    private WorldObject pedestrian;
+    private NpcPedestrian pedestrian;
     private ScriptedPath pedPath;
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
@@ -48,6 +48,7 @@ public class Main {
         // create an automated car and add to the world
         car = new AutomatedCar(CAR_START_POS_X, CAR_START_POS_Y, "car_2_white.png");
         world.addObjectToWorld(car);
+
         world.initializeNpcsAndPaths();
         npcPaths = world.getNpcPaths();
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
