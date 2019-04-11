@@ -7,9 +7,9 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
  */
 public class PedalRangeHandler {
 
-    private static final int STEP_INC = 3;
+    private static final int STEP_INC = 10;
 
-    private static final int STEP_DEC = 3;
+    private static final int STEP_DEC = 10;
 
     private int minValue;
 
