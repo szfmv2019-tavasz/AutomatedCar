@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
@@ -26,7 +25,6 @@ public class Main {
     private World world;
     private List<ScriptedPath> npcPaths;
 
-    private NpcPedestrian pedestrian;
     private ScriptedPath pedPath;
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
