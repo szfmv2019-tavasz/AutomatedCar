@@ -73,6 +73,7 @@ public class AutomatedCar extends WorldObject {
             updateCarPositionAndOrientation();
             positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
                 (int)carLocation.getY()), this.carHeading);
+
         }
     }
 

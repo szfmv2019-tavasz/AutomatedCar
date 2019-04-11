@@ -29,19 +29,21 @@ public class CourseDisplay extends JPanel {
     private final int backgroundColor = 0xEEEEEE;
     private  final int angle = 90;
     private Gui parent;
+
     private int worldH = 3000;
     private int worldW = 5120;
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.5f;
-    private   Map<String, Point> refPoints;
-    private  final boolean useMock = false;
+    private Map<String, Point> refPoints;
+    private final boolean useMock = false;
+
     private WorldObject car;
     private World world;
     private BufferedImage environment = null;
+
     private ReadOnlyCarPacket carPacket;
     private ReadOnlyInputPacket inputPacket;
-
 
     /**
      * Initialize the course display
@@ -58,8 +60,8 @@ public class CourseDisplay extends JPanel {
         try {
             refPoints = Utils.loadReferencePointsFromXml();
         } catch (Exception e) {
-            e.hashCode();
 
+            LOGGER.error("Failed to create the CourseDisplay!", e);
         }
         parent = pt;
     }
@@ -101,7 +103,7 @@ public class CourseDisplay extends JPanel {
      */
     private BufferedImage renderDoubleBufferedScreen(World world) {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = ( Graphics2D ) doubleBufferedScreen.getGraphics();
+        Graphics2D g2d = (Graphics2D)doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
@@ -130,6 +132,7 @@ public class CourseDisplay extends JPanel {
             (int) ((trianglePoints[2].y + offset.getY()) * scale)};
         graphics.setColor(color);
         graphics.drawPolygon(x, y, 3);
+
     }
 
     private void drawWorldObject(WorldObject object, Graphics g, double offsetX, double offsetY) {
@@ -138,7 +141,7 @@ public class CourseDisplay extends JPanel {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(object.getImageFileName()).getFile()));
         } catch (IOException e) {
-            System.out.println(" ");
+            LOGGER.error("Failed to read image file name: " + object.getImageFileName(), e);
 
         }
 
@@ -163,7 +166,8 @@ public class CourseDisplay extends JPanel {
 
         Graphics2D environmentGrap = environment.createGraphics();
 
-        for (WorldObject object : world.getWorldObjects()) {
+        for (WorldObject object : World.getInstance().getWorldObjects()) {
+
             if (Crossable.class.isAssignableFrom(object.getClass())
                 || Stationary.class.isAssignableFrom(object.getClass())) {
                 drawWorldObject(object, environmentGrap, 0, 0);
@@ -173,7 +177,7 @@ public class CourseDisplay extends JPanel {
 
         }
 
-    }
+
 
     private void drawSensorsIfEnabled(Graphics2D g, Point2D offset) {
         if (inputPacket.getSensorDebug()) {
@@ -182,10 +186,7 @@ public class CourseDisplay extends JPanel {
     }
 
 
-    private void drawObjects(Graphics2D g2d, World world) {
-
-
-
+    private void drawObjects(Graphics2D g2d) {
         int scaledWidth = (int) (width / scale);
         int scaledHeight = (int) (height / scale);
         Point2D offset = getOffset(scaledWidth, scaledHeight);
@@ -197,8 +198,7 @@ public class CourseDisplay extends JPanel {
 
         g2d.drawImage(environment, (int) (offset.getX() * scale), (int) (offset.getY() * scale), this);
 
-
-        for (WorldObject object : world.getWorldObjects()) {
+        for (WorldObject object : World.getInstance().getWorldObjects()) {
             if (!Stationary.class.isAssignableFrom(object.getClass())
                 && !Crossable.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
@@ -212,8 +212,6 @@ public class CourseDisplay extends JPanel {
             }
 
         }
-        drawSensorsIfEnabled(g2d, offset);
-
 
     }
 }

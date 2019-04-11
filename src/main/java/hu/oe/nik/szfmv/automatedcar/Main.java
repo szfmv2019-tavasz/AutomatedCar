@@ -17,8 +17,10 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CYCLE_PERIOD = 40;
-    private static final int CAR_START_POS_X = 500;
-    private static final int CAR_START_POS_Y = 500;
+
+    private static final int CAR_START_POS_X = 550;
+    private static final int CAR_START_POS_Y = 250;
+
     // The window handle
     private Gui window;
     private AutomatedCar car;
@@ -46,6 +48,7 @@ public class Main {
         // create an automated car and add to the world
         car = new AutomatedCar(CAR_START_POS_X, CAR_START_POS_Y, "car_2_white.png");
         world.addObjectToWorld(car);
+
         world.initializeNpcsAndPaths();
         npcPaths = world.getNpcPaths();
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");

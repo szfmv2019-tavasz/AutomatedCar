@@ -17,7 +17,6 @@ public class World {
 
     public static final int WIDTH = 5120;
     public static final int HEIGHT = 3000;
-    private static final String XML_LOCATION = "./src/main/resources/test_world.xml";
 
     private static World instance;
 
@@ -39,6 +38,7 @@ public class World {
     }
 
     public List<WorldObject> createWorld() {
+
         try {
             File xml = new File(ClassLoader.getSystemResource("test_world.xml").getFile());
             return XmlParser.build(xml);
