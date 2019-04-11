@@ -116,20 +116,20 @@ public class WorldObject {
      *Create rectangle
      */
     public void generateShape() {
-        AffineTransform tx = new AffineTransform();
-        tx.rotate(-this.getRotation(), this.getX(), this.getY());
-        if (!AutomatedCar.class.isInstance(this)) {
-            this.shape = tx.createTransformedShape(
-                new Rectangle(
-                    (int) this.getX(), (int) this.getY(),
-                    this.getWidth(), this.getHeight()));
-        } else {
-            this.shape = tx.createTransformedShape(
-                new Rectangle(
-                    (int) this.getX() - this.getWidth() / 2,
-                    (int) this.getY() - this.getHeight() / 2,
-                    this.getWidth(), this.getHeight()));
-        }
+       AffineTransform tx = new AffineTransform();
+       tx.rotate(-this.getRotation(), this.getX(), this.getY());
+       if (!AutomatedCar.class.isInstance(this)) {
+           this.shape = tx.createTransformedShape(
+               new Rectangle(
+                   (int) this.getX(), (int) this.getY(),
+                   this.getWidth(), this.getHeight()));
+       } else {
+           this.shape = tx.createTransformedShape(
+               new Rectangle(
+                   (int) this.getX() - this.getWidth() / 2,
+                   (int) this.getY() - this.getHeight() / 2,
+                   this.getWidth(), this.getHeight()));
+       }
     }
 
 }
