@@ -8,18 +8,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Utils {
 
-    public static Map<String, Point> loadReferencePointsFromXml(String uri)
-        throws ParserConfigurationException, IOException, SAXException {
+    public static Map<String, Point> loadReferencePointsFromXml() throws ParserConfigurationException, IOException, SAXException {
         Map<String, Point> referencesP = new HashMap<>();
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(uri);
+        File refXml = new File(ClassLoader.getSystemResource("reference_points.xml").getFile());
+        Document document = documentBuilder.parse(refXml);
 
         NodeList nodes = document.getElementsByTagName("Image");
         for (int i = 0; i < nodes.getLength(); i++) {
