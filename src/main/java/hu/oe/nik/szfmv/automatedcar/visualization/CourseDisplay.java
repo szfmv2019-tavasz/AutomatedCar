@@ -5,9 +5,11 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.CameraPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.CameraPacket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,24 +26,22 @@ import java.util.Map;
  */
 public class CourseDisplay extends JPanel {
 
+    private static final Logger LOGGER = LogManager.getLogger();
     private final int width = 770;
     private final int height = 700;
     private final int backgroundColor = 0xEEEEEE;
-    private  final int angle = 90;
-    private Gui parent;
-
-    private int worldH = 3000;
-    private int worldW = 5120;
+    private final int angle = 90;
     private final int carWidth = 102;
     private final int carHeight = 208;
     private final float scale = 0.5f;
-    private Map<String, Point> refPoints;
     private final boolean useMock = false;
-
+    private Gui parent;
+    private int worldH = 3000;
+    private int worldW = 5120;
+    private Map<String, Point> refPoints;
     private WorldObject car;
     private World world;
     private BufferedImage environment = null;
-
     private ReadOnlyCarPacket carPacket;
     private ReadOnlyInputPacket inputPacket;
 
@@ -51,6 +51,7 @@ public class CourseDisplay extends JPanel {
      * @param pt parent Gui
      */
     CourseDisplay(Gui pt) {
+
         // Not using any layout manager, but fixed coordinates
 
         setLayout(null);
@@ -76,7 +77,7 @@ public class CourseDisplay extends JPanel {
     private void paintComponent(Graphics g, World world) {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
-        this.world  = world;
+        this.world = world;
 
     }
 
@@ -103,19 +104,19 @@ public class CourseDisplay extends JPanel {
      */
     private BufferedImage renderDoubleBufferedScreen(World world) {
         BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D)doubleBufferedScreen.getGraphics();
+        Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
 
-        drawObjects(g2d, world);
+        drawObjects(g2d);
         return doubleBufferedScreen;
     }
 
 
     public void drawWorld(World world, ReadOnlyCarPacket carPacket, ReadOnlyInputPacket input) {
 
-        this.world  = world;
+        this.world = world;
         this.carPacket = carPacket;
         this.inputPacket = input;
         paintComponent(getGraphics(), world);
@@ -169,7 +170,7 @@ public class CourseDisplay extends JPanel {
         for (WorldObject object : World.getInstance().getWorldObjects()) {
 
             if (Crossable.class.isAssignableFrom(object.getClass())
-                || Stationary.class.isAssignableFrom(object.getClass())) {
+                    || Stationary.class.isAssignableFrom(object.getClass())) {
                 drawWorldObject(object, environmentGrap, 0, 0);
 
 
@@ -177,7 +178,7 @@ public class CourseDisplay extends JPanel {
 
         }
 
-
+    }
 
     private void drawSensorsIfEnabled(Graphics2D g, Point2D offset) {
         if (inputPacket.getSensorDebug()) {
@@ -200,7 +201,7 @@ public class CourseDisplay extends JPanel {
 
         for (WorldObject object : World.getInstance().getWorldObjects()) {
             if (!Stationary.class.isAssignableFrom(object.getClass())
-                && !Crossable.class.isAssignableFrom(object.getClass())) {
+                    && !Crossable.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
                 t.scale(scale, scale);
                 t.translate(object.getX() - refPoints.get("car_2_red.png").x + offset.getX(),
