@@ -77,7 +77,7 @@ public class Dashboard extends JPanel {
             rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
             accSpeedSignal.setText(String.valueOf(inputPacket.getAccSpeed()));
             accDistanceSignal.setText(String.valueOf(inputPacket.getAccDistance()));
-            accOnOffSignal.setSwitchedOn(inputPacket.getAccSpeed() != 0);
+            accOnOffSignal.setSwitchedOn(inputPacket.isAccOn());
             ppSignal.setSwitchedOn(inputPacket.isParkingPilotOn());
             lkaSignal.setSwitchedOn(inputPacket.isLaneKeepingOn());
             gasProgressBar.setValue(inputPacket.getGasPedal());

@@ -28,6 +28,8 @@ public class InputPacket implements ReadOnlyInputPacket {
 
     private boolean laneKeepingOn = false;
 
+    private boolean accOn = false;
+
     private boolean parkingPilotOn = false;
     private boolean sensorDebug = false;
 
@@ -107,6 +109,10 @@ public class InputPacket implements ReadOnlyInputPacket {
     public void setParkingPilotOn(boolean parkingPilotOn) {
         this.parkingPilotOn = parkingPilotOn;
     }
+
+    public boolean isAccOn() { return accOn; }
+
+    public void setAccOn(boolean accOn) { this.accOn = accOn; }
 
     public int getAccSpeed() {
         return accSpeed;

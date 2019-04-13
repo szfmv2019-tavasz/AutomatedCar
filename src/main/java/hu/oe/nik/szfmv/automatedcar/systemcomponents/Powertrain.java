@@ -54,7 +54,7 @@ public class Powertrain extends SystemComponent {
 
         if (emergencyBrake) {
             handleEmergencyBrake();
-        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0) {
+        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0 && virtualFunctionBus.inputPacket.isAccOn()) {
             speed = virtualFunctionBus.inputPacket.getAccSpeed();
         } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
             //

@@ -31,6 +31,8 @@ public interface ReadOnlyInputPacket {
 
     boolean isSignalLeftTurn();
 
+    public boolean isAccOn();
+
     public boolean isSignalRightTurn();
 
     public boolean isLaneKeepingOn();
