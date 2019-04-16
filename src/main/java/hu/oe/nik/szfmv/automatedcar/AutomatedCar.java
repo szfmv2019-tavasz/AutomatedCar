@@ -5,6 +5,8 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.EmergencyBrake;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Tempomat;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +39,8 @@ public class AutomatedCar extends WorldObject {
         new Powertrain(virtualFunctionBus, this);
         new Steering(virtualFunctionBus);
         new Collision(virtualFunctionBus, this);
+        new EmergencyBrake(virtualFunctionBus);
+        new Tempomat(virtualFunctionBus);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
