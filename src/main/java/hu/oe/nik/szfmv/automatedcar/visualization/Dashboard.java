@@ -45,6 +45,7 @@ public class Dashboard extends JPanel {
     private DashboardText steeringWheel;
     private DashboardText xCoordinate;
     private DashboardText yCoordinate;
+    private JLabel emergencyWarning;
     private ProgressBars gasProgressBar;
     private ProgressBars breakProgressBar;
     private Gauge rpmGauge;
@@ -93,6 +94,7 @@ public class Dashboard extends JPanel {
             speedLimit.setText("100");
             xCoordinate.setText(String.valueOf(parent.getAutomatedCar().getX()));
             yCoordinate.setText(String.valueOf(parent.getAutomatedCar().getY()));
+            emergencyWarning.setVisible(parent.getVirtualFunctionBus().brakePacket.isWarning());
         }
     };
 
@@ -116,6 +118,7 @@ public class Dashboard extends JPanel {
         addDashboardActiveTexts();
         addProgressBars();
         addGauges();
+        addEmergencyWarning();
     }
 
     private void addTurnSignals() {
@@ -156,7 +159,7 @@ public class Dashboard extends JPanel {
         DashboardText steeringWheelText = new DashboardText(20, 490, 95, 15, "Steering Wheel: ");
         DashboardText xText = new DashboardText(20, 515, 20, 15, "X: ");
         DashboardText yText = new DashboardText(150, 515, 20, 15, "Y: ");
-        DashboardText helathText = new DashboardText(20,535,70,15,"Health:");
+        DashboardText helathText = new DashboardText(20, 535, 70, 15, "Health:");
         add(accOpts);
         add(gearText);
         add(gasText);
@@ -175,7 +178,7 @@ public class Dashboard extends JPanel {
         steeringWheel = new DashboardText(120, 490, 30, 15, " ");
         xCoordinate = new DashboardText(50, 515, 100, 15, "0");
         yCoordinate = new DashboardText(180, 515, 100, 15, "0");
-        healthSignal = new DashboardText(100,535,25,15," ");
+        healthSignal = new DashboardText(100, 535, 25, 15, " ");
         add(currentGear);
         add(speedLimit);
         add(steeringWheel);
@@ -197,4 +200,14 @@ public class Dashboard extends JPanel {
         add(rpmGauge);
         add(kmhGauge);
     }
+
+    private void addEmergencyWarning() {
+        emergencyWarning = new JLabel();
+        emergencyWarning.setText("Emergency");
+        emergencyWarning.setFont(new Font("Onyx", Font.BOLD, 20));
+        emergencyWarning.setForeground(Color.red);
+        emergencyWarning.setBounds(80, 585, 120, 30);
+        add(emergencyWarning);
+    }
+
 }
