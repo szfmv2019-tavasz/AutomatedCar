@@ -76,4 +76,5 @@ public class EmergencyBrake extends SystemComponent {
     private void applyBrake() {
         //TODO
     }
+
 }

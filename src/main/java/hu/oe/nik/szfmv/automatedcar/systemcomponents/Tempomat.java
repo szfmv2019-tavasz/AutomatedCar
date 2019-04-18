@@ -67,4 +67,5 @@ public class Tempomat extends SystemComponent {
     private void decelerate() {
         //TODO
     }
+
 }

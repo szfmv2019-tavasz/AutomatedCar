@@ -24,4 +24,5 @@ public class TempomatPacket implements ReadOnlyTempomatPacket {
     public void setActive(boolean active) {
         this.active = active;
     }
+
 }

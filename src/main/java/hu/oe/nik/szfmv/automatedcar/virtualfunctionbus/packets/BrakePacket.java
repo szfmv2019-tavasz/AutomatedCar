@@ -23,4 +23,5 @@ public class BrakePacket implements ReadOnlyBrakePacket {
     public void setWarning(boolean warning) {
         this.warning = warning;
     }
+
 }

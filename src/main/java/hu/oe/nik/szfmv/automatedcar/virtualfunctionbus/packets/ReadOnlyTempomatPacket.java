@@ -5,4 +5,5 @@ public interface ReadOnlyTempomatPacket {
     boolean isActive();
 
     float getAccSpeed();
+
 }

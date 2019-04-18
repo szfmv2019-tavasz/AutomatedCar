@@ -5,5 +5,5 @@ public interface ReadOnlyBrakePacket {
     boolean isBrake();
 
     boolean isWarning();
-
+    
 }
