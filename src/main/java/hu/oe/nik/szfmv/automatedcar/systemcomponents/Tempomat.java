@@ -3,17 +3,26 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.TempomatPacket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class Tempomat extends SystemComponent {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     boolean active;
     int speedLimit;
     int manualLimit;
     NpcCar target;
 
+    private final TempomatPacket packet;
+
     public Tempomat(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+        packet = new TempomatPacket();
+        virtualFunctionBus.tempomatPacket = packet;
     }
 
     @Override
@@ -22,7 +31,7 @@ public class Tempomat extends SystemComponent {
         keepSpeed();
     }
 
-    private void setTarget(){
+    private void setTarget() {
         //TODO
         getObjectsFromRadarSensor();
     }
@@ -32,30 +41,30 @@ public class Tempomat extends SystemComponent {
         return null;
     }
 
-    private void setSpeedLimit(){
+    private void setSpeedLimit() {
         //TODO
     }
 
-    private void setManualLimit(){
+    private void setManualLimit() {
         //TODO
     }
 
-    private void setActive(){
+    private void setActive() {
         //TODO
         setTarget();
     }
 
-    private void keepSpeed(){
+    private void keepSpeed() {
         //TODO
         accelerate();
         decelerate();
     }
 
-    private void accelerate(){
+    private void accelerate() {
         //TODO
     }
 
-    private void decelerate(){
+    private void decelerate() {
         //TODO
     }
 }

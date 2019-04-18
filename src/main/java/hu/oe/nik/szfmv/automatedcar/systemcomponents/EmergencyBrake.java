@@ -2,16 +2,25 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.BrakePacket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.util.List;
 
 public class EmergencyBrake extends SystemComponent {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     Shape emergencyDistance;
     Shape warningDistance;
 
+    private final BrakePacket packet;
+
     public EmergencyBrake(VirtualFunctionBus virtualFunctionBus) {
         super(virtualFunctionBus);
+        packet = new BrakePacket();
+        virtualFunctionBus.brakePacket = packet;
     }
 
     @Override
@@ -20,30 +29,30 @@ public class EmergencyBrake extends SystemComponent {
         checkEmergency();
     }
 
-    private void drawEmergencyDistances(){
+    private void drawEmergencyDistances() {
         //TODO
         calculateEmergencyDistance();
         calculateWarningDistance();
     }
 
-    private int calculateEmergencyDistance(){
+    private int calculateEmergencyDistance() {
         //TODO
         return 0;
     }
 
-    private int calculateWarningDistance(){
+    private int calculateWarningDistance() {
         //TODO
         return 0;
     }
 
-    private void checkEmergency(){
+    private void checkEmergency() {
         //TODO
         checkIntersection();
         warnDriver();
         applyBrake();
     }
 
-    private boolean checkIntersection(){
+    private boolean checkIntersection() {
         //TODO
         getObjectsFromRadarSensor();
         filterObjects();
@@ -60,11 +69,11 @@ public class EmergencyBrake extends SystemComponent {
         return null;
     }
 
-    private void warnDriver(){
+    private void warnDriver() {
         //TODO
     }
 
-    private void applyBrake(){
+    private void applyBrake() {
         //TODO
     }
 }
