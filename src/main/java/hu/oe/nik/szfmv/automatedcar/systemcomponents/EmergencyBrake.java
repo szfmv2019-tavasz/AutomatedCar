@@ -18,7 +18,11 @@ public class EmergencyBrake extends SystemComponent {
     private AutomatedCar car;
     private double emergencyDistance_height;
     private double emergencyDistance_height_warning;
-
+    private double current_acceleration;
+    private long time_in_Milis_baseTime; // SystemStartTime
+    private int time_in_Milis_last;
+    private int time_in_Milis_curr;
+    private double pastSpeed;
     private final BrakePacket packet;
 
     public EmergencyBrake(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
@@ -29,7 +33,12 @@ public class EmergencyBrake extends SystemComponent {
         emergencyDistance.width = car.getWidth();
         emergencyDistance_height = 0;
         emergencyDistance_height_warning = 0;
+        current_acceleration = 0;
         warningDistance.width = car.getWidth();
+        time_in_Milis_baseTime = System.currentTimeMillis();
+        time_in_Milis_last = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
+        pastSpeed = car.getSpeed();
+        time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
     }
 
     @Override
@@ -41,7 +50,7 @@ public class EmergencyBrake extends SystemComponent {
     private void drawEmergencyDistances() {
         //TODO
         emergencyDistance_height = calculateEmergencyDistance();
-        emergencyDistance_height_warning = calculateWarningDistance();
+        emergencyDistance_height_warning = calculateWarningDistance(emergencyDistance_height);
 
     }
 
@@ -50,13 +59,19 @@ public class EmergencyBrake extends SystemComponent {
         // t = s/v
         // minimal breaking distance => s = 9/2 * (s/v)^2 = (v^2) / 4.5
         // s = v^2 / 4.5
+        //TODO
+        // Conversion between pixels and meters
+        // scale between speed, distance and acceleration
+
         double speed_ms = car.getSpeed() * 3.6;
-        return speed_ms * speed_ms / 4.5;
+        double emergency_distance_minimal = speed_ms * speed_ms / 4.5;
+
+        return emergency_distance_minimal;
     }
 
-    private double calculateWarningDistance() {
+    private double calculateWarningDistance(double minimal_breaking_distance) {
         //TODO
-        return 0;
+        return minimal_breaking_distance * (5/3);
     }
 
     private void checkEmergency() {
@@ -72,6 +87,18 @@ public class EmergencyBrake extends SystemComponent {
         filterObjects();
         return false;
     }
+
+    private double calculateCurrentAcceleration(){
+        time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
+        int dT = time_in_Milis_curr % time_in_Milis_last;
+        if( dT>= 20){
+            time_in_Milis_last  = time_in_Milis_curr;
+            pastSpeed = car.getSpeed();
+            return ((pastSpeed / car.getSpeed()) * 3.6) / (dT * 1000);
+        }
+        return 1;
+    }
+
 
     private List<WorldObject> getObjectsFromRadarSensor() {
         //TODO
