@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.BrakePacket;
@@ -12,15 +13,23 @@ import java.util.List;
 public class EmergencyBrake extends SystemComponent {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    Shape emergencyDistance;
-    Shape warningDistance;
+    private Rectangle emergencyDistance;
+    private Rectangle warningDistance;
+    private AutomatedCar car;
+    private double emergencyDistance_height;
+    private double emergencyDistance_height_warning;
 
     private final BrakePacket packet;
 
-    public EmergencyBrake(VirtualFunctionBus virtualFunctionBus) {
+    public EmergencyBrake(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
         packet = new BrakePacket();
         virtualFunctionBus.brakePacket = packet;
+        this.car = car;
+        emergencyDistance.width = car.getWidth();
+        emergencyDistance_height = 0;
+        emergencyDistance_height_warning = 0;
+        warningDistance.width = car.getWidth();
     }
 
     @Override
@@ -31,16 +40,21 @@ public class EmergencyBrake extends SystemComponent {
 
     private void drawEmergencyDistances() {
         //TODO
-        calculateEmergencyDistance();
-        calculateWarningDistance();
+        emergencyDistance_height = calculateEmergencyDistance();
+        emergencyDistance_height_warning = calculateWarningDistance();
+
     }
 
-    private int calculateEmergencyDistance() {
-        //TODO
-        return 0;
+    private double calculateEmergencyDistance() { // Gives back the minimal distance at which the car can stop with 9 m/s^2 slowing power, the speed is in km/h
+        // s = (a/2) * (t^2)
+        // t = s/v
+        // minimal breaking distance => s = 9/2 * (s/v)^2 = (v^2) / 4.5
+        // s = v^2 / 4.5
+        double speed_ms = car.getSpeed() * 3.6;
+        return speed_ms * speed_ms / 4.5;
     }
 
-    private int calculateWarningDistance() {
+    private double calculateWarningDistance() {
         //TODO
         return 0;
     }
