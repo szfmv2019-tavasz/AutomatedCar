@@ -27,8 +27,10 @@ public class Tempomat extends SystemComponent {
 
     @Override
     public void loop() {
-        setSpeedLimit();
-        keepSpeed();
+        if (active) {
+            setSpeedLimit();
+            keepSpeed();
+        }
     }
 
     private void setTarget() {
@@ -42,11 +44,11 @@ public class Tempomat extends SystemComponent {
     }
 
     private void setSpeedLimit() {
-        //TODO
-    }
-
-    private void setManualLimit() {
-        //TODO
+        manualLimit = virtualFunctionBus.inputPacket.getAccSpeed();
+        if (target == null)
+            speedLimit = manualLimit;
+        else
+            Math.min(target.getPath().getMovementSpeed(), speedLimit);
     }
 
     private void setActive() {
@@ -55,17 +57,7 @@ public class Tempomat extends SystemComponent {
     }
 
     private void keepSpeed() {
-        //TODO
-        accelerate();
-        decelerate();
-    }
-
-    private void accelerate() {
-        //TODO
-    }
-
-    private void decelerate() {
-        //TODO
+        packet.setAccSpeed(speedLimit);
     }
 
 }
