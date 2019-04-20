@@ -31,14 +31,16 @@ public interface ReadOnlyInputPacket {
 
     boolean isSignalLeftTurn();
 
-    public boolean isSignalRightTurn();
+    boolean isSignalRightTurn();
 
-    public boolean isLaneKeepingOn();
+    boolean isLaneKeepingOn();
 
-    public boolean isParkingPilotOn();
+    boolean isParkingPilotOn();
 
-    public int getAccSpeed();
+    int getAccSpeed();
 
-    public double getAccDistance();
+    double getAccDistance();
+
+    boolean isAccOn();
 
 }
