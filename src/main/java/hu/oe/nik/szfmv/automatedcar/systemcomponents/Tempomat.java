@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.TempomatPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tempomat extends SystemComponent {
@@ -27,20 +28,43 @@ public class Tempomat extends SystemComponent {
 
     @Override
     public void loop() {
+        decideActive();
         if (active) {
             setSpeedLimit();
             keepSpeed();
         }
     }
 
+    private void decideActive() {
+        if (virtualFunctionBus.inputPacket.isAccOn())
+            active = true;
+        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())
+            active = false;
+    }
+
+
     private void setTarget() {
-        //TODO
-        getObjectsFromRadarSensor();
+        //TODO kiválasztani a legközelebbit ami megegyező irányba halad, lekezelni ha üres
+        List<NpcCar> objects = filterObjects(getObjectsFromRadarSensor());
+        target = objects.get(0);
+    }
+
+    private List<NpcCar> filterObjects(List<WorldObject> objects) {
+        List<NpcCar> cars = new ArrayList<>();
+        for (WorldObject object : objects) {
+            if (!(object instanceof NpcCar))
+                cars.add((NpcCar) object);
+        }
+        return cars;
     }
 
     private List<WorldObject> getObjectsFromRadarSensor() {
-        //TODO
-        return null;
+        //TODO másik csapattal kommunikálni
+        /*
+        List<WorldObject> objects = virtualFunctionBus.radarPacket.getObjects();
+        return objects;
+        */
+        return new ArrayList<>();
     }
 
     private void setSpeedLimit() {
@@ -51,9 +75,20 @@ public class Tempomat extends SystemComponent {
             Math.min(target.getPath().getMovementSpeed(), speedLimit);
     }
 
-    private void setActive() {
-        //TODO
+    private void activate() {
+        //TODO meghívását handout alapján megcsinálni Listener szerint
         setTarget();
+        active = true;
+        setSpeedLimit();
+        keepSpeed();
+        packet.setActive(true);
+    }
+
+    private void deactivate() {
+        //TODO meghívását handout alapján megcsinálni Listener szerint
+        target = null;
+        active = false;
+        packet.setActive(false);
     }
 
     private void keepSpeed() {
