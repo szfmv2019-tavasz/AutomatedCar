@@ -111,11 +111,11 @@ public class EmergencyBrake extends SystemComponent {
     }
 
     private void warnDriver() {
-        //TODO
+        packet.setWarning(true);
     }
 
     private void applyBrake() {
-        //TODO
+        packet.setBrake(true);
     }
 
 }
