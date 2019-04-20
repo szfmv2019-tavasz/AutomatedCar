@@ -36,10 +36,13 @@ public class Tempomat extends SystemComponent {
     }
 
     private void decideActive() {
-        if (virtualFunctionBus.inputPacket.isAccOn())
-            active = true;
-        if (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())
-            active = false;
+        if (active == true &&
+            (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())) {
+            deactivate();
+        } else {
+            if (active == false && virtualFunctionBus.inputPacket.isAccOn())
+                activate();
+        }
     }
 
 
@@ -79,8 +82,6 @@ public class Tempomat extends SystemComponent {
         //TODO meghívását handout alapján megcsinálni Listener szerint
         setTarget();
         active = true;
-        setSpeedLimit();
-        keepSpeed();
         packet.setActive(true);
     }
 
