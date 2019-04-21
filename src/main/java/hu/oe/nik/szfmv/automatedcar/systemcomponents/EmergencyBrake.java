@@ -30,14 +30,11 @@ public class EmergencyBrake extends SystemComponent {
         packet = new BrakePacket();
         virtualFunctionBus.brakePacket = packet;
         this.car = car;
-        emergencyDistance.width = car.getWidth();
         emergencyDistance_height = 0;
         emergencyDistance_height_warning = 0;
         current_acceleration = 0;
-        warningDistance.width = car.getWidth();
         time_in_Milis_baseTime = System.currentTimeMillis();
         time_in_Milis_last = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
-        pastSpeed = car.getSpeed();
         time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
     }
 
