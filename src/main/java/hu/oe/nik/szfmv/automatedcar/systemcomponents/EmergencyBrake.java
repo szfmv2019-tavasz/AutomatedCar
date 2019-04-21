@@ -12,6 +12,8 @@ import java.util.List;
 
 public class EmergencyBrake extends SystemComponent {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int emergencyDistance_width = 51;
+    private static final int warningDistance_width = 51;
 
     private Rectangle emergencyDistance;
     private Rectangle warningDistance;
@@ -32,10 +34,13 @@ public class EmergencyBrake extends SystemComponent {
         this.car = car;
         emergencyDistance_height = 0;
         emergencyDistance_height_warning = 0;
+        emergencyDistance.width = emergencyDistance_width;
+        warningDistance.width = warningDistance_width;
         current_acceleration = 0;
         time_in_Milis_baseTime = System.currentTimeMillis();
         time_in_Milis_last = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
         time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
+
     }
 
     @Override
