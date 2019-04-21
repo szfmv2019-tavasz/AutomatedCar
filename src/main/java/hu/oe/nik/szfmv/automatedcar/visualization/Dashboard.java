@@ -78,7 +78,6 @@ public class Dashboard extends JPanel {
             rightTurnSignal.setSwitchedOn(inputPacket.isSignalRightTurn());
             accSpeedSignal.setText(String.valueOf(inputPacket.getAccSpeed()));
             accDistanceSignal.setText(String.valueOf(inputPacket.getAccDistance()));
-            accOnOffSignal.setSwitchedOn(inputPacket.getAccSpeed() != 0);
             ppSignal.setSwitchedOn(inputPacket.isParkingPilotOn());
             lkaSignal.setSwitchedOn(inputPacket.isLaneKeepingOn());
             gasProgressBar.setValue(inputPacket.getGasPedal());
@@ -95,6 +94,7 @@ public class Dashboard extends JPanel {
             xCoordinate.setText(String.valueOf(parent.getAutomatedCar().getX()));
             yCoordinate.setText(String.valueOf(parent.getAutomatedCar().getY()));
             emergencyWarning.setVisible(parent.getVirtualFunctionBus().brakePacket.isWarning());
+            accOnOffSignal.setSwitchedOn(parent.getVirtualFunctionBus().tempomatPacket.isActive());
         }
     };
 

@@ -1,11 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.TempomatPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jfree.data.xy.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +15,19 @@ import java.util.List;
 public class Tempomat extends SystemComponent {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    boolean active;
-    int speedLimit;
-    int manualLimit;
-    NpcCar target;
+    private boolean active;
+    private int speedLimit;
+    private int manualLimit;
+    private NpcCar target;
+    private AutomatedCar car;
 
     private final TempomatPacket packet;
 
-    public Tempomat(VirtualFunctionBus virtualFunctionBus) {
+    public Tempomat(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
         packet = new TempomatPacket();
         virtualFunctionBus.tempomatPacket = packet;
+        this.car = car;
     }
 
     @Override
@@ -36,20 +40,43 @@ public class Tempomat extends SystemComponent {
     }
 
     private void decideActive() {
-        if (active == true &&
+        if (active &&
             (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())) {
             deactivate();
         } else {
-            if (active == false && virtualFunctionBus.inputPacket.isAccOn())
+            if (!active && virtualFunctionBus.inputPacket.isAccOn())
                 activate();
         }
     }
 
-
     private void setTarget() {
-        //TODO kiválasztani a legközelebbit ami megegyező irányba halad, lekezelni ha üres         target.getRotation();
         List<NpcCar> objects = filterObjects(getObjectsFromRadarSensor());
-        target = objects.get(0);
+        if (objects == null || objects.isEmpty())
+            target = null;
+        else {
+            NpcCar other;
+            int index = 0;
+            double distance = Double.MAX_VALUE;
+            for (int i = 1; i < objects.size(); i++) {
+                other = objects.get(i);
+                if (Math.abs(other.getRotation() - car.getRotation()) < 10) {
+                    Double d = getDistance(other);
+                    if (d < distance) {
+                        index = i;
+                        distance = d;
+                    }
+                }
+            }
+            if (distance == Double.MAX_VALUE)
+                target = null;
+            else
+                target = objects.get(index);
+        }
+    }
+
+    private double getDistance(NpcCar otherCar) {
+        Vector v = new Vector(otherCar.getX() - car.getX(), otherCar.getY() - car.getY());
+        return v.getLength();
     }
 
     private List<NpcCar> filterObjects(List<WorldObject> objects) {
@@ -91,6 +118,7 @@ public class Tempomat extends SystemComponent {
     }
 
     private void keepSpeed() {
+        //TODO konvertálás, ha kell
         packet.setAccSpeed(speedLimit);
     }
 

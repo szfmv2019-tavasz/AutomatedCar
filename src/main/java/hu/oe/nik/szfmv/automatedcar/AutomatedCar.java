@@ -40,7 +40,7 @@ public class AutomatedCar extends WorldObject {
         new Steering(virtualFunctionBus);
         new Collision(virtualFunctionBus, this);
         new EmergencyBrake(virtualFunctionBus, this);
-        new Tempomat(virtualFunctionBus);
+        new Tempomat(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
