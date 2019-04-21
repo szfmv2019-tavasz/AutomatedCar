@@ -47,7 +47,7 @@ public class Tempomat extends SystemComponent {
 
 
     private void setTarget() {
-        //TODO kiválasztani a legközelebbit ami megegyező irányba halad, lekezelni ha üres
+        //TODO kiválasztani a legközelebbit ami megegyező irányba halad, lekezelni ha üres         target.getRotation();
         List<NpcCar> objects = filterObjects(getObjectsFromRadarSensor());
         target = objects.get(0);
     }
@@ -79,14 +79,12 @@ public class Tempomat extends SystemComponent {
     }
 
     private void activate() {
-        //TODO meghívását handout alapján megcsinálni Listener szerint
         setTarget();
         active = true;
         packet.setActive(true);
     }
 
     private void deactivate() {
-        //TODO meghívását handout alapján megcsinálni Listener szerint
         target = null;
         active = false;
         packet.setActive(false);

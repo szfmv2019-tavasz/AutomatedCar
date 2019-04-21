@@ -74,8 +74,8 @@ public class EmergencyBrake extends SystemComponent {
     private void checkEmergency() {
         //TODO
         checkIntersection();
-        warnDriver();
-        applyBrake();
+        warnDriver(false);
+        applyBrake(false);
     }
 
     private boolean checkIntersection() {
@@ -107,12 +107,12 @@ public class EmergencyBrake extends SystemComponent {
         return null;
     }
 
-    private void warnDriver() {
-        packet.setWarning(true);
+    private void warnDriver(boolean isWarning) {
+        packet.setWarning(isWarning);
     }
 
-    private void applyBrake() {
-        packet.setBrake(true);
+    private void applyBrake(boolean isBrake) {
+        packet.setBrake(isBrake);
     }
 
 }
