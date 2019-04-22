@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
 public class TempomatPacket implements ReadOnlyTempomatPacket {
     boolean active;
     float speed;
+    double distance;
 
     public TempomatPacket() {
     }
@@ -23,6 +24,15 @@ public class TempomatPacket implements ReadOnlyTempomatPacket {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
 }

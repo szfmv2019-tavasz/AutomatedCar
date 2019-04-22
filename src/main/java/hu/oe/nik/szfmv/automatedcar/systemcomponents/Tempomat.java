@@ -36,6 +36,7 @@ public class Tempomat extends SystemComponent {
         if (active) {
             setSpeedLimit();
             keepSpeed();
+            updateDistance();
         }
     }
 
@@ -120,6 +121,13 @@ public class Tempomat extends SystemComponent {
     private void keepSpeed() {
         //TODO konvertálás, ha kell
         packet.setAccSpeed(speedLimit);
+    }
+
+    private void updateDistance() {
+        if (target == null)
+            packet.setDistance(0);
+        else
+            packet.setDistance(getDistance(target));
     }
 
 }

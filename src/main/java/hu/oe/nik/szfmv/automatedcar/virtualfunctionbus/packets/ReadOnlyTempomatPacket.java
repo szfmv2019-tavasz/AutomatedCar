@@ -6,4 +6,6 @@ public interface ReadOnlyTempomatPacket {
 
     float getAccSpeed();
 
+    double getDistance();
+
 }
