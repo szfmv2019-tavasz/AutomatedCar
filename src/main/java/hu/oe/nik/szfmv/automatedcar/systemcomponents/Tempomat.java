@@ -45,16 +45,18 @@ public class Tempomat extends SystemComponent {
             (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())) {
             deactivate();
         } else {
-            if (!active && virtualFunctionBus.inputPacket.isAccOn())
+            if (!active && virtualFunctionBus.inputPacket.isAccOn()) {
                 activate();
+            }
         }
     }
 
     private void setTarget() {
         List<NpcCar> objects = filterObjects(getObjectsFromRadarSensor());
-        if (objects == null || objects.isEmpty())
+        if (objects == null || objects.isEmpty()) {
+            LOGGER.info("For setting Target filtered WorldObjects is NULL");
             target = null;
-        else {
+        } else {
             NpcCar other;
             int index = 0;
             double distance = Double.MAX_VALUE;
@@ -62,16 +64,20 @@ public class Tempomat extends SystemComponent {
                 other = objects.get(i);
                 if (Math.abs(other.getRotation() - car.getRotation()) < 10) {
                     Double d = getDistance(other);
+                    LOGGER.info("NpcCar found with Rotation: " + other.getRotation() + ", Distance: " + d);
                     if (d < distance) {
                         index = i;
                         distance = d;
                     }
                 }
             }
-            if (distance == Double.MAX_VALUE)
+            if (distance == Double.MAX_VALUE) {
+                LOGGER.info("For setting Target no acceptable car");
                 target = null;
-            else
+            } else {
+                LOGGER.info("Setting Target");
                 target = objects.get(index);
+            }
         }
     }
 
@@ -104,17 +110,20 @@ public class Tempomat extends SystemComponent {
             speedLimit = manualLimit;
         else
             Math.min(target.getPath().getMovementSpeed(), speedLimit);
+        LOGGER.info("Speed Limit set to " + speedLimit);
     }
 
     private void activate() {
         setTarget();
         active = true;
+        LOGGER.info("Activating ACC");
         packet.setActive(true);
     }
 
     private void deactivate() {
         target = null;
         active = false;
+        LOGGER.info("Deactivating ACC");
         packet.setActive(false);
     }
 
