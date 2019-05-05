@@ -36,4 +36,22 @@
     <Image name="car_2_red.png">
         <Refpoint x="51" y="104"/>
     </Image>
+    <Image name="car_2_blue.png">
+        <Refpoint x="51" y="104"/>
+    </Image>
+    <Image name="car_2_black.png">
+        <Refpoint x="51" y="104"/>
+    </Image>
+    <Image name="man.png">
+        <Refpoint x="18" y="36"/>
+    </Image>
+    <Image name="car_1_blue.png">
+        <Refpoint x="54" y="120"/>
+    </Image>
+    <Image name="car_1_red.png">
+        <Refpoint x="54" y="120"/>
+    </Image>
+    <Image name="car_1_white.png">
+        <Refpoint x="54" y="120"/>
+    </Image>
 </Images>

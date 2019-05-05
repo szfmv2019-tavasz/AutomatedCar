@@ -4,6 +4,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Crossable;
+import hu.oe.nik.szfmv.automatedcar.model.objects.Npc;
 import hu.oe.nik.szfmv.automatedcar.model.objects.Stationary;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
@@ -201,7 +202,8 @@ public class CourseDisplay extends JPanel {
 
         for (WorldObject object : World.getInstance().getWorldObjects()) {
             if (!Stationary.class.isAssignableFrom(object.getClass())
-                    && !Crossable.class.isAssignableFrom(object.getClass())) {
+                && !Crossable.class.isAssignableFrom(object.getClass())
+                && !Npc.class.isAssignableFrom(object.getClass())) {
                 AffineTransform t = new AffineTransform();
                 t.scale(scale, scale);
                 t.translate(object.getX() - refPoints.get("car_2_red.png").x + offset.getX(),
@@ -209,7 +211,21 @@ public class CourseDisplay extends JPanel {
                 t.rotate(object.getRotation() + Math.toRadians(angle),
                     refPoints.get("car_2_red.png").x, refPoints.get("car_2_red.png").y);
                 g2d.drawImage(object.getImage(), t, this);
-
+            }
+            if (Npc.class.isAssignableFrom(object.getClass())) {
+                String imageFileName = object.getImageFileName();
+                if (imageFileName != null) {
+                    Point refPoint = refPoints.get(imageFileName);
+                    if (refPoint != null) {
+                        AffineTransform t = new AffineTransform();
+                        t.scale(scale, scale);
+                        t.translate(object.getX() - refPoint.x + offset.getX(),
+                            object.getY() - refPoint.y + offset.getY());
+                        t.rotate(object.getRotation() + Math.toRadians(angle),
+                            refPoint.x, refPoint.y);
+                        g2d.drawImage(object.getImage(), t, this);
+                    }
+                }
             }
 
         }
