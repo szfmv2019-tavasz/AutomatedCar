@@ -44,6 +44,8 @@ public class EmergencyBrake extends SystemComponent {
         time_in_Milis_baseTime = System.currentTimeMillis();
         time_in_Milis_last = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
         time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
+        rect_warningDistance = new Rectangle();
+        rect_emergencyDistance = new Rectangle();
     }
 
     @Override
@@ -71,29 +73,29 @@ public class EmergencyBrake extends SystemComponent {
         // Conversion between pixels and meters
         // scale between speed, distance and acceleration
 
-        double speed_ms = car.getSpeed() * 3.6;
+        double speed_ms = car.getSpeed() / 50 * 3.6;
         double emergency_distance_minimal = speed_ms * speed_ms / 4.5;
 
-        return (int)emergency_distance_minimal;
+        return (int)emergency_distance_minimal * 50;
     }
 
     private void setRectranglePosition(int x, int y, Rectangle rect){
-        // car.getRotation();
+
         generateShape();
     }
 
     private double calculateWarningDistance(double minimal_breaking_distance) {
         //TODO
-        return minimal_breaking_distance * (5/3);
+        return minimal_breaking_distance * (5.0/3.0);
     }
 
     private double calculateCurrentAcceleration(){
         time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
-        int dT = time_in_Milis_curr % time_in_Milis_last;
+        double dT = time_in_Milis_curr - time_in_Milis_last;
         if( dT>= 20){
             time_in_Milis_last  = time_in_Milis_curr;
             pastSpeed = car.getSpeed();
-            return ((pastSpeed / car.getSpeed()) * 3.6) / (dT * 1000);
+            return ((pastSpeed / car.getSpeed())*50 * 3.6) / (dT / 1000);
         }
         return 1;
     }
@@ -130,10 +132,10 @@ public class EmergencyBrake extends SystemComponent {
         //TODO
         List<WorldObject> all = World.getInstance().getWorldObjects();
         ArrayList<WorldObject> filtered = new ArrayList<WorldObject>();
-        Rectangle2D rekt = rect_warningDistance.getBounds();
+        // Rectangle2D rekt = rect_warningDistance.getBounds();
         for (int i = 0; i < all.size(); i++) {
             WorldObject tmp = all.get(i);
-            if(tmp.getShape().intersects(rekt)){
+            if(tmp.getShape().intersects(rect_warningDistance.getBounds())){
                 filtered.add(tmp);
             }
         }
