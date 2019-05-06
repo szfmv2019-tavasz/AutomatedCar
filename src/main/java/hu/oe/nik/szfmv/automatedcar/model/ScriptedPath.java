@@ -19,22 +19,25 @@ public class ScriptedPath {
     }
 
     private final float deltaTime = 0.04f;
-    private final float waypointReachedTreshold = 50f;
 
-    private List<Vector2D> waypoints = new ArrayList<>();
+    private float waypointReachedTreshold = 50f;
+
+    //private List<Vector2D> waypoints = new ArrayList<>();
+    private List<Waypoint> waypoints = new ArrayList<>();
     private LoopType loopType = LoopType.NONE;
     private Direction direction = Direction.FORWARDS;
 
     private WorldObject worldObject;
     private Vector2D currentPosition;
-    private boolean isStopped = false;
+    private boolean isStopped = true;
     private float movementSpeed = 10f;
     private float rotation = 0f;
-    private boolean isRotationSmoothingEnabled;
-    private float rotationSpeed;
+    private boolean useWaypointRotations = false;
 
     private int targetId;
-    private Vector2D target;
+    //private Vector2D targetWaypoint;
+    private Waypoint previousWaypoint;
+    private Waypoint targetWaypoint;
 
     public ScriptedPath(WorldObject worldObject) {
         this.worldObject = worldObject;
@@ -48,16 +51,24 @@ public class ScriptedPath {
         isStopped = true;
     }
 
+    public void reset() {
+        currentPosition = new Vector2D(worldObject.getX(), worldObject.getY());
+        targetId = 0;
+        previousWaypoint = new Waypoint(currentPosition, worldObject.getRotation());
+        targetWaypoint = waypoints.get(targetId);
+    }
+
     public void init() {
         currentPosition = new Vector2D(worldObject.getX(), worldObject.getY());
         targetId = 0;
-        target = waypoints.get(targetId);
+        previousWaypoint = new Waypoint(currentPosition, worldObject.getRotation());
+        targetWaypoint = waypoints.get(targetId);
     }
 
     public void loop() {
         if (!isStopped) {
             moveObjectTowardsWaypoint();
-            rotateObjectTowardsWaypoint();
+            rotateObject();
             applyPositionAndRotationToObject();
             if (isTargetWaypointReached()) {
                 getNewTargetWaypoint();
@@ -69,6 +80,19 @@ public class ScriptedPath {
         }
     }
 
+    public static List<Waypoint> createWaypointList(int[] x, int[] y, float[] rotation) {
+        int count = x.length;
+
+        List<Waypoint> waypoints = new ArrayList<>(count);
+
+        for (int i = 0; i < count; i++) {
+            Waypoint waypoint = new Waypoint(new Vector2D(x[i], y[i]), rotation[i]);
+            waypoints.add(waypoint);
+        }
+
+        return waypoints;
+    }
+
     private void applyPositionAndRotationToObject() {
         worldObject.setX((int) currentPosition.getX());
         worldObject.setY((int) currentPosition.getY());
@@ -76,22 +100,43 @@ public class ScriptedPath {
     }
 
     private void moveObjectTowardsWaypoint() {
-        Vector2D directionVector = target.subtract(currentPosition).normalize();
+        Vector2D directionVector = targetWaypoint.getPosition().subtract(currentPosition).normalize();
         Vector2D speedVector = directionVector.scalarMultiply(movementSpeed * deltaTime);
         currentPosition = currentPosition.add(speedVector);
     }
 
     private void rotateObjectTowardsWaypoint() {
-        rotation = (float) Math.atan2(target.getY() - currentPosition.getY(),
-            target.getX() - currentPosition.getX());
+        Vector2D targetPosition = targetWaypoint.getPosition();
+        rotation = (float) Math.atan2(targetPosition.getY() - currentPosition.getY(),
+            targetPosition.getX() - currentPosition.getX());
+    }
+
+    private float lerp(float a, float b, float f) {
+        return (a * (1.0f - f)) + (b * f);
+    }
+
+    private void rotateObjectToWaypointRotation() {
+        float totalDistance = (float) targetWaypoint.getPosition().distance(previousWaypoint.getPosition());
+        float coveredDistance = (float) previousWaypoint.getPosition().distance(currentPosition);
+        float fraction = coveredDistance / totalDistance;
+        rotation = lerp(previousWaypoint.getRotation(), targetWaypoint.getRotation(), fraction);
+    }
+
+    private void rotateObject() {
+        if (useWaypointRotations) {
+            rotateObjectToWaypointRotation();
+        } else {
+            rotateObjectTowardsWaypoint();
+        }
     }
 
     private boolean isTargetWaypointReached() {
-        return Vector2D.distance(currentPosition, target) <= waypointReachedTreshold;
+        Vector2D targetPosition = targetWaypoint.getPosition();
+        return Vector2D.distance(currentPosition, targetPosition) <= waypointReachedTreshold;
     }
 
     private void correctFinalPosition() {
-        currentPosition = target;
+        currentPosition = targetWaypoint.getPosition();
     }
 
     private void getNewTargetWaypoint() {
@@ -100,7 +145,8 @@ public class ScriptedPath {
         } else {
             getNewBackwardWaypointId();
         }
-        target = waypoints.get(targetId);
+        previousWaypoint = targetWaypoint;
+        targetWaypoint = waypoints.get(targetId);
     }
 
     private void getNewForwardWaypointId() {
@@ -135,11 +181,11 @@ public class ScriptedPath {
         return loopType == LoopType.NONE && targetId == waypoints.size() - 1;
     }
 
-    public List<Vector2D> getWaypoints() {
+    public List<Waypoint> getWaypoints() {
         return waypoints;
     }
 
-    public void setWaypoints(List<Vector2D> waypoints) {
+    public void setWaypoints(List<Waypoint> waypoints) {
         this.waypoints = waypoints;
     }
 
@@ -165,5 +211,21 @@ public class ScriptedPath {
 
     public void setMovementSpeed(float movementSpeed) {
         this.movementSpeed = movementSpeed;
+    }
+
+    public boolean isUseWaypointRotations() {
+        return useWaypointRotations;
+    }
+
+    public void setUseWaypointRotations(boolean useWaypointRotations) {
+        this.useWaypointRotations = useWaypointRotations;
+    }
+
+    public float getWaypointReachedTreshold() {
+        return waypointReachedTreshold;
+    }
+
+    public void setWaypointReachedTreshold(float waypointReachedTreshold) {
+        this.waypointReachedTreshold = waypointReachedTreshold;
     }
 }

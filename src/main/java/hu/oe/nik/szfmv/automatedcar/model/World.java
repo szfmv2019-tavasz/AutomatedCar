@@ -2,8 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.objects.CrossWalk;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcPedestrian;
+import hu.oe.nik.szfmv.automatedcar.model.objects.ParkingPlace;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,13 +66,13 @@ public class World {
         for (WorldObject worldObject : worldObjects) {
             if (worldObject instanceof CrossWalk) {
                 CrossWalk crossWalk = (CrossWalk) worldObject;
-                Vector2D startPoint = crossWalk.getStartPoint();
-                Vector2D endPoint = crossWalk.getEndPoint();
+                Waypoint startPoint = crossWalk.getStartPoint();
+                Waypoint endPoint = crossWalk.getEndPoint();
                 NpcPedestrian pedestrian =
                     new NpcPedestrian(1000, 1000,
                         "man.png", "man.png", "man.png");
                 ScriptedPath path = new ScriptedPath(pedestrian);
-                List<Vector2D> waypoints = new ArrayList<>();
+                List<Waypoint> waypoints = new ArrayList<>();
                 waypoints.add(startPoint);
                 waypoints.add(endPoint);
                 path.setWaypoints(waypoints);
@@ -82,6 +82,20 @@ public class World {
                 this.addObjectToWorld(pedestrian);
                 npcPaths.add(path);
                 pedestrian.setPath(path);
+                path.start();
+            }
+        }
+    }
+
+    public void initializeParkingPlaces(WorldObject target) {
+        List<WorldObject> worldObjects = List.copyOf(this.worldObjects);
+        for (WorldObject worldObject : worldObjects) {
+            if (worldObject instanceof ParkingPlace) {
+                ParkingPlace parkingPlace = (ParkingPlace) worldObject;
+                parkingPlace.initializePath(target);
+                npcPaths.add(parkingPlace.getPath());
+                parkingPlace.getPath().start();
+                return;
             }
         }
     }
