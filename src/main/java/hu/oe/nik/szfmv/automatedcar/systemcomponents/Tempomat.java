@@ -42,7 +42,8 @@ public class Tempomat extends SystemComponent {
 
     private void decideActive() {
         if (active &&
-            (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake())) {
+            (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake()
+            || virtualFunctionBus.inputPacket.getGasPedal() > 0)) {
             deactivate();
         } else {
             if (!active && virtualFunctionBus.inputPacket.isAccOn()) {

@@ -103,6 +103,8 @@ public class InputManager extends SystemComponent implements KeyListener {
                 break;
             case KeyEvent.VK_E: handleKeyE();
                 break;
+            case KeyEvent.VK_R: handleKeyR();
+                break;
             default:
                 handleKeyWSADPressed(key);
         }
@@ -112,10 +114,17 @@ public class InputManager extends SystemComponent implements KeyListener {
         switch (key) {
             case KeyEvent.VK_W:
                 gasPedalRangeHandler.setIncrease(true);
+                if (inputPacket.isAccOn()) {
+                    inputPacket.setAccSpeed(0);
+                    inputPacket.setAccOn(false);
+                }
                 break;
             case KeyEvent.VK_S:
                 breakPedalRangeHandler.setIncrease(true);
-                inputPacket.setAccSpeed(0);
+                if (inputPacket.isAccOn()) {
+                    inputPacket.setAccSpeed(0);
+                    inputPacket.setAccOn(false);
+                }
                 break;
             case KeyEvent.VK_A:
                 steeringRangeHandler.turnLeft();
@@ -191,6 +200,14 @@ public class InputManager extends SystemComponent implements KeyListener {
                     inputPacket.setAccSpeed(ACC_SPEED_MAX);
                 }
             }
+        }
+    }
+
+    private void handleKeyR() {
+        if (!inputPacket.isAccOn() && virtualFunctionBus.inputPacket.getAccSpeed() > ACC_SPEED_MIN) {
+            inputPacket.setAccOn(true);
+        } else {
+            inputPacket.setAccOn(false);
         }
     }
 

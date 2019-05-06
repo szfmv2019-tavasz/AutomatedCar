@@ -52,7 +52,7 @@ public class Powertrain extends SystemComponent {
 
         if (virtualFunctionBus.brakePacket.isBrake()) {
             handleEmergencyBrake();
-        } else if (virtualFunctionBus.tempomatPacket.isActive()) {
+        } else if (virtualFunctionBus.tempomatPacket.isActive() && virtualFunctionBus.inputPacket.isAccOn()) {
             speed = virtualFunctionBus.tempomatPacket.getAccSpeed();
         } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
             //
