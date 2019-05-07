@@ -48,17 +48,14 @@ public class AutomatedCar extends WorldObject {
         new Collision(virtualFunctionBus, this);
         positionTracker = new AutomatedCarPos(virtualFunctionBus);
         new Camera(virtualFunctionBus);
-        brake = new EmergencyBrake(virtualFunctionBus, this);
-        tempomat = new Tempomat(virtualFunctionBus, this);
+        new EmergencyBrake(virtualFunctionBus, this);
+        new Tempomat(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
         health = 100;
     }
 
-    public void setAllWorld(java.util.List<WorldObject> allWorld){
-        tempomat.setAllWorld(allWorld);
-    }
 
     public int getAutomatedCarHealth() {
         return this.health;

@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -20,7 +21,6 @@ public class Tempomat extends SystemComponent {
     private int manualLimit;
     private NpcCar target;
     private AutomatedCar car;
-    private List<WorldObject> allWorld;
 
     private final TempomatPacket packet;
 
@@ -60,7 +60,8 @@ public class Tempomat extends SystemComponent {
     }
 
     private void setTarget() {
-        List<NpcCar> objects = filterObjects(allWorld);
+        List<WorldObject> all = World.getInstance().getWorldObjects();
+        List<NpcCar> objects = filterObjects(all);
         if (objects == null || objects.isEmpty()) {
             System.out.println("objects null");
             LOGGER.info("For setting Target filtered WorldObjects is NULL");
@@ -158,7 +159,4 @@ public class Tempomat extends SystemComponent {
             packet.setDistance(getDistance(target));
     }
 
-    public void setAllWorld(List<WorldObject> allWorld) {
-        this.allWorld = allWorld;
-    }
 }

@@ -55,8 +55,6 @@ public class Main {
         npcPaths.add(npcCar.getPath());
         world.addObjectToWorld(npcCar);
 
-        car.setAllWorld(world.getWorldObjects());
-
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputManager(car.getVirtualFunctionBus()));
