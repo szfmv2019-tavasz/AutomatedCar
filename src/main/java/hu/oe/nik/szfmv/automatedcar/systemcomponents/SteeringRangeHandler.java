@@ -22,9 +22,9 @@ public class SteeringRangeHandler {
         RELEASE
     }
 
-    private static final int STEP_TURN = 3;
+    private static final int STEP_TURN = 10;
 
-    private static final int STEP_BACK_TO_CENTER = 2;
+    private static final int STEP_BACK_TO_CENTER = 10;
 
     private int range;
 

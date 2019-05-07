@@ -3,12 +3,16 @@ package hu.oe.nik.szfmv.automatedcar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
+
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Camera;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.EmergencyBrake;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Tempomat;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +35,8 @@ public class AutomatedCar extends WorldObject {
     private float carHeading;  // in radians
     private Vector2D carLocation;
     private int health;
+    private AutomatedCarPos positionTracker;
 
-    // Sprint2 init from master
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
@@ -40,6 +44,8 @@ public class AutomatedCar extends WorldObject {
         new Powertrain(virtualFunctionBus, this);
         new Steering(virtualFunctionBus);
         new Collision(virtualFunctionBus, this);
+        positionTracker = new AutomatedCarPos(virtualFunctionBus);
+        new Camera(virtualFunctionBus);
         new EmergencyBrake(virtualFunctionBus, this);
         new Tempomat(virtualFunctionBus, this);
 
@@ -69,6 +75,9 @@ public class AutomatedCar extends WorldObject {
 
             calculatePositionAndOrientation();
             updateCarPositionAndOrientation();
+            positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
+                (int)carLocation.getY()), this.carHeading);
+
         }
     }
 
@@ -100,7 +109,6 @@ public class AutomatedCar extends WorldObject {
             frontWheelPosition.getX() - backWheelPosition.getX());
     }
 
-
     private void updateCarPositionAndOrientation() {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
@@ -120,7 +128,11 @@ public class AutomatedCar extends WorldObject {
 
     }
 
+    public ReadOnlyCarPacket getCarValues() {
+        return virtualFunctionBus.carPacket;
+    }
     private float calculateWheelBase() {
         return this.height - bumperAxleDistance;
     }
+
 }

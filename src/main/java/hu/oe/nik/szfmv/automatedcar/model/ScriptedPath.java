@@ -1,11 +1,15 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScriptedPath {
+    private final Logger LOGGER = LogManager.getLogger();
+
     public enum LoopType {
         NONE, PINGPONG, LOOP
     }
@@ -15,7 +19,7 @@ public class ScriptedPath {
     }
 
     private final float deltaTime = 0.04f;
-    private final float waypointReachedTreshold = 5f;
+    private final float waypointReachedTreshold = 50f;
 
     private List<Vector2D> waypoints = new ArrayList<>();
     private LoopType loopType = LoopType.NONE;
@@ -96,7 +100,6 @@ public class ScriptedPath {
         } else {
             getNewBackwardWaypointId();
         }
-
         target = waypoints.get(targetId);
     }
 

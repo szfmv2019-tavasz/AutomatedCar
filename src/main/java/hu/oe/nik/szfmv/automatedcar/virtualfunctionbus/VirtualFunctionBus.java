@@ -4,6 +4,11 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyBrakePacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
+
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.ReadOnlyCameraPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
+
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySteeringPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
@@ -23,6 +28,8 @@ public class VirtualFunctionBus {
 
     public ReadOnlySamplePacket samplePacket;
     public ReadOnlySteeringPacket steeringPacket;
+    public ReadOnlyCarPacket carPacket;
+    public ReadOnlyCameraPacket cameraPacket;
 
     public ReadOnlyPowertrainPacket powertrainPacket;
 

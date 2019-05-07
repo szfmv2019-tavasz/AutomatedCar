@@ -29,6 +29,7 @@ public class InputPacket implements ReadOnlyInputPacket {
     private boolean laneKeepingOn = false;
 
     private boolean parkingPilotOn = false;
+    private boolean sensorDebug = false;
 
     /**
      * Automatic Cruise Control target speed
@@ -119,6 +120,15 @@ public class InputPacket implements ReadOnlyInputPacket {
 
     public double getAccDistance() {
         return accDistance;
+    }
+
+    @Override
+    public boolean getSensorDebug() {
+        return sensorDebug;
+    }
+
+    public void toggleSensorDebug() {
+        sensorDebug = !sensorDebug;
     }
 
     public void setAccDistance(double accDistance) {

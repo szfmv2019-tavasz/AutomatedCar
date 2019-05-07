@@ -21,9 +21,7 @@ public class Tree extends Stationary {
         super(x, y, imageFileName);
     }
 
-    /**
-     * Creates an object with default parameter values.
-     */
+
     public Tree() {
         super(0, 0, "tree.png");
     }

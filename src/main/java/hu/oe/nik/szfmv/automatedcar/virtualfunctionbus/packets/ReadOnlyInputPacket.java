@@ -39,6 +39,8 @@ public interface ReadOnlyInputPacket {
 
     int getAccSpeed();
 
+    public boolean getSensorDebug();
+
     double getAccDistance();
 
     boolean isAccOn();
