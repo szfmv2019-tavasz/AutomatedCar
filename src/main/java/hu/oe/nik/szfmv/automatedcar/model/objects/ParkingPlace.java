@@ -15,7 +15,8 @@ public class ParkingPlace extends Crossable {
 
     private static final int[] WAYPOINTS_X = new int[]{-69, -78, -82, -76, -43, -15, 22, 52, 67, 67, 67};
     private static final int[] WAYPOINTS_Y = new int[]{-108, -83, 0, 42, 91, 121, 145, 177, 200, 150, 150};
-    private static final float[] WAYPOINTS_ROT = new float[]{-1.5919616f, -1.6931952f, -2.0228622f, -2.1854513f, -2.2121763f, -2.1591303f, -1.935371f, -1.7069743f, -1.57281f, -1.5728093f, -1.5728093f};
+    private static final float[] WAYPOINTS_ROT = new float[]{-1.5919616f, -1.6931952f, -2.0228622f, -2.1854513f,
+        -2.2121763f, -2.1591303f, -1.935371f, -1.7069743f, -1.57281f, -1.5728093f, -1.5728093f};
 
     private ScriptedPath pathUpper;
     private ScriptedPath pathLower;
@@ -70,24 +71,32 @@ public class ParkingPlace extends Crossable {
         return result;
     }
 
-    private void transformAndRotateToObjectPositionAndRotation(List<Waypoint> waypoints, Vector2D objectPosition, float objectRotation) {
+    private void transformAndRotateToObjectPositionAndRotation(List<Waypoint> waypoints, Vector2D objectPosition,
+                                                               float objectRotation) {
         final Vector2D right = new Vector2D(1, 0);
         for (Waypoint waypoint :
             waypoints) {
             Vector2D position = waypoint.getPosition();
             float length = (float) Vector2D.distance(position, Vector2D.ZERO);
             float angle = (float) Vector2D.angle(position, right);
-            if (position.getY() < 0) angle = -angle;
+            if (position.getY() < 0) {
+                angle = -angle;
+            }
             float newAngle = angle + objectRotation;
-            Vector2D newPosition = new Vector2D(Math.cos(newAngle), Math.sin(newAngle)).scalarMultiply(length).add(objectPosition);
+            Vector2D newPosition = new Vector2D(Math.cos(newAngle), Math.sin(newAngle))
+                .scalarMultiply(length).add(objectPosition);
             waypoint.setPosition(newPosition);
         }
     }
 
     public boolean isEmpty(ScriptedPath path) {
-        if (pathUpper.equals(path)) return isUpperEmpty;
-        else if (pathLower.equals(path)) return isLowerEmpty;
-        else return false;
+        if (pathUpper.equals(path)) {
+            return isUpperEmpty;
+        } else if (pathLower.equals(path)) {
+            return isLowerEmpty;
+        } else {
+            return false;
+        }
     }
 
     public Vector2D getCenterUpper() {

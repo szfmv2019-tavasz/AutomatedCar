@@ -5,7 +5,11 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.ParkingPlace;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.*;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ParkingPilotPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySteeringPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -122,7 +126,8 @@ public class ParkingPilot extends SystemComponent {
     private Vector2D getSearchCenter(float searchDistance) {
         Vector2D position = new Vector2D(carPacket.getPosition().getX(), carPacket.getPosition().getY());
         float rotation = carPacket.getRotation() - (float) Math.toRadians(270);
-        Vector2D searchCenter = position.add(new Vector2D(Math.cos(rotation), Math.sin(rotation)).scalarMultiply(searchDistance));
+        Vector2D searchCenter = position.add(new Vector2D(Math.cos(rotation), Math.sin(rotation))
+            .scalarMultiply(searchDistance));
         return searchCenter;
     }
 

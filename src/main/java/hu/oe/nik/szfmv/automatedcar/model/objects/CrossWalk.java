@@ -39,7 +39,8 @@ public class CrossWalk extends Crossable {
         float rot = -rotation + (float) Math.toRadians(90);
         Vector2D pivot = new Vector2D(this.x, this.y);
         Vector2D endPoint = pivot.add(new Vector2D(Math.cos(rot), Math.sin(rot)).scalarMultiply(this.height / 2));
-        endPoint = endPoint.add(new Vector2D(Math.cos(-rotation), Math.sin(-rotation)).scalarMultiply(this.width + 300));
+        endPoint = endPoint.add(new Vector2D(Math.cos(-rotation), Math.sin(-rotation))
+            .scalarMultiply(this.width + 300));
         return new Waypoint(endPoint, 0f);
     }
 }
