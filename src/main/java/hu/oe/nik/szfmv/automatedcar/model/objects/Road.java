@@ -110,6 +110,7 @@ public class Road extends Crossable {
     public static void loadReferencePoints() {
         try {
             referencePoints = Utils.loadReferencePointsFromXml();
+
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOGGER.error(e.getMessage());
         }

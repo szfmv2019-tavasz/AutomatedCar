@@ -41,7 +41,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay(car);
+        courseDisplay = new CourseDisplay(this);
         add(courseDisplay);
 
         dashboard = new Dashboard(this);
