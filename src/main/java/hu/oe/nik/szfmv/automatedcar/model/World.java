@@ -114,7 +114,9 @@ public class World {
             parkingPlace.setLowerEmpty(false);
             parkingPlace.setUpperEmpty(true);
         }
-        NpcCar car = new NpcCar((int) position.getX(), (int) position.getY(), "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
+        NpcCar car = new NpcCar((int) position.getX(), (int) position.getY(),
+            "car_1_blue.png", "car_1_blue.png",
+            "car_1_blue.png");
         car.setRotation(parkingPlace.getRotation() + (float) Math.toRadians(-90));
         addObjectToWorld(car);
     }
