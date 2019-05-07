@@ -63,7 +63,8 @@ public class EmergencyBrake extends SystemComponent {
 
     }
 
-    private int calculateEmergencyDistance() { // Gives back the minimal distance at which the car can stop with 9 m/s^2 slowing power, the speed is in km/h
+    private int calculateEmergencyDistance() {
+        // Gives back the minimal distance at which the car can stop with 9 m/s^2 slowing power, the speed is in km/h
         // s = (a/2) * (t^2)
         // t = s/v
         // minimal breaking distance => s = 9/2 * (s/v)^2 = (v^2) / 4.5

@@ -1,6 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
 

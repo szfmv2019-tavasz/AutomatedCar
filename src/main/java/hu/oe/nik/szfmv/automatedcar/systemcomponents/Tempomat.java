@@ -45,17 +45,17 @@ public class Tempomat extends SystemComponent {
         if (active &&
             (virtualFunctionBus.inputPacket.getBreakPedal() > 0
                 || virtualFunctionBus.brakePacket.isBrake()
-                || virtualFunctionBus.inputPacket.getGasPedal() > 0)) {
+                || virtualFunctionBus.inputPacket.getGasPedal() > 0))
             /*
             System.out.println("isBrake "+virtualFunctionBus.brakePacket.isBrake());
             System.out.println("brake "+virtualFunctionBus.inputPacket.getBreakPedal());
             System.out.println("gas "+virtualFunctionBus.inputPacket.getGasPedal());
             */
             deactivate();
-        } else {
-            if (!active && virtualFunctionBus.inputPacket.isAccOn()) {
+        else {
+            if (!active && virtualFunctionBus.inputPacket.isAccOn())
                 activate();
-            }
+
         }
     }
 
