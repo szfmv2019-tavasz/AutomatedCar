@@ -20,7 +20,7 @@ public class Collision extends SystemComponent {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final int DAMAGE_ROADSIGN = 20;
+    private static final int DAMAGE_ROADSIGN = 40;
     private static final int DAMAGE_NPCCAR = 50;
     private static final int DAMAGE_TREE = 70;
 
@@ -96,7 +96,7 @@ public class Collision extends SystemComponent {
     private void handleCollisionWithNPCCar() {
         LOGGER.info("Collision with NPC car");
         collisionPacket.setSpeedAfterCollision(0);
-        damage(DAMAGE_NPCCAR);
+        damage(calculateDamage(car.getSpeed(),DAMAGE_NPCCAR));
     }
 
     private void handleCollisionWithNPCPedestrian() {
@@ -107,13 +107,17 @@ public class Collision extends SystemComponent {
     private void handleCollisionWithTree() {
         LOGGER.info("Collision with tree");
         collisionPacket.setSpeedAfterCollision(0);
-        damage(DAMAGE_TREE);
+        damage(calculateDamage(car.getSpeed(),DAMAGE_TREE));
     }
 
     private void handleCollisionWithRoadSign() {
         LOGGER.info("Collision with road sign");
         collisionPacket.setSpeedAfterCollision(car.getSpeed() / 2);
-        damage(DAMAGE_ROADSIGN);
+        damage(calculateDamage(car.getSpeed(),DAMAGE_ROADSIGN));
+    }
+
+    private int calculateDamage(float speed, int value) {
+        return Math.round(((speed/2)*value)/100);
     }
 
     private void damage(int damageValue) {

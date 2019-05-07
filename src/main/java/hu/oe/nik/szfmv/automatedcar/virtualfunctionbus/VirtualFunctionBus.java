@@ -2,8 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCollisionPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyBrakePacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrainPacket;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.ReadOnlyCameraPacket;
@@ -13,7 +12,8 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyPowertrai
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySteeringPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyInputPacket;
-
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyTempomatPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCollisionPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,10 @@ public class VirtualFunctionBus {
      * The output values of the keyboard input component
      */
     public ReadOnlyInputPacket inputPacket;
+
+    public ReadOnlyTempomatPacket tempomatPacket;
+
+    public ReadOnlyBrakePacket brakePacket;
 
     public ReadOnlyCollisionPacket collisionPacket;
 

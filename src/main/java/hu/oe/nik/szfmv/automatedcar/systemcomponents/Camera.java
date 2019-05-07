@@ -58,7 +58,7 @@ public class Camera extends SystemComponent {
         RoadSign roadSign = setRoadSign(carPacket);
         cameraPacket.setRoadSign(roadSign);
         if (cameraPacket.getRoadSign() != null) {
-            System.out.println(cameraPacket.getRoadSign().getImageFileName());
+            //System.out.println(cameraPacket.getRoadSign().getImageFileName());
         }
 
     }
