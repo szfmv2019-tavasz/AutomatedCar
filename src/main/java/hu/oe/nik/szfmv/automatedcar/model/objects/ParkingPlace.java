@@ -113,5 +113,13 @@ public class ParkingPlace extends Crossable {
     public ScriptedPath getPathLower() {
         return pathLower;
     }
+
+    public void setUpperEmpty(boolean upperEmpty) {
+        isUpperEmpty = upperEmpty;
+    }
+
+    public void setLowerEmpty(boolean lowerEmpty) {
+        isLowerEmpty = lowerEmpty;
+    }
 }
 
