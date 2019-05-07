@@ -50,10 +50,7 @@ public class Main {
         world.addObjectToWorld(car);
 
         world.initializeNpcsAndPaths();
-        NpcCar parkingCar = new NpcCar(400, 658, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
-        parkingCar.setRotation(-1.5919616f);
-        world.initializeParkingPlaces(parkingCar);
-        world.addObjectToWorld(parkingCar);
+        world.initializeParkingPlaces();
 
         npcPaths = world.getNpcPaths();
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");

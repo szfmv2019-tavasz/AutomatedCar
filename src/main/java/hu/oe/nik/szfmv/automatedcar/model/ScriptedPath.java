@@ -228,4 +228,12 @@ public class ScriptedPath {
     public void setWaypointReachedTreshold(float waypointReachedTreshold) {
         this.waypointReachedTreshold = waypointReachedTreshold;
     }
+
+    public WorldObject getWorldObject() {
+        return worldObject;
+    }
+
+    public void setWorldObject(WorldObject worldObject) {
+        this.worldObject = worldObject;
+    }
 }

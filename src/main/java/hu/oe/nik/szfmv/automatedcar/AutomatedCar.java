@@ -1,16 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
-
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Camera;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.EmergencyBrake;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Tempomat;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -50,6 +41,7 @@ public class AutomatedCar extends WorldObject {
         new Camera(virtualFunctionBus);
         new EmergencyBrake(virtualFunctionBus, this);
         new Tempomat(virtualFunctionBus, this);
+        new ParkingPilot(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
@@ -76,8 +68,13 @@ public class AutomatedCar extends WorldObject {
         if (!virtualFunctionBus.collisionPacket.isGameOver()) {
             virtualFunctionBus.loop();
 
-            calculatePositionAndOrientation();
-            updateCarPositionAndOrientation();
+            if (!virtualFunctionBus.parkingPilotPacket.isWorking()) {
+                calculatePositionAndOrientation();
+                updateCarPositionAndOrientation();
+            } else {
+                carLocation = new Vector2D(x, y);
+                carHeading = rotation;
+            }
             positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
                 (int)carLocation.getY()), this.carHeading);
 

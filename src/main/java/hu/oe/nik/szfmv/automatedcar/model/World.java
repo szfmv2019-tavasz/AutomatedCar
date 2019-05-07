@@ -87,15 +87,12 @@ public class World {
         }
     }
 
-    public void initializeParkingPlaces(WorldObject target) {
+    public void initializeParkingPlaces() {
         List<WorldObject> worldObjects = List.copyOf(this.worldObjects);
         for (WorldObject worldObject : worldObjects) {
             if (worldObject instanceof ParkingPlace) {
                 ParkingPlace parkingPlace = (ParkingPlace) worldObject;
-                parkingPlace.initializePath(target);
-                npcPaths.add(parkingPlace.getPath());
-                parkingPlace.getPath().start();
-                return;
+                parkingPlace.initializePaths(parkingPlace);
             }
         }
     }
