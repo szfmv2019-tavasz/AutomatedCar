@@ -44,6 +44,8 @@ public class InputPacket implements ReadOnlyInputPacket {
      */
     private double accDistance = 0.8;
 
+    private boolean accOn = false;
+
     public int getGasPedal() {
         return gasPedal;
     }
@@ -133,5 +135,12 @@ public class InputPacket implements ReadOnlyInputPacket {
         this.accDistance = accDistance;
     }
 
+    @Override
+    public boolean isAccOn() {
+        return accOn;
+    }
 
+    public void setAccOn(boolean accOn) {
+        this.accOn = accOn;
+    }
 }
