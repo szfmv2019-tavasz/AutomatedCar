@@ -10,26 +10,25 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmergencyBrake extends SystemComponent {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int emergencyDistance_width = 51;
-    private static final int warningDistance_width = 51;
+    private static final int emergencyDistanceWidth = 51;
+    private static final int warningDistanceWidth = 51;
 
-    private Shape rect_emergencyDistance;
-    private Shape rect_warningDistance;
+    private Shape rectEmergencyDistance;
+    private Shape rectWarningDistance;
     private AutomatedCar car;
-    private int emergencyDistance_height;
-    private int emergencyDistance_height_warning;
-    private double current_acceleration;
-    private long time_in_Milis_baseTime; // SystemStartTime
-    private int time_in_Milis_last;
-    private int time_in_Milis_curr;
+    private int emergencyDistanceHeight;
+    private int warningDistanceHeight;
+    private double currentAcceleration;
+    private long timeInMilisBaseTime; // SystemStartTime
+    private int timeInMilisLast;
+    private int timeInMilisCurr;
     private double pastSpeed;
-    private float emergency_rotation;
+    private float emergencyRotation;
     private final BrakePacket packet;
 
     public EmergencyBrake(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
@@ -37,15 +36,15 @@ public class EmergencyBrake extends SystemComponent {
         packet = new BrakePacket();
         virtualFunctionBus.brakePacket = packet;
         this.car = car;
-        emergencyDistance_height = 0;
-        emergencyDistance_height_warning = 0;
-        current_acceleration = 0;
+        emergencyDistanceHeight = 0;
+        warningDistanceHeight = 0;
+        currentAcceleration = 0;
         // getting current time in miliseconds to calculate acceleration later
-        time_in_Milis_baseTime = System.currentTimeMillis();
-        time_in_Milis_last = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
-        time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
-        rect_warningDistance = new Rectangle();
-        rect_emergencyDistance = new Rectangle();
+        timeInMilisBaseTime = System.currentTimeMillis();
+        timeInMilisLast = (int) (System.currentTimeMillis() - timeInMilisBaseTime);
+        timeInMilisCurr = (int) (System.currentTimeMillis() - timeInMilisBaseTime);
+        rectWarningDistance = new Rectangle();
+        rectEmergencyDistance = new Rectangle();
     }
 
     @Override
@@ -57,9 +56,9 @@ public class EmergencyBrake extends SystemComponent {
     private void drawEmergencyDistances() {
         //TODO
         // emergencyDistance_height = calculateEmergencyDistance();
-        emergencyDistance_height = car.getHeight() * 2;
-        emergencyDistance_height_warning = (int)calculateWarningDistance(emergencyDistance_height);
-        emergency_rotation = car.getRotation();
+        emergencyDistanceHeight = car.getHeight() * 2;
+        warningDistanceHeight = (int) calculateWarningDistance(emergencyDistanceHeight);
+        emergencyRotation = car.getRotation();
 
 
     }
@@ -76,43 +75,43 @@ public class EmergencyBrake extends SystemComponent {
         double speed_ms = car.getSpeed() / 50 * 3.6;
         double emergency_distance_minimal = speed_ms * speed_ms / 4.5;
 
-        return (int)emergency_distance_minimal * 50;
+        return (int) emergency_distance_minimal * 50;
     }
 
-    private void setRectranglePosition(int x, int y, Rectangle rect){
+    private void setRectranglePosition(int x, int y, Rectangle rect) {
 
         generateShape();
     }
 
     private double calculateWarningDistance(double minimal_breaking_distance) {
         //TODO
-        return minimal_breaking_distance * (5.0/3.0);
+        return minimal_breaking_distance * (5.0 / 3.0);
     }
 
-    private double calculateCurrentAcceleration(){
-        time_in_Milis_curr = (int)(System.currentTimeMillis() - time_in_Milis_baseTime);
-        double dT = time_in_Milis_curr - time_in_Milis_last;
-        if( dT>= 20){
-            time_in_Milis_last  = time_in_Milis_curr;
+    private double calculateCurrentAcceleration() {
+        timeInMilisCurr = (int) (System.currentTimeMillis() - timeInMilisBaseTime);
+        double dT = timeInMilisCurr - timeInMilisLast;
+        if (dT >= 20) {
+            timeInMilisLast = timeInMilisCurr;
             pastSpeed = car.getSpeed();
-            return ((pastSpeed / car.getSpeed())*50 * 3.6) / (dT / 1000);
+            return ((pastSpeed / car.getSpeed()) * 50 * 3.6) / (dT / 1000);
         }
         return 1;
     }
 
 
     public void generateShape() {
-            AffineTransform tx = new AffineTransform();
-            tx.rotate(this.emergency_rotation, car.getX(), car.getY());
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(this.emergencyRotation, car.getX(), car.getY());
 
-            this.rect_emergencyDistance = tx.createTransformedShape(
-                new Rectangle(
-                    this.car.getX(),
-                    this.car.getY(),
-                    this.car.getWidth(), this.emergencyDistance_height));
+        this.rectEmergencyDistance = tx.createTransformedShape(
+            new Rectangle(
+                this.car.getX(),
+                this.car.getY(),
+                this.car.getWidth(), this.emergencyDistanceHeight));
 
     }
-    
+
     private void checkEmergency() {
         //TODO
         boolean intersected = checkIntersection();
@@ -135,7 +134,7 @@ public class EmergencyBrake extends SystemComponent {
         // Rectangle2D rekt = rect_warningDistance.getBounds();
         for (int i = 0; i < all.size(); i++) {
             WorldObject tmp = all.get(i);
-            if(tmp.getShape().intersects(rect_warningDistance.getBounds())){
+            if (tmp.getShape().intersects(rectWarningDistance.getBounds())) {
                 filtered.add(tmp);
             }
         }
