@@ -50,12 +50,10 @@ public class Powertrain extends SystemComponent {
     public void loop() {
         speed = car.getSpeed();
 
-        boolean emergencyBrake = false;
-
-        if (emergencyBrake) {
+        if (virtualFunctionBus.brakePacket.isBrake()) {
             handleEmergencyBrake();
-        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0) {
-            speed = virtualFunctionBus.inputPacket.getAccSpeed();
+        } else if (virtualFunctionBus.tempomatPacket.isActive() && virtualFunctionBus.inputPacket.isAccOn()) {
+            speed = virtualFunctionBus.tempomatPacket.getAccSpeed();
         } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
             //
         } else {

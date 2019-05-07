@@ -54,6 +54,7 @@ public class Main {
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
         npcPaths.add(npcCar.getPath());
         world.addObjectToWorld(npcCar);
+
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputManager(car.getVirtualFunctionBus()));
