@@ -36,6 +36,8 @@ public class AutomatedCar extends WorldObject {
     private Vector2D carLocation;
     private int health;
     private AutomatedCarPos positionTracker;
+    private Tempomat tempomat;
+    private EmergencyBrake brake;
 
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
@@ -46,12 +48,16 @@ public class AutomatedCar extends WorldObject {
         new Collision(virtualFunctionBus, this);
         positionTracker = new AutomatedCarPos(virtualFunctionBus);
         new Camera(virtualFunctionBus);
-        new EmergencyBrake(virtualFunctionBus, this);
-        new Tempomat(virtualFunctionBus, this);
+        brake = new EmergencyBrake(virtualFunctionBus, this);
+        tempomat = new Tempomat(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
         health = 100;
+    }
+
+    public void setAllWorld(java.util.List<WorldObject> allWorld){
+        tempomat.setAllWorld(allWorld);
     }
 
     public int getAutomatedCarHealth() {

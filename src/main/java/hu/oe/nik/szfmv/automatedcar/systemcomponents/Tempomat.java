@@ -20,6 +20,7 @@ public class Tempomat extends SystemComponent {
     private int manualLimit;
     private NpcCar target;
     private AutomatedCar car;
+    private List<WorldObject> allWorld;
 
     private final TempomatPacket packet;
 
@@ -42,8 +43,14 @@ public class Tempomat extends SystemComponent {
 
     private void decideActive() {
         if (active &&
-            (virtualFunctionBus.inputPacket.getBreakPedal() > 0 || virtualFunctionBus.brakePacket.isBrake()
-            || virtualFunctionBus.inputPacket.getGasPedal() > 0)) {
+            (virtualFunctionBus.inputPacket.getBreakPedal() > 0
+                || virtualFunctionBus.brakePacket.isBrake()
+                || virtualFunctionBus.inputPacket.getGasPedal() > 0)) {
+            /*
+            System.out.println("isBrake "+virtualFunctionBus.brakePacket.isBrake());
+            System.out.println("brake "+virtualFunctionBus.inputPacket.getBreakPedal());
+            System.out.println("gas "+virtualFunctionBus.inputPacket.getGasPedal());
+            */
             deactivate();
         } else {
             if (!active && virtualFunctionBus.inputPacket.isAccOn()) {
@@ -53,17 +60,22 @@ public class Tempomat extends SystemComponent {
     }
 
     private void setTarget() {
-        List<NpcCar> objects = filterObjects(getObjectsFromRadarSensor());
+        List<NpcCar> objects = filterObjects(allWorld);
         if (objects == null || objects.isEmpty()) {
+            System.out.println("objects null");
             LOGGER.info("For setting Target filtered WorldObjects is NULL");
             target = null;
         } else {
+            System.out.println("objects not null");
             NpcCar other;
             int index = 0;
             double distance = Double.MAX_VALUE;
-            for (int i = 1; i < objects.size(); i++) {
+            for (int i = 0; i < objects.size(); i++) {
                 other = objects.get(i);
-                if (Math.abs(other.getRotation() - car.getRotation()) < 10) {
+                System.out.println("Rotations: " + other.getRotation() + ", " + car.getRotation());
+
+                if (car.getRotation() < other.getRotation() + 0.2 &&
+                    car.getRotation() > other.getRotation() - 0.2) {
                     Double d = getDistance(other);
                     LOGGER.info("NpcCar found with Rotation: " + other.getRotation() + ", Distance: " + d);
                     if (d < distance) {
@@ -80,6 +92,8 @@ public class Tempomat extends SystemComponent {
                 target = objects.get(index);
             }
         }
+        if (target != null)
+            System.out.println("TARGET SET");
     }
 
     private double getDistance(NpcCar otherCar) {
@@ -90,14 +104,14 @@ public class Tempomat extends SystemComponent {
     private List<NpcCar> filterObjects(List<WorldObject> objects) {
         List<NpcCar> cars = new ArrayList<>();
         for (WorldObject object : objects) {
-            if (!(object instanceof NpcCar))
+            if ((object instanceof NpcCar))
                 cars.add((NpcCar) object);
         }
         return cars;
     }
 
     private List<WorldObject> getObjectsFromRadarSensor() {
-        //TODO másik csapattal kommunikálni
+        //TO DO másik csapattal kommunikálni
         /*
         List<WorldObject> objects = virtualFunctionBus.radarPacket.getObjects();
         return objects;
@@ -107,14 +121,18 @@ public class Tempomat extends SystemComponent {
 
     private void setSpeedLimit() {
         manualLimit = virtualFunctionBus.inputPacket.getAccSpeed();
-        if (target == null)
+        if (target == null) {
             speedLimit = manualLimit;
-        else
-            Math.min(target.getPath().getMovementSpeed(), speedLimit);
+            System.out.println("Set Manual Limit" + manualLimit);
+        } else {
+            speedLimit = Math.round(Math.min(target.getPath().getMovementSpeed(), manualLimit));
+            System.out.println("Set Limit: " + speedLimit);
+        }
         LOGGER.info("Speed Limit set to " + speedLimit);
     }
 
     private void activate() {
+        System.out.println("ACC Activating");
         setTarget();
         active = true;
         LOGGER.info("Activating ACC");
@@ -122,6 +140,7 @@ public class Tempomat extends SystemComponent {
     }
 
     private void deactivate() {
+        System.out.println("ACC Deactivating");
         target = null;
         active = false;
         LOGGER.info("Deactivating ACC");
@@ -129,7 +148,6 @@ public class Tempomat extends SystemComponent {
     }
 
     private void keepSpeed() {
-        //TODO konvertálás, ha kell
         packet.setAccSpeed(speedLimit);
     }
 
@@ -140,4 +158,7 @@ public class Tempomat extends SystemComponent {
             packet.setDistance(getDistance(target));
     }
 
+    public void setAllWorld(List<WorldObject> allWorld) {
+        this.allWorld = allWorld;
+    }
 }
