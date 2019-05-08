@@ -50,10 +50,14 @@ public class Main {
         world.addObjectToWorld(car);
 
         world.initializeNpcsAndPaths();
+        world.initializeParkingPlaces();
+
         npcPaths = world.getNpcPaths();
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
         npcPaths.add(npcCar.getPath());
+        npcCar.getPath().start();
         world.addObjectToWorld(npcCar);
+
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputManager(car.getVirtualFunctionBus()));
