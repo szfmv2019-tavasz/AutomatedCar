@@ -1,7 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.objects.CrossWalk;
+import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcPedestrian;
+import hu.oe.nik.szfmv.automatedcar.model.objects.ParkingPlace;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.camera.SimpleDetector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class World {
 
@@ -66,13 +69,13 @@ public class World {
         for (WorldObject worldObject : worldObjects) {
             if (worldObject instanceof CrossWalk) {
                 CrossWalk crossWalk = (CrossWalk) worldObject;
-                Vector2D startPoint = crossWalk.getStartPoint();
-                Vector2D endPoint = crossWalk.getEndPoint();
+                Waypoint startPoint = crossWalk.getStartPoint();
+                Waypoint endPoint = crossWalk.getEndPoint();
                 NpcPedestrian pedestrian =
                     new NpcPedestrian(1000, 1000,
                         "man.png", "man.png", "man.png");
                 ScriptedPath path = new ScriptedPath(pedestrian);
-                List<Vector2D> waypoints = new ArrayList<>();
+                List<Waypoint> waypoints = new ArrayList<>();
                 waypoints.add(startPoint);
                 waypoints.add(endPoint);
                 path.setWaypoints(waypoints);
@@ -82,8 +85,40 @@ public class World {
                 this.addObjectToWorld(pedestrian);
                 npcPaths.add(path);
                 pedestrian.setPath(path);
+                path.start();
             }
         }
+    }
+
+    public void initializeParkingPlaces() {
+        List<WorldObject> worldObjects = List.copyOf(this.worldObjects);
+        for (WorldObject worldObject : worldObjects) {
+            if (worldObject instanceof ParkingPlace) {
+                ParkingPlace parkingPlace = (ParkingPlace) worldObject;
+                parkingPlace.initializePaths(parkingPlace);
+                placeCar(parkingPlace);
+            }
+        }
+    }
+
+    public void placeCar(ParkingPlace parkingPlace) {
+        Random r = new Random();
+        boolean upper = r.nextBoolean();
+        Vector2D position;
+        if (upper) {
+            position = parkingPlace.getCenterUpper();
+            parkingPlace.setUpperEmpty(false);
+            parkingPlace.setLowerEmpty(true);
+        } else {
+            position = parkingPlace.getCenterLower();
+            parkingPlace.setLowerEmpty(false);
+            parkingPlace.setUpperEmpty(true);
+        }
+        NpcCar car = new NpcCar((int) position.getX(), (int) position.getY(),
+            "car_1_blue.png", "car_1_blue.png",
+            "car_1_blue.png");
+        car.setRotation(parkingPlace.getRotation() + (float) Math.toRadians(-90));
+        addObjectToWorld(car);
     }
 
     public List<ScriptedPath> getNpcPaths() {

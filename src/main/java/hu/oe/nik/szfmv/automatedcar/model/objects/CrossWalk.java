@@ -1,8 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.model.objects;
 
+import hu.oe.nik.szfmv.automatedcar.model.Waypoint;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CrossWalk extends Crossable {
+
+    private static final Logger LOGGER = LogManager.getLogger();
     /**
      * Creates an object of the virtual world on the given coordinates with the given image.
      *
@@ -22,15 +27,21 @@ public class CrossWalk extends Crossable {
         super(0, 0, "crosswalk.png");
     }
 
-    public Vector2D getStartPoint() {
-        Vector2D startPoint = new Vector2D(this.x, this.y);
-        return startPoint;
+    public Waypoint getStartPoint() {
+        float rot = -rotation + (float) Math.toRadians(90);
+        Vector2D pivot = new Vector2D(this.x, this.y);
+        Vector2D startPoint = pivot.add(new Vector2D(Math.cos(rot), Math.sin(rot)).scalarMultiply(this.height / 2));
+        startPoint = startPoint.subtract(new Vector2D(Math.cos(-rotation), Math.sin(-rotation)).scalarMultiply(300));
+        return new Waypoint(startPoint, 0f);
     }
 
-    public Vector2D getEndPoint() {
-        Vector2D endPoint = new Vector2D(this.x, this.y - this.width);
-
-        return endPoint;
+    public Waypoint getEndPoint() {
+        float rot = -rotation + (float) Math.toRadians(90);
+        Vector2D pivot = new Vector2D(this.x, this.y);
+        Vector2D endPoint = pivot.add(new Vector2D(Math.cos(rot), Math.sin(rot)).scalarMultiply(this.height / 2));
+        endPoint = endPoint.add(new Vector2D(Math.cos(-rotation), Math.sin(-rotation))
+            .scalarMultiply(this.width + 300));
+        return new Waypoint(endPoint, 0f);
     }
 }
 
