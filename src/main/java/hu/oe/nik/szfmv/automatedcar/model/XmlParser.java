@@ -22,15 +22,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class XmlConverter {
+public abstract class XmlParser {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static List<WorldObject> build(String xmlLocation)
+    public static List<WorldObject> build(File xml)
         throws ParserConfigurationException, IOException, SAXException {
         Road.loadReferencePoints();
 
         List<WorldObject> objectListToReturn = new ArrayList<WorldObject>();
-        File inputFile = new File(xmlLocation);
+        File inputFile = xml;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = factory.newDocumentBuilder();
         Document doc = dBuilder.parse(inputFile);

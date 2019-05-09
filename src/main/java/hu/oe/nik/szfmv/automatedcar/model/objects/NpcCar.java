@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.objects;
 
 import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
+import hu.oe.nik.szfmv.automatedcar.model.Waypoint;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.util.ArrayList;
@@ -26,12 +27,13 @@ public class NpcCar extends Npc {
         path.init();
     }
 
-    private List<Vector2D> createWaypointList() {
-        List<Vector2D> waypoints = new ArrayList<>();
+    private List<Waypoint> createWaypointList() {
+        List<Waypoint> waypoints = new ArrayList<>();
         int waypointCount = WAYPOINTS_X.length;
         for (int i = 0; i < waypointCount; i++) {
-            Vector2D point = new Vector2D(WAYPOINTS_X[i], WAYPOINTS_Y[i]);
-            waypoints.add(point);
+            Vector2D position = new Vector2D(WAYPOINTS_X[i], WAYPOINTS_Y[i]);
+            Waypoint waypoint = new Waypoint(position, 0);
+            waypoints.add(waypoint);
         }
         return waypoints;
     }

@@ -1,0 +1,6 @@
+linter:
+  checkstyle:
+    config: checkstyle.xml
+    dir: src/main
+    ignore:
+      - warning

@@ -1,11 +1,17 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.AutomatedCarPos;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Camera;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Collision;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.EmergencyBrake;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Steering;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Tempomat;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlyCarPacket;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,20 +34,28 @@ public class AutomatedCar extends WorldObject {
     private float carHeading;  // in radians
     private Vector2D carLocation;
     private int health;
+    private AutomatedCarPos positionTracker;
+    private Tempomat tempomat;
+    private EmergencyBrake brake;
 
-    // Sprint2 init from master
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        new Powertrain(virtualFunctionBus);
+        new Powertrain(virtualFunctionBus, this);
         new Steering(virtualFunctionBus);
         new Collision(virtualFunctionBus, this);
+        positionTracker = new AutomatedCarPos(virtualFunctionBus);
+        new Camera(virtualFunctionBus);
+        new EmergencyBrake(virtualFunctionBus, this);
+        new Tempomat(virtualFunctionBus, this);
+        new ParkingPilot(virtualFunctionBus, this);
 
         wheelBase = calculateWheelBase();
         carLocation = new Vector2D(x, y);
         health = 100;
     }
+
 
     public int getAutomatedCarHealth() {
         return this.health;
@@ -54,15 +68,25 @@ public class AutomatedCar extends WorldObject {
         }
     }
 
-//    public void setCarSpeed(float speed){
-//        this.speed = speed;
-//    }
+    public float getSpeed() {
+        return speed;
+    }
 
     public void drive() {
-        virtualFunctionBus.loop();
+        if (!virtualFunctionBus.collisionPacket.isGameOver()) {
+            virtualFunctionBus.loop();
 
-        calculatePositionAndOrientation();
-        updateCarPositionAndOrientation();
+            if (!virtualFunctionBus.parkingPilotPacket.isWorking()) {
+                calculatePositionAndOrientation();
+                updateCarPositionAndOrientation();
+            } else {
+                carLocation = new Vector2D(x, y);
+                carHeading = rotation;
+            }
+            positionTracker.handleLocationChange(new Point((int)carLocation.getX(),
+                (int)carLocation.getY()), this.carHeading);
+
+        }
     }
 
     public VirtualFunctionBus getVirtualFunctionBus() {
@@ -70,7 +94,9 @@ public class AutomatedCar extends WorldObject {
     }
 
     private void calculatePositionAndOrientation() {
-        speed = virtualFunctionBus.powertrainPacket.getSpeed();
+        speed = virtualFunctionBus.collisionPacket.isCollision() ?
+            virtualFunctionBus.collisionPacket.getSpeedAfterCollision() :
+            virtualFunctionBus.powertrainPacket.getSpeed();
         steeringAngle = virtualFunctionBus.steeringPacket.getSteeringAngle();
 
         Vector2D frontWheelPosition = carLocation.add(new Vector2D(Math.cos(carHeading), Math.sin(carHeading))
@@ -91,7 +117,6 @@ public class AutomatedCar extends WorldObject {
             frontWheelPosition.getX() - backWheelPosition.getX());
     }
 
-
     private void updateCarPositionAndOrientation() {
         this.x = (int) carLocation.getX();
         this.y = (int) carLocation.getY();
@@ -111,7 +136,11 @@ public class AutomatedCar extends WorldObject {
 
     }
 
+    public ReadOnlyCarPacket getCarValues() {
+        return virtualFunctionBus.carPacket;
+    }
     private float calculateWheelBase() {
         return this.height - bumperAxleDistance;
     }
+
 }

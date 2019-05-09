@@ -28,6 +28,7 @@ public class InputManager extends SystemComponent implements KeyListener {
 
     private final InputPacket inputPacket;
 
+
     private final PedalRangeHandler gasPedalRangeHandler;
 
     private final PedalRangeHandler breakPedalRangeHandler;
@@ -103,6 +104,10 @@ public class InputManager extends SystemComponent implements KeyListener {
                 break;
             case KeyEvent.VK_E: handleKeyE();
                 break;
+            case KeyEvent.VK_K: handleKeyK();
+                break;
+            case KeyEvent.VK_R: handleKeyR();
+                break;
             default:
                 handleKeyWSADPressed(key);
         }
@@ -112,10 +117,17 @@ public class InputManager extends SystemComponent implements KeyListener {
         switch (key) {
             case KeyEvent.VK_W:
                 gasPedalRangeHandler.setIncrease(true);
+                if (inputPacket.isAccOn()) {
+                    inputPacket.setAccSpeed(0);
+                    inputPacket.setAccOn(false);
+                }
                 break;
             case KeyEvent.VK_S:
                 breakPedalRangeHandler.setIncrease(true);
-                inputPacket.setAccSpeed(0);
+                if (inputPacket.isAccOn()) {
+                    inputPacket.setAccSpeed(0);
+                    inputPacket.setAccOn(false);
+                }
                 break;
             case KeyEvent.VK_A:
                 steeringRangeHandler.turnLeft();
@@ -194,6 +206,14 @@ public class InputManager extends SystemComponent implements KeyListener {
         }
     }
 
+    private void handleKeyR() {
+        if (!inputPacket.isAccOn() && virtualFunctionBus.inputPacket.getAccSpeed() > ACC_SPEED_MIN) {
+            inputPacket.setAccOn(true);
+        } else {
+            inputPacket.setAccOn(false);
+        }
+    }
+
     // Rounds a float number to the nearest int number that can be divided by 10
     private int roundAccSpeed(float speed) {
         return Math.round(speed / 10) * 10;
@@ -234,6 +254,9 @@ public class InputManager extends SystemComponent implements KeyListener {
                 inputPacket.setSignalLeftTurn(false);
             }
         }
+    }
+    private void handleKeyK() {
+        inputPacket.toggleSensorDebug();
     }
 
     private void handleKeyE() {

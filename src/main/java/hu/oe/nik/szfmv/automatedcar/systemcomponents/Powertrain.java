@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +30,8 @@ public class Powertrain extends SystemComponent {
 
     private final float pedalRate = 10.0f;
 
+    private AutomatedCar car;
+
     private int rpm = 700;
     private float speed = 0f;   // in pixel/s
     private int actualAutoGear = 0;
@@ -36,20 +39,21 @@ public class Powertrain extends SystemComponent {
 
     private PowertrainPacket packet;
 
-    public Powertrain(VirtualFunctionBus virtualFunctionBus) {
+    public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car) {
         super(virtualFunctionBus);
+        this.car = car;
         packet = new PowertrainPacket();
         virtualFunctionBus.powertrainPacket = packet;
     }
 
     @Override
     public void loop() {
-        boolean emergencyBrake = false;
+        speed = car.getSpeed();
 
-        if (emergencyBrake) {
+        if (virtualFunctionBus.brakePacket.isBrake()) {
             handleEmergencyBrake();
-        } else if (virtualFunctionBus.inputPacket.getAccSpeed() > 0) {
-            speed = virtualFunctionBus.inputPacket.getAccSpeed();
+        } else if (virtualFunctionBus.tempomatPacket.isActive() && virtualFunctionBus.inputPacket.isAccOn()) {
+            speed = virtualFunctionBus.tempomatPacket.getAccSpeed();
         } else if (virtualFunctionBus.inputPacket.isParkingPilotOn()) {
             //
         } else {

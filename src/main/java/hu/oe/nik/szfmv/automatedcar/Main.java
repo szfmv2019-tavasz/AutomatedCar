@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.ScriptedPath;
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.objects.NpcCar;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
@@ -18,15 +17,16 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CYCLE_PERIOD = 40;
-    private static final int CAR_START_POS_X = 200;
-    private static final int CAR_START_POS_Y = 200;
+
+    private static final int CAR_START_POS_X = 550;
+    private static final int CAR_START_POS_Y = 250;
+
     // The window handle
     private Gui window;
     private AutomatedCar car;
     private World world;
     private List<ScriptedPath> npcPaths;
 
-    private WorldObject pedestrian;
     private ScriptedPath pedPath;
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
@@ -48,11 +48,16 @@ public class Main {
         // create an automated car and add to the world
         car = new AutomatedCar(CAR_START_POS_X, CAR_START_POS_Y, "car_2_white.png");
         world.addObjectToWorld(car);
+
         world.initializeNpcsAndPaths();
+        world.initializeParkingPlaces();
+
         npcPaths = world.getNpcPaths();
         NpcCar npcCar = new NpcCar(0, 0, "car_1_blue.png", "car_1_blue.png", "car_1_blue.png");
         npcPaths.add(npcCar.getPath());
+        npcCar.getPath().start();
         world.addObjectToWorld(npcCar);
+
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputManager(car.getVirtualFunctionBus()));
@@ -62,7 +67,7 @@ public class Main {
         while (true) {
             try {
                 car.drive();
-                window.getCourseDisplay().drawWorld();
+                window.getCourseDisplay().drawWorld(world, car.getCarValues(), window.getVirtualFunctionBus().inputPacket);
                 loopNpcPaths();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
@@ -76,6 +81,5 @@ public class Main {
             path.loop();
         }
     }
-
 
 }
